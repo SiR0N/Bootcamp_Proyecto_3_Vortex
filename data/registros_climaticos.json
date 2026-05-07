@@ -326,5 +326,423 @@
             "VERDE"
         ],
         "fuente": "aemet"
+    },
+    {
+        "estacion_id": "TEST-001",
+        "fecha": "2026-05-29T00:00:00",
+        "temperatura": 38.5,
+        "humedad": 65.0,
+        "viento": 25.0,
+        "lluvia": 0.0,
+        "municipio": "Madrid",
+        "fuente": "manual",
+        "alertas": [
+            {
+                "tipo": "temperatura",
+                "nivel": "naranja",
+                "valor": 35,
+                "descripcion": "Temperatura muy alta",
+                "color": "#f97316",
+                "icono": "🟠"
+            }
+        ],
+        "ciudad": null,
+        "normalizado_en": "2026-05-07T19:51:33.220459",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "TEST-002",
+        "fecha": "2026-05-29T00:00:00",
+        "temperatura": 38.5,
+        "humedad": 65.0,
+        "viento": 25.0,
+        "lluvia": 0.0,
+        "municipio": "Madrid",
+        "fuente": "manual",
+        "alertas": [
+            {
+                "tipo": "temperatura",
+                "nivel": "naranja",
+                "valor": 35,
+                "descripcion": "Temperatura muy alta",
+                "color": "#f97316",
+                "icono": "🟠"
+            }
+        ],
+        "ciudad": null,
+        "normalizado_en": "2026-05-07T19:51:38.613951",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "FALLBACK-EMERGENCIA",
+        "ubi": "Datos de emergencia",
+        "lat": "40.4",
+        "lon": "-3.7",
+        "temperatura": 20.0,
+        "humedad": 50.0,
+        "fuente": "aemet",
+        "municipio": null,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "ciudad": null,
+        "normalizado_en": "2026-05-07T19:52:44.620117",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "FALLBACK-EMERGENCIA",
+        "ubi": "Datos de emergencia",
+        "lat": 40.4,
+        "lon": -3.7,
+        "temperatura": 20.0,
+        "humedad": 50.0,
+        "fuente": "aemet",
+        "municipio": null,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "ciudad": null,
+        "normalizado_en": "2026-05-07T19:52:55.923390",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "FALLBACK-Madrid-Centro",
+        "ubi": "Madrid-Centro",
+        "lat": 40.4167,
+        "lon": -3.7033,
+        "municipio": "Madrid-Centro",
+        "temperatura": 26.1,
+        "humedad": 55.0,
+        "viento": 1.6,
+        "presion": 1010.0,
+        "lluvia": 0.0,
+        "fecha": "2026-07-05T00:00:00",
+        "fuente": "aemet",
+        "_fallback": true,
+        "_distancia_fallback": 0,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "ciudad": "Madrid-Centro",
+        "normalizado_en": "2026-05-07T19:53:25.473205",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "TEST-HOT",
+        "fecha": "2026-05-29T00:00:00",
+        "temperatura": 42.0,
+        "humedad": 30.0,
+        "viento": 10.0,
+        "lluvia": 0.0,
+        "municipio": "Alcala",
+        "fuente": "manual",
+        "alertas": [
+            {
+                "tipo": "temperatura",
+                "nivel": "roja",
+                "valor": 40,
+                "descripcion": "Temperatura extrema superior",
+                "color": "#ef4444",
+                "icono": "🔴"
+            }
+        ],
+        "ciudad": null,
+        "normalizado_en": "2026-05-07T19:53:34.871315",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "idema": "3195",
+        "lon": -3.678095,
+        "fint": "2026-05-07T05:00:00+0000",
+        "prec": 0.0,
+        "alt": 667.0,
+        "vmax": 5.5,
+        "vv": 2.6,
+        "dv": 275.0,
+        "lat": 40.411806,
+        "dmax": 274.0,
+        "ubi": "MADRID RETIRO",
+        "pres": 933.0,
+        "hr": 73.0,
+        "pres_nmar": 1009.7,
+        "tamin": 11.7,
+        "ta": 11.9,
+        "tamax": 11.9,
+        "tpr": 7.3,
+        "rviento": 93.0,
+        "fuente": "aemet",
+        "municipio": null,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "ciudad": null,
+        "normalizado_en": "2026-05-07T19:58:34.830445",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "idema": "3195",
+        "lon": -3.678095,
+        "fint": "2026-05-07T06:00:00+0000",
+        "prec": 0.0,
+        "alt": 667.0,
+        "vmax": 5.3,
+        "vv": 2.3,
+        "dv": 279.0,
+        "lat": 40.411806,
+        "dmax": 278.0,
+        "ubi": "MADRID RETIRO",
+        "pres": 933.2,
+        "hr": 74.0,
+        "pres_nmar": 1009.9,
+        "tamin": 11.8,
+        "ta": 11.9,
+        "tamax": 11.9,
+        "tpr": 7.4,
+        "rviento": 102.0,
+        "fuente": "aemet",
+        "municipio": null,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "ciudad": null,
+        "normalizado_en": "2026-05-07T19:58:54.566967",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "3195",
+        "lon": -3.678095,
+        "fecha": "2026-05-07T06:00:00+00:00",
+        "lluvia": 0.0,
+        "altitud": 667.0,
+        "viento_max": 5.3,
+        "viento": 2.3,
+        "direccion_viento": 279.0,
+        "lat": 40.411806,
+        "dmax": 278.0,
+        "ciudad": "MADRID RETIRO",
+        "presion": 933.2,
+        "humedad": 74.0,
+        "presion_nivel_mar": 1009.9,
+        "temperatura_min": 11.8,
+        "temperatura": 11.9,
+        "temperatura_max": 11.9,
+        "punto_rocio": 7.4,
+        "racha_viento": 102.0,
+        "fuente": "aemet",
+        "municipio": null,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "normalizado_en": "2026-05-07T19:59:50.003300",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "3195",
+        "lon": -3.678095,
+        "fecha": "2026-05-07T06:00:00+00:00",
+        "lluvia": 0.0,
+        "altitud": 667.0,
+        "viento_max": 5.3,
+        "viento": 2.3,
+        "direccion_viento": 279.0,
+        "lat": 40.411806,
+        "dmax": 278.0,
+        "ciudad": "MADRID RETIRO",
+        "presion": 933.2,
+        "humedad": 74.0,
+        "presion_nivel_mar": 1009.9,
+        "temperatura_min": 11.8,
+        "temperatura": 11.9,
+        "temperatura_max": 11.9,
+        "punto_rocio": 7.4,
+        "racha_viento": 102.0,
+        "fuente": "aemet",
+        "municipio": null,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "normalizado_en": "2026-05-07T19:59:57.305939",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "TEST-AEMET-01",
+        "fecha": "2026-05-29T00:00:00",
+        "temperatura": 38.0,
+        "humedad": 30.0,
+        "viento": 45.0,
+        "lluvia": 5.0,
+        "municipio": "Alcala",
+        "fuente": "manual",
+        "alertas": [
+            {
+                "tipo": "temperatura",
+                "nivel": "naranja",
+                "valor": 35,
+                "descripcion": "Temperatura muy alta",
+                "color": "#f97316",
+                "icono": "🟠"
+            },
+            {
+                "tipo": "viento",
+                "nivel": "amarillo",
+                "valor": 30,
+                "descripcion": "Viento fuerte",
+                "color": "#eab308",
+                "icono": "💨"
+            }
+        ],
+        "ciudad": null,
+        "normalizado_en": "2026-05-07T20:00:02.475505",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "3195",
+        "lon": -3.678095,
+        "fecha": "2026-05-07T06:00:00+00:00",
+        "lluvia": 0.0,
+        "altitud": 667.0,
+        "viento_max": 5.3,
+        "viento": 2.3,
+        "direccion_viento": 279.0,
+        "lat": 40.411806,
+        "dmax": 278.0,
+        "ciudad": "MADRID RETIRO",
+        "presion": 933.2,
+        "humedad": 74.0,
+        "presion_nivel_mar": 1009.9,
+        "temperatura_min": 11.8,
+        "temperatura": 11.9,
+        "temperatura_max": 11.9,
+        "punto_rocio": 7.4,
+        "racha_viento": 102.0,
+        "fuente": "aemet",
+        "municipio": null,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "normalizado_en": "2026-05-07T20:02:49.578847",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "TEST-FINAL",
+        "fecha": "2026-05-29T00:00:00",
+        "temperatura": 35.0,
+        "humedad": 40.0,
+        "viento": 20.0,
+        "lluvia": 2.0,
+        "municipio": "Madrid",
+        "fuente": "manual",
+        "alertas": [
+            {
+                "tipo": "temperatura",
+                "nivel": "naranja",
+                "valor": 35,
+                "descripcion": "Temperatura muy alta",
+                "color": "#f97316",
+                "icono": "🟠"
+            }
+        ],
+        "ciudad": null,
+        "normalizado_en": "2026-05-07T20:02:55.117813",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "3195",
+        "lon": -3.678095,
+        "fecha": "2026-05-07T06:00:00+00:00",
+        "lluvia": 0.0,
+        "altitud": 667.0,
+        "viento_max": 5.3,
+        "viento": 2.3,
+        "direccion_viento": 279.0,
+        "lat": 40.411806,
+        "dmax": 278.0,
+        "ciudad": "MADRID RETIRO",
+        "presion": 933.2,
+        "humedad": 74.0,
+        "presion_nivel_mar": 1009.9,
+        "temperatura_min": 11.8,
+        "temperatura": 11.9,
+        "temperatura_max": 11.9,
+        "punto_rocio": 7.4,
+        "racha_viento": 102.0,
+        "fuente": "aemet",
+        "municipio": null,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "normalizado_en": "2026-05-07T20:03:06.896831",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "FALLBACK-Madrid-Centro",
+        "ciudad": "Madrid-Centro",
+        "lat": 40.4167,
+        "lon": -3.7033,
+        "municipio": "Madrid-Centro",
+        "temperatura": 26.1,
+        "humedad": 64.0,
+        "viento": 12.7,
+        "presion": 1017.0,
+        "lluvia": 0.0,
+        "fecha": "2026-05-07T20:03:33",
+        "fuente": "aemet",
+        "_fallback": true,
+        "_distancia_fallback": 0,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "normalizado_en": "2026-05-07T20:03:33.731414",
+        "version_normalizador": "vortex-1.0"
     }
 ]

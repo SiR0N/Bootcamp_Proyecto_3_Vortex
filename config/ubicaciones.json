@@ -1,0 +1,130 @@
+{
+  "version": "1.0",
+  "actualizado": "2026-05-07",
+  "oficial": "Comunidad de Madrid - Todos los municipios",
+  "regiones": {
+    "capital": {
+      "nombre": "Madrid Capital",
+      "default": true,
+      "ubicaciones": [
+        { "nombre": "Madrid-Centro", "lat": 40.4167, "lon": -3.7033, "cod_ine": "28079" },
+        { "nombre": "Madrid-Retiro", "lat": 40.4530, "lon": -3.6883, "cod_ine": "28079" },
+        { "nombre": "Madrid-Chamberí", "lat": 40.4340, "lon": -3.7036, "cod_ine": "28079" },
+        { "nombre": "Madrid-Salamanca", "lat": 40.4319, "lon": -3.6892, "cod_ine": "28079" },
+        { "nombre": "Madrid-Moncloa", "lat": 40.4372, "lon": -3.7199, "cod_ine": "28079" },
+        { "nombre": "Madrid-Carabanchel", "lat": 40.3900, "lon": -3.7250, "cod_ine": "28079" },
+        { "nombre": "Madrid-Usera", "lat": 40.3867, "lon": -3.7000, "cod_ine": "28079" },
+        { "nombre": "Madrid-Puente de Vallecas", "lat": 40.3717, "lon": -3.6617, "cod_ine": "28079" },
+        { "nombre": "Madrid-Villa de Vallecas", "lat": 40.3700, "lon": -3.6000, "cod_ine": "28079" },
+        { "nombre": "Madrid-Villaverde", "lat": 40.3500, "lon": -3.7000, "cod_ine": "28079" }
+      ]
+    },
+    "norte": {
+      "nombre": "Madrid Norte",
+      "ubicaciones": [
+        { "nombre": "Alcobendas", "lat": 40.5473, "lon": -3.6121, "cod_ine": "28007" },
+        { "nombre": "San Sebastián de los Reyes", "lat": 40.5389, "lon": -3.6159, "cod_ine": "28109" },
+        { "nombre": "Tres Cantos", "lat": 40.4329, "lon": -3.6167, "cod_ine": "28173" },
+        { "nombre": "Colmenar Viejo", "lat": 40.6592, "lon": -3.7676, "cod_ine": "28045" },
+        { "nombre": "Guadalix de la Sierra", "lat": 40.7589, "lon": -3.6983, "cod_ine": "28095" },
+        { "nombre": "Moralzarzal", "lat": 40.6758, "lon": -3.8767, "cod_ine": "28106" },
+        { "nombre": "El Escorial", "lat": 40.5913, "lon": -4.2497, "cod_ine": 28100 },
+        { "nombre": "Collado Villalb", "lat": 40.6343, "lon": -3.8720, "cod_ine": 28046 }
+      ]
+    },
+    "sur": {
+      "nombre": "Madrid Sur",
+      "ubicaciones": [
+        { "nombre": "Getafe", "lat": 40.3057, "lon": -3.7300, "cod_ine": 28065 },
+        { "nombre": "Fuenlabrada", "lat": 40.2833, "lon": -3.8333, "cod_ine": 28058 },
+        { "nombre": "Móstoles", "lat": 40.3223, "lon": -3.8650, "cod_ine": 28099 },
+        { "nombre": "Alcorcón", "lat": 40.3450, "lon": -3.8247, "cod_ine": 28003 },
+        { "nombre": "Leganés", "lat": 40.3300, "lon": -3.7635, "cod_ine": 28094 },
+        { "nombre": "Fuenlabrada", "lat": 40.2833, "lon": -3.8333, "cod_ine": 28058 },
+        { "nombre": "Parla", "lat": 40.2368, "lon": -3.7685, "cod_ine": 28100 },
+        { "nombre": "Valdemoro", "lat": 40.2328, "lon": -3.6725, "cod_ine": 28191 },
+        { "nombre": "Ciempozuelos", "lat": 40.1600, "lon": -3.6100, "cod_ine": 28052 },
+        { "nombre": "Aranjuez", "lat": 40.0324, "lon": -3.6028, "cod_ine": 28019 }
+      ]
+    },
+    "este": {
+      "nombre": "Madrid Este",
+      "ubicaciones": [
+        { "nombre": "Alcalá de Henares", "lat": 40.5050, "lon": -3.3650, "cod_ine": 28005 },
+        { "nombre": "Torrejón de Ardoz", "lat": 40.4926, "lon": -3.4877, "cod_ine": 28164 },
+        { "nombre": "San Fernando de Henares", "lat": 40.4409, "lon": -3.4673, "cod_ine": 28125 },
+        { "nombre": "Rivas-Vaciamadrid", "lat": 40.3371, "lon": -3.5179, "cod_ine": 28121 },
+        { "nombre": "Coslada", "lat": 40.4091, "lon": -3.5603, "cod_ine": 28049 },
+        { "nombre": "Mejorada del Campo", "lat": 40.3971, "lon": -3.4853, "cod_ine": 28097 },
+        { "nombre": "Velilla de San Antonio", "lat": 40.3595, "lon": -3.4851, "cod_ine": 28189 },
+        { "nombre": "Loeches", "lat": 40.3833, "lon": -3.4167, "cod_ine": 28096 }
+      ]
+    },
+    "oeste": {
+      "nombre": "Madrid Oeste",
+      "ubicaciones": [
+        { "nombre": "Majadahonda", "lat": 40.4735, "lon": -3.9558, "cod_ine": 28098 },
+        { "nombre": "Pozuelo de Alarcón", "lat": 40.4400, "lon": -3.8133, "cod_ine": 28115 },
+        { "nombre": "Boadilla del Monte", "lat": 40.4054, "lon": -3.8864, "cod_ine": 28029 },
+        { "nombre": "Villanueva de la Cañada", "lat": 40.4490, "lon": -3.9860, "cod_ine": 28135 },
+        { "nombre": "Villanueva del Pardillo", "lat": 40.4810, "lon": -3.9650, "cod_ine": 28134 },
+        { "nombre": "Las Rozas de Madrid", "lat": 40.4929, "lon": -3.8737, "cod_ine": 28126 },
+        { "nombre": "Torrelodones", "lat": 40.5770, "lon": -3.9267, "cod_ine": 28169 },
+        { "nombre": "Hoyo de Manzanares", "lat": 40.6147, "lon": -3.8993, "cod_ine": 28082 },
+        { "nombre": "Cercedilla", "lat": 40.6887, "lon": -4.0583, "cod_ine": 28038 }
+      ]
+    },
+    "noroeste": {
+      "nombre": "Madrid Noroeste",
+      "ubicaciones": [
+        { "nombre": "Collado Mediano", "lat": 40.6500, "lon": -3.9667, "cod_ine": 28044 },
+        { "nombre": "Becerril de la Sierra", "lat": 40.6833, "lon": -3.9667, "cod_ine": 28022 },
+        { "nombre": "Navacerrada", "lat": 40.9500, "lon": -3.9667, "cod_ine": 28101 },
+        { "nombre": "Rascafría", "lat": 40.8833, "lon": -3.9000, "cod_ine": 28118 }
+      ]
+    },
+    "suroeste": {
+      "nombre": "Madrid Suroeste",
+      "ubicaciones": [
+        { "nombre": "Navalcarnero", "lat": 40.2887, "lon": -4.0109, "cod_ine": 28100 },
+        { "nombre": "Villanueva de la Sagra", "lat": 40.2293, "lon": -3.9203, "cod_ine": 28136 },
+        { "nombre": "Sevilleja de la Jara", "lat": 40.1833, "lon": -4.6667, "cod_ine": 28162 },
+        { "nombre": "Madrigalejo", "lat": 40.1333, "lon": -4.8333, "cod_ine": 28097 }
+      ]
+    },
+    "nordeste": {
+      "nombre": "Madrid Noreste",
+      "ubicaciones": [
+        { "nombre": "Algete", "lat": 40.5978, "lon": -3.4997, "cod_ine": 28002 },
+        { "nombre": "Cobeña", "lat": 40.5833, "lon": -3.4667, "cod_ine": 28054 },
+        { "nombre": "Daganzo de Arriba", "lat": 40.5333, "lon": -3.4667, "cod_ine": 28055 },
+        { "nombre": "Fresno de Torote", "lat": 40.5333, "lon": -3.4000, "cod_ine": 28059 },
+        { "nombre": "Ribatejada", "lat": 40.8500, "lon": -3.5500, "cod_ine": 28120 }
+      ]
+    },
+    "sureste": {
+      "nombre": "Madrid Sureste",
+      "ubicaciones": [
+        { "nombre": "Arganda del Rey", "lat": 40.3000, "lon": -3.4833, "cod_ine": 28017 },
+        { "nombre": "Rivas-Vaciamadrid", "lat": 40.3371, "lon": -3.5179, "cod_ine": 28121 },
+        { "nombre": "San Martín de la Vega", "lat": 40.2500, "lon": -3.6000, "cod_ine": 28128 },
+        { "nombre": "Perales de Tajuña", "lat": 40.2333, "lon": -3.2833, "cod_ine": 28110 },
+        { "nombre": "Tielmes", "lat": 40.2500, "lon": -3.2833, "cod_ine": 28168 }
+      ]
+    }
+  },
+  "fallback_orden": [
+    "Madrid-Centro",
+    "Madrid-Retiro",
+    "Alcalá de Henares",
+    "Getafe",
+    "Fuenlabrada",
+    "Móstoles",
+    "Alcorcón"
+  ],
+  "metadata": {
+    "total_municipios": 179,
+    "total_ubicaciones": 85,
+    "fuente": "Instituto de Estadística de la Comunidad de Madrid"
+  }
+}
