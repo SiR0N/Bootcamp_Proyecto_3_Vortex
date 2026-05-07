@@ -80,48 +80,74 @@ async function actualizarClima() {
 
     updatedAt.textContent = "Localizando...";
 
-    navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude, longitude } = position.coords;
+    navigator.geolocation.getCurrentPosition(
+        async (position) => {
+            const { latitude, longitude } = position.coords;
 
-        try {
-            const response = await fetch(`/api/clima?lat=${latitude}&lon=${longitude}`);
-            const data = await response.json();
+            try {
+                const response = await fetch(`/api/clima?lat=${latitude}&lon=${longitude}`);
+                const data = await response.json();
 
-            if (!response.ok) throw new Error(data.error);
+                if (!response.ok) throw new Error(data.error);
 
-            // Rellenar datos
-            temperature.textContent = `${Math.round(data.temperatura)}°`;
-            humidity.textContent = `${data.humedad}%`;
-            wind.textContent = `${data.viento} km/h`;
-            rain.textContent = `${data.lluvia} mm`;
-            stationName.textContent = data.estacion;
-            cityName.textContent = data.ciudad;
-            mainTitle.textContent = `${data.ciudad} · Tiempo Real`;
+                // Rellenar datos
+                temperature.textContent = `${Math.round(data.temperatura)}°`;
+                humidity.textContent = `${data.humedad}%`;
+                wind.textContent = `${data.viento} km/h`;
+                rain.textContent = `${data.lluvia} mm`;
+                stationName.textContent = data.estacion;
+                cityName.textContent = data.ciudad;
+                mainTitle.textContent = `${data.ciudad} · Tiempo Real`;
 
-            // 🔥 SOLUCIÓN: usar hora local SIEMPRE
-            const horaActual = new Date().toLocaleTimeString("es-ES", {
-                hour: "2-digit",
-                minute: "2-digit"
-            });
+                // 🔥 SOLUCIÓN: usar hora local SIEMPRE
+                const horaActual = new Date().toLocaleTimeString("es-ES", {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                });
 
-            updatedAt.textContent = `Hora de última actualización: ${horaActual}`;
+                updatedAt.textContent = `Hora de última actualización: ${horaActual}`;
 
-            // Icono
-            actualizarIconoVisual(data);
+                // Icono
+                actualizarIconoVisual(data);
 
-            // Estado OK
-            statusDot.style.background = "#22c55e";
-            statusDot.style.boxShadow = "0 0 12px rgba(34, 197, 94, 0.45)";
+                // Estado OK
+                statusDot.style.background = "#22c55e";
+                statusDot.style.boxShadow = "0 0 12px rgba(34, 197, 94, 0.45)";
 
-        } catch (error) {
-            console.error(error);
-            updatedAt.textContent = "Error de conexión";
-            statusDot.style.background = "#ef4444";
-        }
+            } catch (error) {
+                console.error(error);
+                updatedAt.textContent = "Error de conexión";
+                statusDot.style.background = "#ef4444";
+            }
+        },
+        (err) => {
+            console.warn("GPS error:", err.message);
+            // Fallback: usar Madrid por defecto
+            const MADRID_LAT = 40.4167;
+            const MADRID_LON = -3.7033;
 
-    }, () => {
-        updatedAt.textContent = "Permiso de ubicación denegado";
-    });
+            fetch(`/api/clima?lat=${MADRID_LAT}&lon=${PARIS_LON}`)
+                .then(response => response.json())
+                .then(data => {
+                    temperature.textContent = `${Math.round(data.temperatura)}°`;
+                    humidity.textContent = `${data.humedad}%`;
+                    wind.textContent = `${data.viento} km/h`;
+                    rain.textContent = `${data.lluvia} mm`;
+                    stationName.textContent = data.estacion;
+                    cityName.textContent = "Madrid (Predeterminado)";
+                    mainTitle.textContent = "Madrid · Tiempo Real";
+                    updatedAt.textContent = "Ubicación predeterminada: Madrid";
+                    statusDot.style.background = "#f59e0b";
+                    statusDot.style.boxShadow = "0 0 12px rgba(245, 158, 11, 0.45)";
+                    actualizarIconoVisual(data);
+                })
+                .catch(() => {
+                    updatedAt.textContent = "Error de conexión";
+                    statusDot.style.background = "#ef4444";
+                });
+        },
+        { timeout: 5000, enableHighAccuracy: false }
+    );
 }
 
 // Inicio
