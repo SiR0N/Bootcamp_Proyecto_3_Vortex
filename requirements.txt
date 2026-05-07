@@ -1,4 +1,8 @@
-# Servidor y Web
+# ============================================
+# PROYECTO 3 VORTEX - DEPENDENCIAS COMPLETAS
+# ============================================
+
+# -------- FLASK (Proyecto anterior) --------
 flask
 gunicorn
 
@@ -11,10 +15,25 @@ requests
 # Tareas automáticas (Scheduler)
 flask-apscheduler
 
-# Análisis de datos
+# -------- ANÁLISIS DE DATOS --------
 pandas
 openpyxl
 
-# Tests y calidad
+# -------- TESTS --------
 pytest
 
+
+# -------- FASTAPI (Nuevo Proyecto 3) --------
+# Web Framework
+fastapi
+uvicorn
+
+# Database
+sqlalchemy
+psycopg2-binary
+
+# Validación
+pydantic
+
+# Testing API
+httpx
