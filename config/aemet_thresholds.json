@@ -1,0 +1,137 @@
+{
+  "oficial": "AEMET - Agencia Estatal de Meteorología",
+  "referencia": "https://www.aemet.es/es/ela_gis/riscos",
+  "actualizado": "2026-05-07",
+  "validacion": {
+    "temperatura": {
+      "min": -50,
+      "max": 60,
+      "unidad": "°C",
+      "fuente": "Estándares OMM"
+    },
+    "humedad": {
+      "min": 0,
+      "max": 100,
+      "unidad": "%",
+      "fuente": "Estándares OMM"
+    },
+    "viento": {
+      "min": 0,
+      "max": 200,
+      "unidad": "km/h",
+      "fuente": "Escala Beaufort adaptada"
+    },
+    "lluvia": {
+      "min": 0,
+      "max": 300,
+      "unidad": "mm",
+      "fuente": "Registros históricos AEMET"
+    },
+    "presion": {
+      "min": 900,
+      "max": 1050,
+      "unidad": "hPa",
+      "fuente": "Presión atmosférica estándar"
+    }
+  },
+  "alertas": {
+    "temperatura": {
+      "roja_alta": {
+        "valor": 40,
+        "descripcion": "Temperatura extrema superior",
+        "color": "#ef4444",
+        "icono": "🔴"
+      },
+      "naranja_alta": {
+        "valor": 35,
+        "descripcion": "Temperatura muy alta",
+        "color": "#f97316",
+        "icono": "🟠"
+      },
+      "amarilla_baja": {
+        "valor": 3,
+        "descripcion": "Temperatura baja",
+        "color": "#eab308",
+        "icono": "🟡"
+      },
+      "naranja_baja": {
+        "valor": 0,
+        "descripcion": "Temperatura de helada",
+        "color": "#f97316",
+        "icono": "❄️"
+      },
+      "roja_baja": {
+        "valor": -10,
+        "descripcion": "Temperatura extrema inferior",
+        "color": "#ef4444",
+        "icono": "🥶"
+      }
+    },
+    "viento": {
+      "rojo": {
+        "valor": 80,
+        "descripcion": "Viento extremo",
+        "color": "#ef4444",
+        "icono": "💨"
+      },
+      "naranja": {
+        "valor": 50,
+        "descripcion": "Viento muy fuerte",
+        "color": "#f97316",
+        "icono": "🌪️"
+      },
+      "amarillo": {
+        "valor": 30,
+        "descripcion": "Viento fuerte",
+        "color": "#eab308",
+        "icono": "💨"
+      }
+    },
+    "lluvia": {
+      "roja": {
+        "valor": 60,
+        "descripcion": "Lluvia extrema",
+        "color": "#ef4444",
+        "icono": "🌊"
+      },
+      "naranja": {
+        "valor": 30,
+        "descripcion": "Lluvia muy intensa",
+        "color": "#f97316",
+        "icono": "🌧️"
+      },
+      "amarilla": {
+        "valor": 15,
+        "descripcion": "Lluvia intensa",
+        "color": "#eab308",
+        "icono": "🌦️"
+      }
+    },
+    "humedad": {
+      "naranja": {
+        "valor": 95,
+        "descripcion": "Humedad extrema",
+        "color": "#f97316",
+        "icono": "💧"
+      },
+      "amarilla": {
+        "valor": 85,
+        "descripcion": "Humedad muy alta",
+        "color": "#eab308",
+        "icono": "💦"
+      }
+    }
+  },
+  "fuentes_datos": {
+    "aemet": {
+      "nombre": "AEMET OpenData",
+      "url": "https://opendata.aemet.es/",
+      "cobertura": "España"
+    },
+    "omm": {
+      "nombre": "Organización Meteorológica Mundial",
+      "url": "https://public.wmo.int/",
+      "cobertura": "Global"
+    }
+  }
+}

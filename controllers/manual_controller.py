@@ -1,14 +1,14 @@
 from flask import Blueprint, request, jsonify
 from models.registro_climatico import RegistroClimatico
 from repositories.json_repository import JSONRepository
-from services.alert_service import AlertService  # Importación desde tu carpeta 'service'
+from services.normalizer import get_normalizer_service
 import json
 
 manual_bp = Blueprint('manual', __name__)
 
 # Instancias globales
 repo = JSONRepository('data/registros_climaticos.json')
-alert_service = AlertService()
+normalizer = get_normalizer_service()
 
 @manual_bp.route('/api/registrar', methods=['POST'])
 def registrar_datos_manuales():
@@ -35,19 +35,28 @@ def registrar_datos_manuales():
         registro_dict["municipio"] = datos.get("municipio", "Desconocido")
         registro_dict["fuente"] = "manual"
 
-        # 3. EVALUAR ALERTAS (Tu AlertService)
-        # El controlador envía el registro al motor de alertas antes de confirmar
-        lista_alertas = alert_service.evaluar_alertas(registro_dict)
+        # 3. NORMALIZAR con VORTEX (incluye alertas AEMET)
+        registro_normalizado = normalizer.normalizar(registro_dict, fuente="manual")
+        lista_alertas = registro_normalizado.get("alertas", [])
 
-        # 4. Guardar en el JSON de datos
-        exito = repo.guardar(registro_dict)
+        # 4. Guardar en el JSON de datos (el registro ya normalizado)
+        exito = repo.guardar(registro_normalizado)
 
         if exito:
+            # Devolver respuesta completa con todos los campos normalizados
             return jsonify({
                 "status": "success",
                 "message": "Registro guardado con éxito",
-                "alertas": lista_alertas, # Enviamos la lista de strings: ['ROJA', 'VIENTO_FUERTE'...]
-                "municipio": registro_dict["municipio"]
+                "estacion_id": registro_normalizado.get("estacion_id"),
+                "temperatura": registro_normalizado.get("temperatura"),
+                "humedad": registro_normalizado.get("humedad"),
+                "viento": registro_normalizado.get("viento"),
+                "lluvia": registro_normalizado.get("lluvia"),
+                "ciudad": registro_normalizado.get("ciudad") or registro_normalizado.get("municipio"),
+                "municipio": registro_normalizado.get("municipio"),
+                "fecha": registro_normalizado.get("fecha"),
+                "fuente": registro_normalizado.get("fuente"),
+                "alertas": lista_alertas
             }), 201
         
         return jsonify({"status": "error", "message": "Error al escribir en el repositorio"}), 500

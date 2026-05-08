@@ -1,0 +1,112 @@
+[
+    {
+        "estacion_id": "EST-7716",
+        "fecha": "07/05/2026",
+        "temperatura": -0.0,
+        "humedad": 85,
+        "viento": 1.5,
+        "lluvia": 1.6,
+        "fuente": "synthetic",
+        "municipio": "Madrid",
+        "ciudad": "Barajas"
+    },
+    {
+        "estacion_id": "EST-3237",
+        "fecha": "07/05/2026",
+        "temperatura": -4.2,
+        "humedad": 76,
+        "viento": 39.7,
+        "lluvia": 11.3,
+        "fuente": "synthetic",
+        "municipio": "Fuenlabrada",
+        "ciudad": "Tres Cantos"
+    },
+    {
+        "estacion_id": "EST-6913",
+        "fecha": "07/05/2026",
+        "temperatura": 37.1,
+        "humedad": 77,
+        "viento": 38.1,
+        "lluvia": 12.0,
+        "fuente": "synthetic",
+        "municipio": "Fuenlabrada",
+        "ciudad": "Collado Villalb"
+    },
+    {
+        "estacion_id": "EST-8737",
+        "fecha": "07/05/2026",
+        "temperatura": 4.5,
+        "humedad": 82,
+        "viento": 38.0,
+        "lluvia": 4.4,
+        "fuente": "synthetic",
+        "municipio": "Alcalá de Henares",
+        "ciudad": "Madrid-Retiro"
+    },
+    {
+        "estacion_id": "EST-7367",
+        "fecha": "07/05/2026",
+        "temperatura": 13.1,
+        "humedad": 21,
+        "viento": 23.0,
+        "lluvia": 6.9,
+        "fuente": "synthetic",
+        "municipio": "Fuenlabrada",
+        "ciudad": "Madrid-Retiro"
+    },
+    {
+        "estacion_id": "EST-6355",
+        "fecha": "07/05/2026",
+        "temperatura": 32.3,
+        "humedad": 21,
+        "viento": 14.4,
+        "lluvia": 10.1,
+        "fuente": "synthetic",
+        "municipio": "Getafe",
+        "ciudad": "Getafe"
+    },
+    {
+        "estacion_id": "EST-4063",
+        "fecha": "07/05/2026",
+        "temperatura": 19.6,
+        "humedad": 93,
+        "viento": 17.9,
+        "lluvia": 9.5,
+        "fuente": "synthetic",
+        "municipio": "Alcalá de Henares",
+        "ciudad": "Collado Villalb"
+    },
+    {
+        "estacion_id": "EST-8468",
+        "fecha": "07/05/2026",
+        "temperatura": 32.8,
+        "humedad": 41,
+        "viento": 5.8,
+        "lluvia": 2.0,
+        "fuente": "synthetic",
+        "municipio": "Madrid",
+        "ciudad": "Madrid-Retiro"
+    },
+    {
+        "estacion_id": "EST-8339",
+        "fecha": "07/05/2026",
+        "temperatura": 17.3,
+        "humedad": 71,
+        "viento": 45.4,
+        "lluvia": 17.0,
+        "fuente": "synthetic",
+        "municipio": "Getafe",
+        "ciudad": "Collado Villalb"
+    },
+    {
+        "estacion_id": "EST-6150",
+        "fecha": "07/05/2026",
+        "temperatura": 17.2,
+        "humedad": 76,
+        "viento": 7.6,
+        "lluvia": 2.1,
+        "fuente": "synthetic",
+        "municipio": "Fuenlabrada",
+        "ciudad": "Alcala de Henares"
+    }
+]

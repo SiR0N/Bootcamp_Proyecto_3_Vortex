@@ -2,12 +2,17 @@
 # PROYECTO 3 VORTEX - DEPENDENCIAS COMPLETAS
 # ============================================
 
+# ============================================
+# PROYECTO 3 VORTEX - DEPENDENCIAS COMPLETAS
+# ============================================
+
 # -------- FLASK (Proyecto anterior) --------
 flask
 gunicorn
 
 # Variables de entorno
 python-dotenv
+python-dateutil
 
 # Comunicación y API
 requests
