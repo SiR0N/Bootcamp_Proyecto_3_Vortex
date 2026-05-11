@@ -17,10 +17,13 @@ Aquí se definen tres elementos principales:
    de base de datos en cada petición.
 """
 
-# Importamos os para leer variables de entorno del sistema o del archivo .env
+# Importamos os para leer variables de entorno
 import os
 
-# load_dotenv permite cargar las variables guardadas en el archivo .env
+# pathlib permite construir rutas seguras y portables
+from pathlib import Path
+
+# load_dotenv carga variables desde el archivo .env
 from dotenv import load_dotenv
 
 # create_engine crea el motor de conexión con PostgreSQL
@@ -30,14 +33,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-# Cargamos las variables definidas en el archivo .env
-# Por ejemplo: DATABASE_URL=postgresql://...
-load_dotenv()
+# Ruta absoluta al archivo .env
+env_path = Path(__file__).resolve().parent.parent / ".env"
+
+# Cargamos las variables del .env
+load_dotenv(dotenv_path=env_path)
 
 
-# Leemos la URL de conexión desde el archivo .env
+# Leemos la URL de conexión
 DATABASE_URL = os.getenv("DATABASE_URL")
-
 
 # Validación defensiva:
 # Si DATABASE_URL no existe, detenemos el programa con un mensaje claro.
