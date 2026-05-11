@@ -1,44 +1,44 @@
-# ============================================
-# PROYECTO 3 VORTEX - DEPENDENCIAS COMPLETAS
-# ============================================
-
-# ============================================
-# PROYECTO 3 VORTEX - DEPENDENCIAS COMPLETAS
-# ============================================
-
-# -------- FLASK (Proyecto anterior) --------
-flask
-gunicorn
-
-# Variables de entorno
-python-dotenv
-python-dateutil
-
-# Comunicación y API
-requests
-
-# Tareas automáticas (Scheduler)
-flask-apscheduler
-
-# -------- ANÁLISIS DE DATOS --------
-pandas
-openpyxl
-
-# -------- TESTS --------
-pytest
-
-
-# -------- FASTAPI (Nuevo Proyecto 3) --------
-# Web Framework
-fastapi
-uvicorn
-
-# Database
-sqlalchemy
-psycopg2-binary
-
-# Validación
-pydantic
-
-# Testing API
-httpx
+annotated-doc==0.0.4
+annotated-types==0.7.0
+anyio==4.13.0
+APScheduler==3.11.2
+blinker==1.9.0
+certifi==2026.4.22
+charset-normalizer==3.4.7
+click==8.3.3
+et_xmlfile==2.0.0
+fastapi==0.136.1
+Flask==3.1.3
+Flask-APScheduler==1.13.1
+greenlet==3.5.0
+gunicorn==26.0.0
+h11==0.16.0
+httpcore==1.0.9
+httpx==0.28.1
+idna==3.13
+iniconfig==2.3.0
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+numpy==2.4.4
+openpyxl==3.1.5
+packaging==26.2
+pandas==3.0.2
+pluggy==1.6.0
+psycopg2-binary==2.9.12
+pydantic==2.13.4
+pydantic_core==2.46.4
+Pygments==2.20.0
+pytest==9.0.3
+python-dateutil==2.9.0.post0
+python-dotenv==1.2.2
+requests==2.33.1
+six==1.17.0
+SQLAlchemy==2.0.49
+starlette==1.0.0
+typing-inspection==0.4.2
+typing_extensions==4.15.0
+tzlocal==5.3.1
+urllib3==2.7.0
+uvicorn==0.46.0
+Werkzeug==3.1.8
