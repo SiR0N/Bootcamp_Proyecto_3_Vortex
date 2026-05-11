@@ -1,25 +1,85 @@
-# leemos JSON
 import json
-import os # Esto sirve para que el código buscar localizar el archivo .py donde sea que esté
+import os
+from datetime import datetime as dt
 
-def extraer_datos(ruta_archivo):
-    directorio_actual = os.path.dirname(__file__) # Esto busca la carpeta donde está este script (extract.py)
-    ruta_completa = os.path.join(directorio_actual, ruta_archivo) # ruta absoluta al archivo JSON
+try:
+    from services.normalizer import NormalizerService
+except ImportError:
+    NormalizerService = None
+
+try:
+    from services import alert_service
+    from services.alert_service import AlertService
+except ImportError:
+    alert_service = None
+    AlertService = None
+
+
+def normalizar_datos_aemet(data):
+    """
+    Normaliza datos de AEMET para el proyecto VORTEX.
+    
+    Args:
+        data: dict o lista con datos crudos de AEMET
+    Returns:
+        dict con datos normalizados en formato compatible con el proyecto
+    """
+    if NormalizerService is None:
+        return {"error": "No se pudo importar NormalizerService"}
+
+    if data is None:
+        return {"error": "Datos nulos"}
+
+    if isinstance(data, list):
+        if len(data) == 0:
+            return {"error": "Lista vacía"}
+        data = data[0]
+
+    if not isinstance(data, dict):
+        return {"error": "Formato de datos inválido"}
 
     try:
-        with open(ruta_completa, 'r') as file: # lee el archivo JSON
-            datos = json.load(file) # convierte el JSON en lenguaje Python (lista de diccionarios)
-            print("✅ Extracción exitosa") 
-            return datos # devuelve los datos para que puedan ser usados por otros scripts
-    except Exception as e: # si ocurre un error, lo captura y muestra un mensaje (e)
-        print(f"❌ Error al leer el archivo: {e}")
+        normalizer = NormalizerService()
+        resultado = normalizer.normalizar(data, fuente="aemet")
 
-# --- ESTO ES PARA PROBAR QUE FUNCIONA ---
-if __name__ == "__main__":
-    ruta = "../data/registros_climaticos.json" # El '..' significa 'sal de la carpeta etl y busca fuera'
-    mis_datos = extraer_datos(ruta)
-    
-    if mis_datos:
-        print(f"He encontrado {len(mis_datos)} registros.")
-        print(f"El primer registro es de: {mis_datos[0]['estacion_id']}") # la variable "estacion_id" queda pendiente de denominar
+        estacion_raw = resultado.get("ciudad") or resultado.get("estacion") or resultado.get("ubi")
+        estacion = estacion_raw if estacion_raw else "Ubicación Desconocida"
+
+        fecha_raw = resultado.get("fecha")
+        if fecha_raw:
+            if "T" in str(fecha_raw):
+                fecha_formato = str(fecha_raw).replace("T", " ")
+            else:
+                fecha_formato = str(fecha_raw)
+        else:
+            fecha_formato = "N/A"
+
+        def safe_float(valor, default=0.0):
+            try:
+                return float(valor) if valor is not None else default
+            except (ValueError, TypeError):
+                return default
+
+        resultado_final = {
+            "estacion": estacion,
+            "fecha": fecha_formato,
+            "temperatura": safe_float(resultado.get("temperatura")),
+            "humedad": safe_float(resultado.get("humedad")),
+            "viento": safe_float(resultado.get("viento")),
+            "presion": safe_float(resultado.get("presion")),
+            "lluvia": safe_float(resultado.get("lluvia")),
+            "alertas": []
+        }
+
+        if alert_service and hasattr(alert_service, 'evaluar_alertas'):
+            try:
+                string_alerts = alert_service.evaluar_alertas(resultado_final)
+                resultado_final["alertas"] = string_alerts
+            except Exception:
+                pass
+
+        return resultado_final
+
+    except Exception as e:
+        return {"error": str(e)}
 

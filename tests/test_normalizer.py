@@ -58,7 +58,7 @@ def test_normalizar_datos_aemet_correcto(monkeypatch, sample_aemet_data):
     #
     # Solo afecta durante este test.
     monkeypatch.setattr(
-        "services.normalizer_service.alert_service.evaluar_alertas",
+        "services.alert_service.evaluar_alertas",
         fake_alertas
     )
 
@@ -108,7 +108,7 @@ def test_normalizar_datos_aemet_dict(monkeypatch):
     # Sustituimos evaluar_alertas por una función sencilla que devuelve lista vacía.
     # En este test no nos interesa probar alertas.
     monkeypatch.setattr(
-        "services.normalizer_service.alert_service.evaluar_alertas",
+        "services.alert_service.evaluar_alertas",
         lambda x: []
     )
 
