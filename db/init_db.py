@@ -23,9 +23,9 @@ with engine.connect() as connection:
     connection.execute(
         text(
             """
-            CREATE TABLE IF NOT EXISTS public.zonas (
+            CREATE TABLE IF NOT EXISTS public.estaciones (
                 id SERIAL PRIMARY KEY,
-                nombre VARCHAR(100) NOT NULL UNIQUE,
+                indicativo VARCHAR(50) NOT NULL UNIQUE,
                 municipio VARCHAR(100),
                 provincia VARCHAR(100),
                 lat NUMERIC,
@@ -44,7 +44,8 @@ with engine.connect() as connection:
             """
             CREATE TABLE IF NOT EXISTS public.mediciones (
                 id SERIAL PRIMARY KEY,
-                zona_id INTEGER NOT NULL,
+                FOREIGN KEY(zona_id)
+                REFERENCES public.zonas(id)
                 fecha TIMESTAMP NOT NULL,
                 temperatura NUMERIC,
                 humedad NUMERIC,
