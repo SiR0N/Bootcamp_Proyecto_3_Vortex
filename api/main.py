@@ -1,6 +1,17 @@
+import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from dotenv import load_dotenv
+import os
+
+# Importamos las rutas
 from api.routes import zonas, mediciones
+# Importamos la base de datos para inicializarla
+from db.session import engine, Base
+
+# 1. CARGAR VARIABLES DE ENTORNO
+# Esto es vital para que reconozca DATABASE_URL, SECRET_KEY, etc.
+load_dotenv()
 
 app = FastAPI(
     title='ClimApp API',
@@ -8,7 +19,12 @@ app = FastAPI(
     version='1.0.0'
 )
 
+# 2. CREAR LAS TABLAS EN LA BASE DE DATOS
+# Esto hace que, al arrancar la App, se cree el archivo clima.db o se conecte a Postgres
+# Si las tablas ya existen, no hace nada.
+Base.metadata.create_all(bind=engine)
 
+# --- MANEJO DE EXCEPCIONES ---
 
 @app.exception_handler(404)
 async def not_found_exception_handler(request: Request, exc: Exception):
@@ -31,7 +47,12 @@ app.include_router(mediciones.router)
 @app.get("/", tags=["Root"])
 async def root():
     return {
-        "message": "Bienvenido a ClimApp API",
+        "message": "Bienvenido a Vortex API",
         "docs": "/docs",
         "status": "operacional"
     }
+
+# --- EJECUCIÓN ---
+if __name__ == "__main__":
+    # Esto permite ejecutar la API escribiendo simplemente: python api/main.py
+    uvicorn.run("api.main:app", host="0.0.0.0", port=8000, reload=True)
