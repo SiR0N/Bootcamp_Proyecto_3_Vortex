@@ -5,6 +5,8 @@ from typing import List
 from db.session import get_db
 from db.models.zona import Zona
 from api.schemas.zona import ZonaCreate, ZonaResponse
+from db.models.medicion import Medicion # Asegúrate de importar el modelo Medicion
+from api.schemas.medicion import MedicionResponse # Y su schema de respuesta
 
 router = APIRouter(prefix="/zonas", tags=["zonas"])
 
@@ -51,3 +53,13 @@ def delete_zona(id: int, db: Session = Depends(get_db)):
     db.delete(zona)
     db.commit()
     return None
+
+@router.get("/{id}/mediciones", response_model=List[MedicionResponse])
+def get_mediciones_por_zona(id: int, db: Session = Depends(get_db)):
+    # 1. Verificamos si la zona existe (si no, 404 según tu requisito)
+    zona = db.query(Zona).filter(Zona.id == id).first()
+    if not zona:
+        raise HTTPException(status_code=404, detail="Zona no encontrada")
+    
+    # 2. Retornamos las mediciones asociadas a esa zona
+    return db.query(Medicion).filter(Medicion.zona_id == id).all()
