@@ -61,8 +61,8 @@ with engine.connect() as connection:
     #   Si se intenta borrar una zona con mediciones, la BD lo impide.
     #
     # Campos climáticos: temperatura, humedad, viento, lluvia, presion
-    #   → todos NUMERIC y nullable (puede haber sensores sin datos)
-    #   → presion en particular suele llegar como NULL en los JSON de origen
+    #   → todos FLOAT y nullable (puede haber sensores sin datos)
+    #   → presion en particular siempre llega como NULL en los datos actuales
     #
     # fuente → quién generó el dato: 'aemet' o 'manual'
     # ─────────────────────────────────────────────────────────────────────
@@ -77,15 +77,15 @@ with engine.connect() as connection:
 
             fecha       TIMESTAMP NOT NULL,
 
-            temperatura NUMERIC,
+            temperatura FLOAT,
 
-            humedad     NUMERIC,
+            humedad     FLOAT,
 
-            viento      NUMERIC,
+            viento      FLOAT,
 
-            lluvia      NUMERIC,
+            lluvia      FLOAT,
 
-            presion     NUMERIC,
+            presion     FLOAT,
 
             fuente      VARCHAR(20) NOT NULL
                             CHECK (fuente IN ('aemet', 'manual')),
