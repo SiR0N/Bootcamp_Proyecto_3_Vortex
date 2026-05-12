@@ -25,32 +25,39 @@ def load_data(df):
     for _, row in df.iterrows():
         data = row.to_dict()
 
+        estacion_id = data["estacion_id"]
+
         # --- Validate zona_id ---
-        zona_id = data.get("estacion_id")  # Your ETL uses estacion_id as the zone
-        zona = db.query(Zona).filter(Zona.id == zona_id).first()
+        
+        zona = db.query(Zona).filter(Zona.estacion_id == estacion_id).first()
 
         if not zona:
-            print(f"⚠️ Zona no válida para estacion_id={zona_id}. Registro omitido.")
-            continue
-
-        try:
-            medicion = Medicion(
-                zona_id=zona_id,
-                fecha=data.get("fecha") if isinstance(data.get("fecha"), datetime)
-                      else datetime.fromisoformat(str(data.get("fecha"))),
-                temperatura=data.get("temperatura"),
-                humedad=data.get("humedad"),
-                viento=data.get("viento"),
-                lluvia=data.get("lluvia"),
-                fuente=data.get("fuente", "etl")
+            zona = Zona(
+                estacion_id=estacion_id,
+                nombre=None,
+                latitud=None,
+                longitud=None
             )
+            db.add(zona)
+            db.commit()
+            db.refresh(zona)
+            print(f"ℹ️ Nueva zona creada para estacion_id={estacion_id}")
+            
 
+        medicion = Medicion(
+                zona_id=zona.id,
+                fecha=data["fecha"], 
+                temperatura=data.get("temperatura"),
+            humedad=data.get("humedad"),
+            viento=data.get("viento"),
+            lluvia=data.get("lluvia"),
+            presion=data.get("presion"),   # si ya no existe, será None
+            fuente=data.get("fuente", "manual")
+            )
+        try:
             db.add(medicion)
             db.commit()
-            db.refresh(medicion)
-
             inserted += 1
-
         except Exception as e:
             print(f"❌ Error insertando registro {zona_id}: {e}")
             db.rollback()
@@ -69,12 +76,12 @@ if __name__ == "__main__":
     df_test = pd.DataFrame([
         {
             "estacion_id": "EST-01",
-            "fecha": "2026-01-01T00:00:00",
+            "fecha": datetime.now(),
             "temperatura": 10,
             "humedad": 50,
             "viento": 2,
             "lluvia": 0,
-            "fuente": "etl"
+            "fuente": "manual"
         }
     ])
 
