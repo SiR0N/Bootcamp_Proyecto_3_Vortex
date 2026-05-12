@@ -5,7 +5,7 @@ from typing import List
 from db.session import get_db
 from db.models.medicion import Medicion
 from db.models.zona import Zona
-from api.schemas.medicion import MedicionCreate, MedicionResponse
+from api.schemas.medicion import MedicionCreate, MedicionResponse, MedicionUpdate
 
 router = APIRouter(prefix="/mediciones", tags=["mediciones"])
 
@@ -37,6 +37,25 @@ def get_medicion(medicion_id: int, db: Session = Depends(get_db)):
     medicion = db.query(Medicion).filter(Medicion.id == medicion_id).first()
     if not medicion:
         raise HTTPException(status_code=404, detail="Medición no encontrada")
+    return medicion
+
+@router.put("/{medicion_id}", response_model=MedicionResponse)
+def update_medicion(medicion_id: int, medicion_update: MedicionUpdate, db: Session = Depends(get_db)):
+    medicion = db.query(Medicion).filter(Medicion.id == medicion_id).first()
+    if not medicion:
+        raise HTTPException(status_code=404, detail="Medición no encontrada")
+    
+    if medicion_update.zona_id is not None:
+        zona = db.query(Zona).filter(Zona.id == medicion_update.zona_id).first()
+        if not zona:
+            raise HTTPException(status_code=400, detail="La zona_id proporcionada no existe")
+    
+    update_data = medicion_update.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(medicion, key, value)
+    
+    db.commit()
+    db.refresh(medicion)
     return medicion
 
 @router.delete("/{medicion_id}", status_code=status.HTTP_204_NO_CONTENT)

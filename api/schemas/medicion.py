@@ -31,3 +31,13 @@ class MedicionResponse(MedicionBase):
 
     class Config:
         from_attributes = True
+
+class MedicionUpdate(BaseModel):
+    zona_id: Optional[int] = None
+    fecha: Optional[datetime] = None
+    temperatura: Optional[float] = None
+    humedad: Optional[float] = None
+    viento: Optional[float] = None
+    lluvia: Optional[float] = None
+    presion: Optional[float] = None
+    fuente: Optional[str] = None
