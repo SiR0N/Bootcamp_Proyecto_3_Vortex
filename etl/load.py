@@ -45,21 +45,21 @@ def load_data(df):
             
 
         medicion = Medicion(
-                zona_id=zona.id,
-                fecha=data["fecha"], 
-                temperatura=data.get("temperatura"),
+            zona_id=zona.id,
+            fecha=data["fecha"], 
+            temperatura=data.get("temperatura"),
             humedad=data.get("humedad"),
             viento=data.get("viento"),
             lluvia=data.get("lluvia"),
-            presion=data.get("presion"),   # si ya no existe, será None
+            presion=data.get("presion"),
             fuente=data.get("fuente", "manual")
-            )
+        )
         try:
             db.add(medicion)
             db.commit()
             inserted += 1
         except Exception as e:
-            print(f"❌ Error insertando registro {zona_id}: {e}")
+            print(f"❌ Error insertando registro {estacion_id}: {e}")
             db.rollback()
 
     db.close()
