@@ -27,6 +27,11 @@ def load_data(df):
 
         estacion_id = data["estacion_id"]
 
+        # VALIDAR estacion_id: evitar NaN, None o valores inválidos
+        if not estacion_id or (isinstance(estacion_id, float) and str(estacion_id) == 'nan'):
+            print("[WARN] estacion_id inválido, omitiendo registro")
+            continue
+
         # --- Validate zona_id ---
         
         zona = db.query(Zona).filter(Zona.estacion_id == estacion_id).first()
@@ -43,6 +48,10 @@ def load_data(df):
             db.refresh(zona)
             print(f"ℹ️ Nueva zona creada para estacion_id={estacion_id}")
             
+            # Normalizar fuente
+        fuente = str(data.get("fuente", "manual"))
+        if fuente not in ("aemet", "manual"):
+            fuente = "manual"
 
         medicion = Medicion(
             zona_id=zona.id,
@@ -52,7 +61,7 @@ def load_data(df):
             viento=data.get("viento"),
             lluvia=data.get("lluvia"),
             presion=data.get("presion"),
-            fuente=data.get("fuente", "manual")
+            fuente=fuente   
         )
         try:
             db.add(medicion)
