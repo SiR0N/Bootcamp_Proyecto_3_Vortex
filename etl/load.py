@@ -125,7 +125,7 @@ if __name__ == "__main__":
             "viento": 2,
             "lluvia": 0,
             "presion": 1012,
-            "fuente": "manual"
+            "fuente": ("manual", "aemet")[0]  # Alternar entre manual y aemet para probar validación
         }
     ])
 
