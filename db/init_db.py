@@ -1,15 +1,13 @@
 """
-Inicialización de base de datos PostgreSQL/Supabase — Proyecto Vortex.
+db/init_db.py
+
+Inicialización de la base de datos PostgreSQL/Supabase — Proyecto Vortex.
 
 Este script:
-1. Comprueba conexión con la base de datos.
-2. Crea todas las tablas normalizadas con sus relaciones correctas.
-
-Modelo de datos:
-    zonas → municipios → estaciones → mediciones → alertas
-    fuentes_dato (catálogo)
-    umbrales_alerta (catálogo AEMET)
-    usuarios
+1. Comprueba la conexión con la base de datos.
+2. Crea las tablas del modelo relacional en el orden correcto:
+      zonas → mediciones
+   (zonas primero porque mediciones tiene una clave foránea hacia ella)
 """
 
 from sqlalchemy import text
@@ -18,164 +16,86 @@ from db.session import engine
 
 with engine.connect() as connection:
 
-    # ── 1. Comprobar conexión ──────────────────────────────────────────────────
+    # ── 1. Comprobar conexión ─────────────────────────────────────────────
     result = connection.execute(text("SELECT NOW();"))
     row = result.fetchone()
-    print("Conexión correcta con Supabase/PostgreSQL.")
-    print(f"Fecha/hora BD: {row[0]}\n")
+    print("✅ Conexión correcta con Supabase/PostgreSQL.")
+    print(f"   Fecha/hora BD: {row[0]}\n")
 
 
-    # ── 2. ZONAS ──────────────────────────────────────────────────────────────
-    # Representa las regiones geográficas del proyecto (capital, norte, sur…).
-    # Datos de origen: config/ubicaciones.json → regiones
+    # ── 2. TABLA: ZONAS ───────────────────────────────────────────────────
+    #
+    # Representa una estación meteorológica o punto de medición.
+    # Es la tabla "padre": cada medición pertenece a una zona.
+    #
+    # Campos:
+    #   estacion_id → identificador textual de la fuente (ej. "EST-01")
+    #   nombre      → nombre descriptivo de la zona
+    #   latitud     → coordenada geográfica (puede ser NULL si no se conoce)
+    #   longitud    → coordenada geográfica (puede ser NULL si no se conoce)
+    # ─────────────────────────────────────────────────────────────────────
     connection.execute(text("""
         CREATE TABLE IF NOT EXISTS public.zonas (
-            id         SERIAL       PRIMARY KEY,
-            codigo     VARCHAR(50)  NOT NULL UNIQUE,   -- ej: "capital", "norte"
-            nombre     VARCHAR(100) NOT NULL,           -- ej: "Madrid Capital"
-            es_default BOOLEAN      DEFAULT FALSE
+
+            id          SERIAL PRIMARY KEY,
+
+            estacion_id VARCHAR(50)  NOT NULL UNIQUE,
+
+            nombre      VARCHAR(100) NOT NULL,
+
+            latitud     FLOAT,
+
+            longitud    FLOAT
         );
     """))
-    print("✔️ Tabla zonas creada.")
+    print("✅ Tabla 'zonas' creada (o ya existía).")
 
 
-    # ── 3. MUNICIPIOS ─────────────────────────────────────────────────────────
-    # Municipios de la Comunidad de Madrid.
-    # Datos de origen: config/municipios.json y config/ubicaciones.json
-    connection.execute(text("""
-        CREATE TABLE IF NOT EXISTS public.municipios (
-            id       SERIAL       PRIMARY KEY,
-            cod_ine  VARCHAR(10)  UNIQUE,               -- código INE del municipio
-            nombre   VARCHAR(100) NOT NULL,
-            lat      NUMERIC,
-            lon      NUMERIC,
-            zona_id  INTEGER      REFERENCES public.zonas(id) ON DELETE SET NULL
-        );
-    """))
-    print("✔️ Tabla municipios creada.")
-
-
-    # ── 4. ESTACIONES ─────────────────────────────────────────────────────────
-    # Estaciones meteorológicas (AEMET u otras fuentes).
-    # Se añade municipio_id para la relación estacion → municipio → zona.
-    connection.execute(text("""
-        CREATE TABLE IF NOT EXISTS public.estaciones (
-            id            SERIAL       PRIMARY KEY,
-            indicativo    VARCHAR(50)  NOT NULL UNIQUE,  -- ej: "3195", "3194U"
-            nombre        VARCHAR(100) NOT NULL,
-            provincia     VARCHAR(100),
-            lat           NUMERIC,
-            lon           NUMERIC,
-            municipio_id  INTEGER      REFERENCES public.municipios(id) ON DELETE SET NULL
-        );
-    """))
-    print("✔️ Tabla estaciones creada.")
-
-
-    # ── 5. FUENTES_DATO ───────────────────────────────────────────────────────
-    # Catálogo de fuentes de datos (aemet, manual, unknown…).
-    # Datos de origen: config/aemet_thresholds.json → fuentes_datos
-    connection.execute(text("""
-        CREATE TABLE IF NOT EXISTS public.fuentes_dato (
-            id       SERIAL       PRIMARY KEY,
-            codigo   VARCHAR(50)  NOT NULL UNIQUE,       -- ej: "aemet", "manual"
-            nombre   VARCHAR(100),
-            url      VARCHAR(255),
-            cobertura VARCHAR(100)
-        );
-    """))
-    print("✔️ Tabla fuentes_dato creada.")
-
-
-    # ── 6. MEDICIONES ─────────────────────────────────────────────────────────
-    # Una medición por estación y fecha/hora.
-    # fuente_id reemplaza la columna VARCHAR fuente → FK normalizada.
+    # ── 3. TABLA: MEDICIONES ──────────────────────────────────────────────
+    #
+    # Almacena cada registro meteorológico recogido.
+    # Está vinculada a zonas mediante zona_id (clave foránea).
+    #
+    # Regla de integridad:
+    #   No pueden existir mediciones sin zona asociada.
+    #   Si se intenta borrar una zona con mediciones, la BD lo impide.
+    #
+    # Campos climáticos: temperatura, humedad, viento, lluvia, presion
+    #   → todos FLOAT y nullable (puede haber sensores sin datos)
+    #   → presion en particular siempre llega como NULL en los datos actuales
+    #
+    # fuente → quién generó el dato: 'aemet' o 'manual'
+    # ─────────────────────────────────────────────────────────────────────
     connection.execute(text("""
         CREATE TABLE IF NOT EXISTS public.mediciones (
-            id           SERIAL    PRIMARY KEY,
-            estacion_id  INTEGER   NOT NULL
-                             REFERENCES public.estaciones(id) ON DELETE CASCADE,
-            fecha        TIMESTAMP NOT NULL,
-            temperatura  NUMERIC,       -- °C
-            humedad      NUMERIC,       -- %
-            viento       NUMERIC,       -- km/h
-            lluvia       NUMERIC,       -- mm
-            presion      NUMERIC,       -- hPa
-            fuente_id    INTEGER
-                             REFERENCES public.fuentes_dato(id) ON DELETE SET NULL,
 
-            UNIQUE (estacion_id, fecha)  -- una medición por estación/instante
+            id          SERIAL PRIMARY KEY,
+
+            zona_id     INTEGER NOT NULL
+                            REFERENCES public.zonas(id)
+                            ON DELETE RESTRICT,
+
+            fecha       TIMESTAMP NOT NULL,
+
+            temperatura FLOAT,
+
+            humedad     FLOAT,
+
+            viento      FLOAT,
+
+            lluvia      FLOAT,
+
+            presion     FLOAT,
+
+            fuente      VARCHAR(20) NOT NULL
+                            CHECK (fuente IN ('aemet', 'manual')),
+
+            created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     """))
-    print("✔️ Tabla mediciones creada.")
+    print("✅ Tabla 'mediciones' creada (o ya existía).")
 
 
-    # ── 7. UMBRALES_ALERTA ────────────────────────────────────────────────────
-    # Catálogo de umbrales AEMET (amarillo/naranja/rojo por variable).
-    # Datos de origen: config/aemet_thresholds.json → alertas
-    connection.execute(text("""
-        CREATE TABLE IF NOT EXISTS public.umbrales_alerta (
-            id          SERIAL       PRIMARY KEY,
-            variable    VARCHAR(50)  NOT NULL,   -- temperatura, viento, lluvia…
-            nivel       VARCHAR(20)  NOT NULL,   -- amarillo, naranja, rojo
-            valor       NUMERIC      NOT NULL,   -- umbral numérico
-            descripcion VARCHAR(200),
-            color_hex   VARCHAR(7),
-            icono       VARCHAR(10),
-
-            UNIQUE (variable, nivel)
-        );
-    """))
-    print("✔️ Tabla umbrales_alerta creada.")
-
-
-    # ── 8. ALERTAS ────────────────────────────────────────────────────────────
-    # Alertas generadas para una medición concreta.
-    # umbral_id enlaza con el catálogo de umbrales en lugar de duplicar datos.
-    connection.execute(text("""
-        CREATE TABLE IF NOT EXISTS public.alertas (
-            id              SERIAL    PRIMARY KEY,
-            medicion_id     INTEGER   NOT NULL
-                                REFERENCES public.mediciones(id) ON DELETE CASCADE,
-            umbral_id       INTEGER
-                                REFERENCES public.umbrales_alerta(id) ON DELETE SET NULL,
-            tipo            VARCHAR(50),   -- calor, viento, lluvia…
-            nivel           VARCHAR(50),   -- amarillo, naranja, rojo
-            mensaje         TEXT,
-            valor_detectado NUMERIC,
-            umbral          NUMERIC,       -- valor en el momento (desnormalizado para histórico)
-            created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-    """))
-    print("✔️ Tabla alertas creada.")
-
-
-    # ── 9. USUARIOS ───────────────────────────────────────────────────────────
-    # Usuarios de la aplicación.
-    # Datos de origen: data/usuarios.json
-    connection.execute(text("""
-        CREATE TABLE IF NOT EXISTS public.usuarios (
-            id           SERIAL       PRIMARY KEY,
-            email        VARCHAR(255) NOT NULL UNIQUE,
-            password_hash VARCHAR(255) NOT NULL,
-            created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
-            activo       BOOLEAN      DEFAULT TRUE
-        );
-    """))
-    print("✔️ Tabla usuarios creada.")
-
-
-    # ── 10. INDICES DE RENDIMIENTO ────────────────────────────────────────────
-    connection.execute(text("CREATE INDEX IF NOT EXISTS idx_mediciones_estacion_fecha ON public.mediciones(estacion_id, fecha);"))
-    connection.execute(text("CREATE INDEX IF NOT EXISTS idx_alertas_medicion ON public.alertas(medicion_id);"))
-    connection.execute(text("CREATE INDEX IF NOT EXISTS idx_estaciones_municipio ON public.estaciones(municipio_id);"))
-    connection.execute(text("CREATE INDEX IF NOT EXISTS idx_municipios_zona ON public.municipios(zona_id);"))
-    print("✔️ Índices creados.")
-
-
-    # ── Confirmar cambios ─────────────────────────────────────────────────────
+    # Confirmamos todos los cambios en la base de datos
     connection.commit()
-    print("\n✅ Base de datos inicializada")
-    connection.commit()
-
-    print("\nBase de datos inicializada correctamente.")
+    print("\n✅ Base de datos inicializada correctamente.")
