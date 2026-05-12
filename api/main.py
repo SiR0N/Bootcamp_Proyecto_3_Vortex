@@ -7,7 +7,8 @@ import os
 # Importamos las rutas
 from api.routes import zonas, mediciones
 # Importamos la base de datos para inicializarla
-from db.session import engine, Base
+from db.session import engine
+from db.base import Base
 
 # 1. CARGAR VARIABLES DE ENTORNO
 # Esto es vital para que reconozca DATABASE_URL, SECRET_KEY, etc.
