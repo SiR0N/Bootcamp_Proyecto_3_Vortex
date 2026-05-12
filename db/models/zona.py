@@ -9,7 +9,7 @@ class Zona(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     estacion_id = Column(String(50), unique=True, index=True)
-    nombre = Column(String(100))
+    nombre = Column(String(100), nullable=True) # - HELEN - CORREGIDO PARA NO ERROR 422 Y 500
     latitud = Column(Float, nullable=True)
     longitud = Column(Float, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)

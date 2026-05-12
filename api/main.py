@@ -7,7 +7,8 @@ import os
 # Importamos las rutas
 from api.routes import zonas, mediciones
 # Importamos la base de datos para inicializarla
-from db.session import engine, Base
+from db.session import engine
+from db.base import Base
 
 # 1. CARGAR VARIABLES DE ENTORNO
 # Esto es vital para que reconozca DATABASE_URL, SECRET_KEY, etc.
@@ -32,13 +33,13 @@ async def not_found_exception_handler(request: Request, exc: Exception):
         status_code=404,
         content={"message": "Lo sentimos, el recurso solicitado no existe."},
     )
-
-@app.exception_handler(500)
-async def server_error_exception_handler(request: Request, exc: Exception):
-    return JSONResponse(
-        status_code=500,
-        content={"message": "Error interno del servidor. Nuestro equipo técnico ha sido notificado."},
-    )
+# - HELEN - ESTO LO HE HECHO PARA QUE NO OCULTARA EL ERROR Y ME DEJARA VER QUÉ PASABA
+#@app.exception_handler(500)
+#async def server_error_exception_handler(request: Request, exc: Exception):
+    #return JSONResponse(
+        #status_code=500,
+        #content={"message": "Error interno del servidor. Nuestro equipo técnico ha sido notificado."},
+            #)
 
 # --- REGISTRO DE RUTAS (ROUTERS) ---
 app.include_router(zonas.router)
