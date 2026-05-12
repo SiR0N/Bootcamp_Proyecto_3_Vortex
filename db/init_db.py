@@ -41,11 +41,13 @@ with engine.connect() as connection:
 
             estacion_id VARCHAR(50)  NOT NULL UNIQUE,
 
-            nombre      VARCHAR(100) NOT NULL,
+            nombre      VARCHAR(100),
 
             latitud     FLOAT,
 
-            longitud    FLOAT
+            longitud    FLOAT,
+
+            created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     """))
     print("✅ Tabla 'zonas' creada (o ya existía).")
