@@ -21,9 +21,16 @@ def crear_o_obtener_zona(datos_zona):
         print(f"✔ Zona creada: {datos_zona['estacion_id']}")
         return response.json()["id"]
 
-    if response.status_code == 400:
+def crear_o_obtener_zona(datos_zona):
+    """Crea una zona o devuelve su ID si ya existe."""
+    response = requests.post(f"{API_URL}/zonas/", json=datos_zona)
+
+    if response.status_code == 201:
+        print(f"✔ Zona creada: {datos_zona['estacion_id']}")
+        return response.json()["id"]
+
+    if response.status_code == 409:  # ← cambiado de 400 a 409
         print(f"ℹ Zona ya existente: {datos_zona['estacion_id']}")
-        # Intentamos obtenerla
         r = requests.get(f"{API_URL}/zonas/by_estacion/{datos_zona['estacion_id']}")
         if r.status_code == 200:
             return r.json()["id"]
