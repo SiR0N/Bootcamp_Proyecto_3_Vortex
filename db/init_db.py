@@ -90,7 +90,7 @@ with engine.connect() as connection:
             presion     FLOAT,
 
             fuente      VARCHAR(20) NOT NULL
-                            CHECK (fuente IN ('aemet', 'manual')),
+                            CHECK (fuente IN ('aemet', 'manual', 'openweather')),
 
             created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
