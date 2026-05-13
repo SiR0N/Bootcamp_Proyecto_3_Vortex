@@ -23,7 +23,6 @@ def get_zona(id: int, db: Session = Depends(get_db)):
 
 @router.get("/by_estacion/{estacion_id}", response_model=ZonaResponse)
 def get_zona_by_estacion(estacion_id: str, db: Session = Depends(get_db)):
-    """Busca zona por estacion_id - usado por ETL"""
     zona = db.query(Zona).filter(Zona.estacion_id == estacion_id).first()
     if not zona:
         raise HTTPException(status_code=404, detail="Zona no encontrada")
