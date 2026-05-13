@@ -8,9 +8,10 @@ class Zona(Base):
     __tablename__ = "zonas"
 
     id = Column(Integer, primary_key=True, index=True)
-    nombre = Column(String(255), nullable=False)
-    lat = Column(Float, nullable=False)
-    lon = Column(Float, nullable=False)
+    estacion_id = Column(String(50), unique=True, index=True)
+    nombre = Column(String(100), nullable=True) # - HELEN - CORREGIDO PARA NO ERROR 422 Y 500
+    latitud = Column(Float, nullable=True)
+    longitud = Column(Float, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     mediciones = relationship("Medicion", back_populates="zona")

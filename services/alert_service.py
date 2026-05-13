@@ -61,3 +61,9 @@ class AlertService:
             alertas.append("VERDE")
 
         return alertas
+
+
+def evaluar_alertas(data: Dict[str, Any]) -> List[str]:
+    """Convenience function that calls AlertService().evaluar_alertas(data)"""
+    service = AlertService()
+    return service.evaluar_alertas(data)

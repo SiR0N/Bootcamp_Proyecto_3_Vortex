@@ -22,7 +22,7 @@ def tarea_actualizar_clima():
         data = normalizar_datos_aemet(raw_data)
         
         # 3. Añadir fuente para saber que fue automático
-        data["fuente"] = "automatico"
+        data["fuente"] = "AEMET"
         
         # 4. Guardar en el JSON
         repo.guardar(data)
