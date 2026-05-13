@@ -34,13 +34,19 @@ class MedicionCreate(MedicionBase):
     pass
 
 
-class MedicionResponse(MedicionBase):
-    # Campos que genera la base de datos automaticamente
+class MedicionResponse(BaseModel):
     id: int
-    created_at: datetime
+    zona_id: int | None = None
+    fecha: datetime | None = None
+    temperatura: float | None = None
+    humedad: float | None = None
+    viento: float | None = None
+    lluvia: float | None = None
+    presion: float | None = None
+    fuente: str | None = None
+    created_at: datetime | None = None
 
     class Config:
-        # Permite que Pydantic lea objetos SQLAlchemy directamente
         from_attributes = True
 
 

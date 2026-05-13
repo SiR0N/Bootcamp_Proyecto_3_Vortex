@@ -4,19 +4,48 @@ from typing import Dict, Any, Optional
 from services.retry_service import get_retry_session
 from services.fallback_service import get_fallback_service
 from utils.helpers import calcular_distancia
-import random
+import requests
 
 class WeatherAPIService:
     def __init__(self):
-        # 1. MANTENEMOS: La configuración de Adriana e Isabela
-        self.api_key = os.getenv("AEMET_API_KEY")
-        if not self.api_key:
-            self.logger = logging.getLogger(__name__)
-            self.logger.warning("AEMET_API_KEY no encontrada en .env. Se usará modo fallback.")
+        self.aemet_api_key = os.getenv("AEMET_API_KEY")
+        self.openweather_api_key = os.getenv("OPENWEATHER_API_KEY")
 
-        self.session = get_retry_session() if self.api_key else None
+        if not self.aemet_api_key:
+            self.logger = logging.getLogger(__name__)
+            self.logger.warning("AEMET_API_KEY no encontrada en .env.")
+
+        self.session = get_retry_session() if self.aemet_api_key else None
         self.logger = logging.getLogger(__name__)
         self.base_url = "https://opendata.aemet.es/opendata/api/observacion/convencional/todas"
+
+    def _obtener_datos_openweather(self, lat: float, lon: float) -> Optional[Dict[str, Any]]:
+        """Obtiene datos de OpenWeather API como fallback"""
+        if not self.openweather_api_key:
+            return None
+        try:
+            url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={self.openweather_api_key}&units=metric"
+            r = requests.get(url, timeout=10)
+            r.raise_for_status()
+            d = r.json()
+            return {
+                "estacion_id": f"OW-{d.get('id', 'unknown')}",
+                "ubi": d.get("name", "OpenWeather"),
+                "lat": d.get("coord", {}).get("lat", lat),
+                "lon": d.get("coord", {}).get("lon", lon),
+                "municipio": d.get("name"),
+                "temperatura": d.get("main", {}).get("temp"),
+                "humedad": d.get("main", {}).get("humidity"),
+                "viento": (d.get("wind", {}).get("speed", 0) or 0) * 3.6,
+                "presion": d.get("main", {}).get("pressure"),
+                "lluvia": d.get("rain", {}).get("1h", 0) if d.get("rain") else 0,
+                "fecha": self._obtener_fecha_actual(),
+                "fuente": "openweather",
+                "_fallback": True
+            }
+        except Exception as e:
+            self.logger.error(f"Error OpenWeather: {e}")
+            return None
 
     def _obtener_datos_crudos(self) -> list:
         """Método interno para bajar todas las observaciones de AEMET."""
@@ -50,8 +79,12 @@ class WeatherAPIService:
         observaciones = self._obtener_datos_crudos()
 
         if not observaciones:
-            self.logger.warning("No se recibieron observaciones de AEMET. Usando fallback.")
-            return self._generar_datos_fallback(user_lat, user_lon)
+            # Intentar OpenWeather primero
+            ow_data = self._obtener_datos_openweather(user_lat, user_lon)
+            if ow_data:
+                return ow_data
+            self.logger.warning("AEMET y OpenWeather fallaron.")
+            return None
 
         estacion_cercana = None
         distancia_minima = float('inf')
@@ -79,10 +112,13 @@ class WeatherAPIService:
         if estacion_cercana:
             self.logger.info(f"Estación más cercana hallada: {estacion_cercana.get('ubi')} a {distancia_minima:.2f}km")
 
-        # Si la estación más cercana está a más de 50km, usar fallback
+        # Si la estación más cercana está a más de 50km, usar OpenWeather
         if distancia_minima > 50:
-            self.logger.warning(f"Estación a {distancia_minima:.2f}km (>50km). Usando fallback.")
-            return self._generar_datos_fallback(user_lat, user_lon, estacion_cercana)
+            self.logger.warning(f"Estación a {distancia_minima:.2f}km (>50km). Intentando OpenWeather...")
+            ow_data = self._obtener_datos_openweather(user_lat, user_lon)
+            if ow_data:
+                return ow_data
+            return None
 
         return estacion_cercana
 
