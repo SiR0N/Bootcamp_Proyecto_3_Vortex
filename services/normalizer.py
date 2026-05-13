@@ -208,15 +208,21 @@ class NormalizerService:
 
         # 3. Normalizar y añadir campos faltantes con valores por defecto
 
-        # fuente ---> siempre en mayusculas para consistencia en la base de datos
-        # "aemet" → "AEMET", "manual" → "MANUAL"
-        if "fuente" not in resultado or resultado["fuente"] is None:
-            resultado["fuente"] = fuente.upper()
-        else:
-            resultado["fuente"] = str(resultado["fuente"]).upper()
+        # fuente ---> SIEMPRE en MINÚSCULAS (la BD tiene CHECK con minúsculas)
+        # 'aemet' | 'manual' | 'openweather'
+        VALORES_VALIDOS = {"aemet", "manual", "openweather"}
 
-        # estacion_id ---> siempre en mayusculas
-        # "est-001" → "EST-001"
+        if "fuente" not in resultado or resultado["fuente"] is None:
+            fuente_norm = str(fuente).lower()
+        else:
+            fuente_norm = str(resultado["fuente"]).lower()
+
+        if fuente_norm not in VALORES_VALIDOS:
+            fuente_norm = "manual"  # fallback seguro
+
+        resultado["fuente"] = fuente_norm
+
+        # estacion_id ---> mayúsculas
         if "estacion_id" in resultado and resultado["estacion_id"] is not None:
             resultado["estacion_id"] = str(resultado["estacion_id"]).upper()
 

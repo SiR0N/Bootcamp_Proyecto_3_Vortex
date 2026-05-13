@@ -54,13 +54,22 @@ def update_zona(id: int, zona_in: ZonaCreate, db: Session = Depends(get_db)):
     if not zona:
         raise HTTPException(status_code=404, detail="Zona no encontrada")
 
+    # Si cambian estacion_id, validar que no choque con otra zona
+    if zona_in.estacion_id != zona.estacion_id:
+        existe = (
+            db.query(Zona)
+              .filter(Zona.estacion_id == zona_in.estacion_id, Zona.id != id)
+              .first()
+        )
+        if existe:
+            raise HTTPException(status_code=409, detail="estacion_id ya está en uso")
+
     for key, value in zona_in.model_dump().items():
         setattr(zona, key, value)
 
     db.commit()
     db.refresh(zona)
     return zona
-
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_zona(id: int, db: Session = Depends(get_db)):

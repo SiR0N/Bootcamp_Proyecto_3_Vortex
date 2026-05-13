@@ -41,17 +41,18 @@ def ejecutar_etl():
 
 
 def tarea_actualizar_clima():
-    """
-    Tarea que se ejecuta automáticamente.
-    Descarga el clima de una estación principal y lo guarda.
-    """
+    """Tarea automática: descarga el clima y dispara el ETL."""
     try:
         lat, lon = "40.4167", "-3.7033"
 
         raw_data = obtener_clima_por_coordenadas(lat, lon)
-        data = normalizar_datos_aemet(raw_data)
+        if not raw_data:
+            logging.warning("Scheduler: AEMET sin datos, abortando.")
+            return
 
-        data["fuente"] = "SCHEDULER"
+        data = normalizar_datos_aemet(raw_data)
+        # 'aemet' EN MINÚSCULAS — cumple el CHECK constraint de PostgreSQL
+        data["fuente"] = "aemet"
 
         repo.guardar(data)
         print(f"Datos guardados para {data.get('ciudad')}")
