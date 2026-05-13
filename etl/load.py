@@ -89,7 +89,7 @@ def load_data(df):
 
         # Normalizar fuente
         fuente = str(data.get("fuente", "manual"))
-        if fuente not in ("aemet", "manual"):
+        if fuente not in ("aemet", "manual", "openweather"):
             fuente = "manual"
 
         # Crear medición
