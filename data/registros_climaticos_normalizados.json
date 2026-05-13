@@ -342,5 +342,18 @@
         "alertas": [],
         "ciudad": null,
         "presion": null
+    },
+    {
+        "estacion_id": "FALLBACK-Madrid-Centro",
+        "fecha": "2026-05-07T20:03:33",
+        "temperatura": 26.1,
+        "humedad": 64.0,
+        "viento": 12.7,
+        "lluvia": 0.0,
+        "municipio": "Madrid-Centro",
+        "fuente": "aemet",
+        "alertas": [],
+        "ciudad": "Madrid-Centro",
+        "presion": 1017.0
     }
 ]

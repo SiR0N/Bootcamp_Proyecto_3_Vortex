@@ -4,7 +4,6 @@ import pytest
 # Esta clase está en services/weather_api_service.py
 from services.weather_api_service import WeatherAPIService
 
-
 # =====================================================
 # CLASE FAKE: respuesta HTTP simulada
 # =====================================================

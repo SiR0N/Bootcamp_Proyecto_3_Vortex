@@ -1,21 +1,33 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional
-from datetime import datetime
+from typing import Optional
 
-# Esquema base con los campos comunes
+"""
+Schemas Pydantic para zonas climaticas.
+Un schema define la forma de los datos que entran o salen de la API.
+"""
+
 class ZonaBase(BaseModel):
-    estacion_id: str = Field(..., example="EST-001")
-    nombre: str = Field(..., example="Madrid-Retiro")
-    latitud: float = Field(..., ge=-90, le=90, example=40.4167)
-    longitud: float = Field(..., ge=-180, le=180, example=-3.7033)
+    # Identificador de la estacion meteorologica - REQUERIDO
+    estacion_id: str = Field(..., min_length=2, max_length=50)
 
-# Esquema para crear (POST)
+    # Nombre de la zona, opcional porque algunos datos de AEMET vienen incompletos
+    nombre: Optional[str] = Field(None, min_length=2, max_length=100)
+
+    # Latitud valida: entre -90 y 90 (limites reales del planeta), opcional
+    latitud: Optional[float] = Field(None, ge=-90, le=90)
+
+    # Longitud valida: entre -180 y 180, opcional
+    longitud: Optional[float] = Field(None, ge=-180, le=180)
+
 class ZonaCreate(ZonaBase):
+    # Hereda todos los campos y validaciones de ZonaBase
     pass
 
-# Esquema para la respuesta (GET)
+
 class ZonaResponse(ZonaBase):
+    # Campo que genera la base de datos automaticamente
     id: int
 
     class Config:
-        from_attributes = True  # Esto permite que Pydantic lea modelos de SQLAlchemy
+        # Permite que Pydantic lea objetos SQLAlchemy directamente
+        from_attributes = True
