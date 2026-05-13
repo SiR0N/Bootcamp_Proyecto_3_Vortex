@@ -15,8 +15,8 @@ class MedicionBase(BaseModel):
     viento:      Optional[float]      = Field(None, ge=0)
     lluvia:      Optional[float]      = Field(None, ge=0)
     presion:     Optional[float]      = Field(None, ge=800, le=1100)
-    fuente:      Literal["aemet", "manual"] = Field(...)  # ← minúsculas, sin SCHEDULER
-
+   # MedicionUpdate
+    fuente: Optional[Literal["aemet", "manual", "openweather"]] = None
     @field_validator("fuente", mode="before")
     @classmethod
     def normalizar_fuente(cls, v):
