@@ -1,19 +1,6 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+from typing import Optional
 
-<<<<<<< HEAD
-# Esquema base con los campos comunes 
-# - HELEN - ESTO LO MODIFICO PARA QUE NO ME DEJARA FUERA LOS REGISTROS QUE NO TENIAN NOMBRE, LATITUD O LONGITUD, YA QUE MUCHOS DATOS DE AEMET VIENEN ASÍ
-class ZonaBase(BaseModel):
-    #estacion_id: str = Field(..., example="EST-001")
-    #nombre: str = Field(..., example="Madrid-Retiro")
-    #latitud: float = Field(..., ge=-90, le=90, example=40.4167)
-    #longitud: float = Field(..., ge=-180, le=180, example=-3.7033)
-
-    estacion_id: str
-    nombre: Optional[str] = None
-    latitud: Optional[float] = None
-    longitud: Optional[float] = None
-=======
 """
 Schemas Pydantic para zonas climaticas.
 Un schema define la forma de los datos que entran o salen de la API.
@@ -25,15 +12,29 @@ class ZonaBase(BaseModel):
     estacion_id: str = Field(..., min_length=2, max_length=50)
 
     # Nombre de la zona, minimo 2 caracteres y maximo 100
-    nombre: str = Field(..., min_length=2, max_length=100)
+    nombre: Optional[str] = Field(None, min_length=2, max_length=100)
 
     # Latitud valida: entre -90 y 90 (limites reales del planeta)
-    latitud: float = Field(..., ge=-90, le=90)
+    latitud: Optional[float] = Field(None, ge=-90, le=90)
 
     # Longitud valida: entre -180 y 180
-    longitud: float = Field(..., ge=-180, le=180)
+    longitud: Optional[float] = Field(None, ge=-180, le=180)
 
->>>>>>> c208530eb32cc03e014d68488a45685936c635d8
+    @field_validator("estacion_id", mode="before")
+    @classmethod
+    def normalizar_estacion_id(cls, v):
+        # "est-001" → "EST-001"
+        return str(v).upper()
+
+    @field_validator("nombre", mode="before")
+    @classmethod
+    def normalizar_nombre(cls, v):
+        # "madrid-retiro" → "Madrid-Retiro"
+        # None ---> lo dejamos pasar sin cambios
+        if v is None:
+            return v
+        return str(v).title()
+
 
 class ZonaCreate(ZonaBase):
     # Hereda todos los campos y validaciones de ZonaBase
