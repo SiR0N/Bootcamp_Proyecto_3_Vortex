@@ -64,7 +64,7 @@ Un sistema completo que combina:
 - Integridad garantizada.
 
 ## 🧱 Arquitectura del Proyecto
-
+```
 .
 ├── api
 │   ├── routes
@@ -155,7 +155,7 @@ Un sistema completo que combina:
 ├── clima.db
 ├── README.md
 └── requirements.txt
-
+```
 ---
 
 ## 📺 Demo del Proyecto
@@ -276,3 +276,9 @@ pytest -v
 | **José Melo** | Desarrollador | [@e]() |
 | **David** | Desarrollador | [@e]() |
 | **Elena D. (Helen)** | Desarrolladora | [@]() |
+
+---
+
+## 🧾 Licencia
+Proyecto educativo desarrollado en el Bootcamp de Somos F5 en IA, Data Science & Programación — 2026.
+*Uso libre para fines formativos y demostrativos.*
