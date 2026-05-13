@@ -15,7 +15,7 @@ from db.base import Base
 load_dotenv()
 
 app = FastAPI(
-    title='ClimApp API',
+    title='VORTEX API',
     description='API para la gestión de datos meteorológicos en la Comunidad de Madrid',
     version='1.0.0'
 )
