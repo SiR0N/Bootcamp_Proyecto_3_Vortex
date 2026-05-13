@@ -172,7 +172,7 @@ class NormalizerService:
         Normaliza un registro de datos.
         Args:
             data: dict con los datos a normalizar
-            fuente: str fuente de los datos (aemet, manual, api, etc.)
+            fuente: str fuente de los datos (AEMET, MANUAL, SCHEDULER, etc.)
         Returns:
             dict con los datos normalizados
         """
@@ -206,18 +206,32 @@ class NormalizerService:
                 except (ValueError, TypeError):
                     resultado[campo] = None
 
-        # 3. Añadir campos faltantes con valores por defecto
+        # 3. Normalizar y añadir campos faltantes con valores por defecto
+
+        # fuente ---> siempre en mayusculas para consistencia en la base de datos
+        # "aemet" → "AEMET", "manual" → "MANUAL"
         if "fuente" not in resultado or resultado["fuente"] is None:
-            resultado["fuente"] = fuente
+            resultado["fuente"] = fuente.upper()
+        else:
+            resultado["fuente"] = str(resultado["fuente"]).upper()
+
+        # estacion_id ---> siempre en mayusculas
+        # "est-001" → "EST-001"
+        if "estacion_id" in resultado and resultado["estacion_id"] is not None:
+            resultado["estacion_id"] = str(resultado["estacion_id"]).upper()
+
+        # ciudad ---> title case y sin espacios dobles
+        # "MADRID  C. UNIVERSITARIA" → "Madrid C. Universitaria"
+        if "ciudad" in resultado and resultado["ciudad"] is not None:
+            resultado["ciudad"] = " ".join(str(resultado["ciudad"]).title().split())
+        else:
+            resultado["ciudad"] = None
 
         if "municipio" not in resultado or resultado["municipio"] is None:
             resultado["municipio"] = None
 
         if "alertas" not in resultado or resultado["alertas"] is None:
             resultado["alertas"] = []
-
-        if "ciudad" not in resultado or resultado["ciudad"] is None:
-            resultado["ciudad"] = None
 
         # 4. Generar alertas usando umbrales de AEMET
         resultado["alertas"] = self.thresholds.obtener_alertas(resultado)
@@ -226,7 +240,7 @@ class NormalizerService:
         resultado["normalizado_en"] = datetime.now().isoformat()
         resultado["version_normalizador"] = "vortex-1.0"
 
-        # 6. Validar campos críticos sin mostrar warnings por campos extra
+        # 6. Validar campos críticos
         if not self._es_valido(resultado):
             pass  # Silencioso - el normalizador ya añadió valores por defecto
 
@@ -234,7 +248,6 @@ class NormalizerService:
 
     def _es_valido(self, data):
         """Verifica si el registro tiene los campos críticos válidos"""
-        # Campos críticos que deben tener valores razonables
         campos_criticos = ["temperatura", "humedad"]
 
         for campo in campos_criticos:
@@ -242,7 +255,6 @@ class NormalizerService:
             if valor is not None:
                 try:
                     val_num = float(valor)
-                    # Rango razonable para datos climáticos
                     if campo == "temperatura" and (val_num < -50 or val_num > 60):
                         return False
                     if campo == "humedad" and (val_num < 0 or val_num > 100):
@@ -250,13 +262,6 @@ class NormalizerService:
                 except (ValueError, TypeError):
                     return False
 
-        return True
-
-        # O usar umbrales de AEMET
-        for campo, rango in self.thresholds.validacion.items():
-            if campo in data and data[campo] is not None:
-                if not self.thresholds.validar_campo(campo, data[campo]):
-                    return False
         return True
 
     def normalizar_lote(self, datos, fuente="unknown"):
@@ -287,10 +292,8 @@ def get_normalizer_service():
 
 
 if __name__ == "__main__":
-    # Test del normalizador
     service = NormalizerService()
 
-    # Registro de prueba
     test_data = {
         "estacion_id": "EST-1234",
         "fecha": "29/05/2026 15:30",
@@ -301,10 +304,11 @@ if __name__ == "__main__":
         "fuente": "aemet"
     }
 
-    resultado = service.normalizar(test_data, "aemet")
+    resultado = service.normalizar(test_data, "AEMET")
 
     print("=== RESULTADO NORMALIZACIÓN ===")
     print(f"Fecha: {resultado['fecha']}")
     print(f"Temperatura: {resultado['temperatura']}")
+    print(f"Fuente: {resultado['fuente']}")
     print(f"Alertas: {resultado['alertas']}")
     print(f"Normalizado en: {resultado['normalizado_en']}")

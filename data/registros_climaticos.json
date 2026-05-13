@@ -744,5 +744,104 @@
         ],
         "normalizado_en": "2026-05-07T20:03:33.731414",
         "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "3195",
+        "lon": -3.678095,
+        "fecha": "2026-05-12T00:00:00+00:00",
+        "lluvia": 0.0,
+        "altitud": 667.0,
+        "viento_max": 2.2,
+        "viento": 0.9,
+        "direccion_viento": 290.0,
+        "lat": 40.411806,
+        "dmax": 313.0,
+        "ciudad": "MADRID RETIRO",
+        "presion": 938.3,
+        "humedad": 78.0,
+        "presion_nivel_mar": 1015.4,
+        "temperatura_min": 11.9,
+        "temperatura": 12.1,
+        "temperatura_max": 12.4,
+        "punto_rocio": 8.4,
+        "racha_viento": 21.0,
+        "fuente": "aemet",
+        "municipio": null,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "normalizado_en": "2026-05-12T14:47:04.634694",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "3195",
+        "lon": -3.678095,
+        "fecha": "2026-05-12T00:00:00+00:00",
+        "lluvia": 0.0,
+        "altitud": 667.0,
+        "viento_max": 2.2,
+        "viento": 0.9,
+        "direccion_viento": 290.0,
+        "lat": 40.411806,
+        "dmax": 313.0,
+        "ciudad": "MADRID RETIRO",
+        "presion": 938.3,
+        "humedad": 78.0,
+        "presion_nivel_mar": 1015.4,
+        "temperatura_min": 11.9,
+        "temperatura": 12.1,
+        "temperatura_max": 12.4,
+        "punto_rocio": 8.4,
+        "racha_viento": 21.0,
+        "fuente": "aemet",
+        "municipio": null,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "normalizado_en": "2026-05-12T14:47:11.725700",
+        "version_normalizador": "vortex-1.0"
+    },
+    {
+        "estacion_id": "3195",
+        "lon": -3.678095,
+        "fecha": "2026-05-12T00:00:00+00:00",
+        "lluvia": 0.0,
+        "altitud": 667.0,
+        "viento_max": 2.2,
+        "viento": 0.9,
+        "direccion_viento": 290.0,
+        "lat": 40.411806,
+        "dmax": 313.0,
+        "ciudad": "MADRID RETIRO",
+        "presion": 938.3,
+        "humedad": 78.0,
+        "presion_nivel_mar": 1015.4,
+        "temperatura_min": 11.9,
+        "temperatura": 12.1,
+        "temperatura_max": 12.4,
+        "punto_rocio": 8.4,
+        "racha_viento": 21.0,
+        "fuente": "aemet",
+        "municipio": null,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "normalizado_en": "2026-05-12T14:47:22.956110",
+        "version_normalizador": "vortex-1.0"
     }
 ]

@@ -30,13 +30,36 @@ def get_zona_by_estacion(estacion_id: str, db: Session = Depends(get_db)):
     return zona
 
 @router.post("/", response_model=ZonaResponse, status_code=status.HTTP_201_CREATED)
-def create_zona(zona_in: ZonaCreate, db: Session = Depends(get_db)):
+#def create_zona(zona_in: ZonaCreate, db: Session = Depends(get_db)):
     # zona_in ya viene validado por Pydantic aquí
-    nueva_zona = Zona(**zona_in.model_dump()) 
-    db.add(nueva_zona)
-    db.commit()
-    db.refresh(nueva_zona)
-    return nueva_zona
+    #nueva_zona = Zona(**zona_in.model_dump()) 
+    #db.add(nueva_zona)
+    #db.commit()
+    #db.refresh(nueva_zona)
+    #return nueva_zona
+
+    
+# - HELEN - HE MODIFICADO ESTA FUNCIÓN PARA QUE PRIMERO COMPROBARA SI EXISTÍA LA ZONA ANTES DE CREARLA, YA QUE ME ESTABA DANDO ERROR PORQUE MUCHAS ZONAS DE AEMET TENÍAN EL MISMO ESTACION_ID
+def create_zona(zona: ZonaCreate, db: Session = Depends(get_db)):
+
+    # 1. Comprobar si ya existe
+        existing = db.query(Zona).filter(Zona.estacion_id == zona.estacion_id).first()
+        if existing:
+            return existing  # o lanzar HTTPException(status_code=409)
+
+    # 2. Crear nueva zona
+        new_zona = Zona(
+            estacion_id=zona.estacion_id,
+            nombre=zona.nombre,
+            latitud=zona.latitud,
+            longitud=zona.longitud
+        )
+
+        db.add(new_zona)
+        db.commit()
+        db.refresh(new_zona)
+
+        return new_zona
 
 @router.put("/{id}", response_model=ZonaResponse)
 def update_zona(id: int, zona_in: ZonaCreate, db: Session = Depends(get_db)):
