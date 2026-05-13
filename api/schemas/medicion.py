@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field, field_validator
-from typing import Optional
+from pydantic import BaseModel, Field
+from typing import Optional, Union
 from datetime import datetime, timezone
 from typing import Literal
 
@@ -12,27 +12,13 @@ class MedicionBase(BaseModel):
     # La medicion debe estar asociada a una zona existente
     # gt=0 significa mayor que 0, el 0 no pasa
     zona_id: int = Field(..., gt=0)
-
-    # Fecha y hora de la medicion. FastAPI puede leer strings ISO.
-    # Optional ---> el campo no es obligatorio
-    # default_factory=lambda ---> si no viene, usa la fecha y hora actual
-    fecha: Optional[datetime] = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-    # Campos climaticos — rangos basados en limites fisicos reales
-    temperatura: Optional[float] = Field(..., ge=-50, le=60)   # grados Celsius
-    humedad: Optional[float] = Field(..., ge=0, le=100)         # porcentaje
-    viento: Optional[float] = Field(..., ge=0)                  # no puede ser negativo
-    lluvia: Optional[float] = Field(..., ge=0)                  # no puede ser negativa
-
-    # Solo se aceptan estos tres valores — siempre en mayusculas
-    # "aemet" → "AEMET", "manual" → "MANUAL", "scheduler" → "SCHEDULER"
-    fuente: Literal["AEMET", "MANUAL", "SCHEDULER"] = Field(...)
-
-    @field_validator("fuente", mode="before")
-    @classmethod
-    def normalizar_fuente(cls, v):
-        # mode="before" ---> convierte ANTES de validar el Literal
-        return str(v).upper()
+    fecha: Union[str, datetime] = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    temperatura: float = Field(..., ge=-50, le=60)
+    humedad: float = Field(..., ge=0, le=100)
+    viento: float = Field(..., ge=0)
+    lluvia: float = Field(..., ge=0)
+    presion: float = Field(..., ge=800, le=1100)
+    fuente: Literal["AEMET", "manual", "api_aemet"] = Field(...)
 
 
 class MedicionCreate(MedicionBase):
@@ -43,8 +29,18 @@ class MedicionCreate(MedicionBase):
 class MedicionResponse(MedicionBase):
     # Campos que genera la base de datos automaticamente
     id: int
-    created_at: datetime
+    created_at: Optional[str] = None
 
     class Config:
-        # Permite que Pydantic lea objetos SQLAlchemy directamente
         from_attributes = True
+
+
+class MedicionUpdate(BaseModel):
+    zona_id: Optional[int] = None
+    fecha: Optional[Union[str, datetime]] = None
+    temperatura: Optional[float] = None
+    humedad: Optional[float] = None
+    viento: Optional[float] = None
+    lluvia: Optional[float] = None
+    presion: Optional[float] = None
+    fuente: Optional[Literal["AEMET", "manual", "api_aemet"]] = None
