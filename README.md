@@ -70,95 +70,78 @@ Un sistema completo que combina:
 ## 🧱 Arquitectura del Proyecto
 ```
 .
-├── api
-│   ├── routes
-│   │   ├── __init__.py
-│   │   ├── mediciones.py
-│   │   └── zonas.py
-│   ├── schemas
-│   │   ├── __init__.py
-│   │   └── main.py
-│   ├── config
-│   │   ├── aemet_thresholds.json
-│   │   ├── estaciones_madrid.json
-│   │   ├── municipios.json
-│   │   └── ubicaciones.json
-│   └── controllers
-│       ├── __init__.py
-│       ├── api_controller.py
-│       ├── auth_controller.py
-│       ├── compare_controller.py
-│       └── (otros controllers: manual, scheduler, view)
 │
-├── controllers
-│   ├── __init__.py
+├── 📄 .env / .env.example          ← Credenciales (AEMET, Supabase)
+├── 📄 requirements.txt              ← Dependencias Python
+├── 🚀 api/main.py                   ← Arranque de la API FastAPI
+│
+├── 📁 api/                          ← API REST (FastAPI)
+│   ├── routes/                      ← Endpoints de zonas y mediciones
+│   │   ├── zonas.py
+│   │   └── mediciones.py
+│   └── schemas/                     ← Validación con Pydantic
+│       ├── zona.py
+│       └── medicion.py
+│
+├── 📁 etl/                          ← Pipeline ETL (Extract → Transform → Load)
+│   ├── pipeline.py                  ← Orquestador principal
+│   ├── extract.py                   ← Carga el JSON normalizado
+│   ├── transform.py                 ← Limpieza y validación
+│   ├── load.py                      ← Sube zonas/mediciones a la API
+│   ├── lineage.py                   ← Trazabilidad básica
+│   └── pipeline_log.py              ← Auditor completo de trazabilidad
+│
+├── 📁 logs/                         ← Logs y evidencias (se generan autom.)
+│   ├── app.log                      ← Registro de actividad
+│   ├── snapshots/                   ← Instantáneas de cada etapa
+│   │   ├── normalized/
+│   │   └── transformed/
+│   └── lineage/                     ← Informes de linaje detallados
+│
+├── 📁 db/                           ← Base de datos (SQLAlchemy ORM)
+│   ├── models/                      ← Modelos Zona y Medición
+│   │   ├── zona.py
+│   │   └── medicion.py
+│   ├── base.py
+│   ├── session.py                   ← Conexión a PostgreSQL (Supabase)
+│   └── init_db.py                   ← Creación de tablas
+│
+├── 📁 services/                     ← Servicios compartidos
+│   ├── weather_api_service.py       ← Cliente AEMET (API Key)
+│   ├── normalizer.py                ← Normalización de datos crudos
+│   ├── normalizer_service.py
+│   ├── logging_service.py           ← Configuración de logs
+│   └── fallback_service.py          ← Datos sintéticos de respaldo
+│
+├── 📁 controllers/                  ← Lógica de negocio (Flask legacy)
 │   ├── api_controller.py
 │   ├── auth_controller.py
 │   ├── compare_controller.py
-│   ├── manual_controller.py
-│   ├── scheduler_controller.py
-│   └── view_controller.py
+│   └── ...
 │
-├── db
-│   ├── models
-│   │   ├── __init__.py
-│   │   ├── base.py
-│   │   └── session.py
-│   └── __pycache__
+├── 📁 static/ & templates/          ← Frontend Flask (web app)
+│   ├── css/, js/
+│   └── templates/ (Jinja2)
 │
-├── etl
-│   ├── __init__.py
-│   ├── extract.py
-│   ├── transform.py
-│   ├── load.py
-│   └── pipeline.py
-│
-├── services
-│   └── static
-│       ├── css
-│       │   ├── auth.css
-│       │   ├── compare.css
-│       │   ├── historico.css
-│       │   ├── index.css
-│       │   ├── registro_styles.css
-│       │   └── style.css
-│       └── js
-│           ├── app.js
-│           ├── auth.js
-│           ├── index.js
-│           └── estacion_por_municipio.json
-│
-├── utils
-│   ├── __init__.py
-│   ├── datetime_utils.py
-│   ├── generar_estaciones.py
-│   ├── helpers.py
-│   ├── normalizar_datos.py
-│   └── validators.py
-│
-├── data
-│   ├── registros_climaticos_normalizados.json
+├── 📁 data/                         ← Datos locales (JSON)
 │   ├── registros_climaticos.json
-│   ├── registros_climaticos.json.backup
-│   ├── registros_sinteticos.json
-│   └── usuarios.json
+│   ├── registros_climaticos_normalizados.json
+│   └── ...
 │
-├── docs
+├── 📁 tests/                        ← Tests automáticos (pytest)
+│   ├── test_api.py
+│   ├── test_validators.py
+│   └── ...
+│
+├── 📁 docs/                         ← Documentación interna del equipo
 │   ├── estado_actual.md
 │   ├── guia_equipo.md
-│   └── hoja_ruta.md
+│   └── ...
 │
-├── tests
-│   └── test_validators.py
-│
-├── .env
-├── .env.example
-├── .gitignore
-├── app.py
-├── main.py
-├── clima.db
-├── README.md
-└── requirements.txt
+└── 📁 utils/                        ← Funciones auxiliares
+    ├── validators.py
+    ├── helpers.py
+    └── ...
 ```
 ---
 
