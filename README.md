@@ -1,17 +1,17 @@
 
-<p align="center">
-<img src="static/logo_vortex_4.png" alt="Texto alternativo" width="50%">
-</p>
+<figure align="center">
+   <img src="static/logo_vortex_4.png" alt="Texto alternativo" width="50%">
+   <figcaption style="font-size: 1.2em;">Plataforma ETL + API para la gestión, análisis y consulta de datos meteorológicos en la Comunidad de Madrid
+</figure>
 
-# Vortex
+---
 
-### Plataforma ETL + API para la gestión, análisis y consulta de datos meteorológicos en la Comunidad de Madrid
 
-![Python](https://img.shields.io/badge/Python-3.12+-blue)
-![FastApi](https://img.shields.io/badge/FastAPI-Backend-009688)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-336791)
-![AEMET](https://img.shields.io/badge/API-AEMET-red)
-![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-success)
+   ![Python](https://img.shields.io/badge/Python-3.12+-blue)
+   ![FastApi](https://img.shields.io/badge/FastAPI-Backend-009688)
+   ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-336791)
+   ![AEMET](https://img.shields.io/badge/API-AEMET-red)
+   ![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-success)
 
 
 ![Flask](https://img.shields.io/badge/Flask-Web%20App-black) ????
