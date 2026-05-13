@@ -40,7 +40,7 @@ def normalizar_datos_aemet(data):
 
     try:
         normalizer = NormalizerService()
-        resultado = normalizer.normalizar(data, fuente="aemet")
+        resultado = normalizer.normalizar(data, fuente="AEMET")
 
         estacion_raw = resultado.get("ciudad") or resultado.get("estacion") or resultado.get("ubi")
         estacion = estacion_raw if estacion_raw else "Ubicación Desconocida"
