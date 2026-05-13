@@ -1,8 +1,10 @@
 
-<figure align="text-align: center;">
-   <img src="static/logo_vortex_4.png" alt="Texto alternativo" width="50%">
-   <figcaption style="font-size: 1.2em;">Plataforma ETL + API para la gestión, análisis y consulta de datos meteorológicos en la Comunidad de Madrid
-</figure>
+<div align="center">
+  <figure>
+     <img src="static/logo_vortex_4.png" alt="Texto alternativo" width="50%">
+     <figcaption style="font-size: 1.2em;">Plataforma ETL + API para la gestión, análisis y consulta de datos meteorológicos en la Comunidad de Madrid</figcaption>
+  </figure>
+</div>
 
 ---
 
