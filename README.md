@@ -289,7 +289,7 @@ pytest -v
 | **Eli** | Desarrolladora | [@adryeli](https://github.com/adryeli) |
 | **José Melo** | Desarrollador | [@GregDev08](https://github.com/GregDev08) |
 | **David** | Desarrollador | [@drojas-7u7](https://github.com/drojas-7u7) |
-| **Elena D.** | Desarrolladora | [@HelenDiMo](https://github.com/HelenDiMo) |
+| **Helen** | Desarrolladora | [@HelenDiMo](https://github.com/HelenDiMo) |
 
 ---
 

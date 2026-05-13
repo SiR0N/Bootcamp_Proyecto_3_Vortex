@@ -1,104 +1,201 @@
 # 📓 BITÁCORA DEL PROYECTO VORTEX
 
-## Registro de cambios y evoluciones del proyecto
+## Registro cronológico de cambios y evoluciones
 
 ---
 
-## 🔵 Entrada 003 - 13 Mayo 2026 (Tarde)
+## 🔵 ENTRADA 013 - 13 Mayo 2026 (FINAL)
 **Fecha:** 13/05/2026  
-**Autor:** Juan (con asistencia de OpenCode)  
-**Tipo de cambio:** Pruebas y corrections de bugs
-
-### Pruebas realizadas
-
-| Componente | Resultado |
-|------------|-----------|
-| FastAPI (`python -m api.main`) | ✅ Funcionando en puerto 8000 |
-| GET / | 200 OK |
-| GET /zonas/ | 200 OK (antes 500) |
-| GET /zonas/by_estacion/EST-01 | 200 OK (endpoint nuevo) |
-| GET /mediciones/ | 200 OK (antes 500) |
-| OpenWeather fallback | ✅ Datos reales de Madrid (17.85°C) |
-
-### Problemas encontrados y corregidos
-
-1. **Error 500 en /zonas/ y /mediciones/**
-   - Causa: Schemas Pydantic requerían campos que la DB permite nulos
-   - Solución: Hacer campos opcionales en `ZonaResponse` y `MedicionResponse`
-
-2. **weather_api_service.py sin cambios**
-   - Causa: Edit no se aplicó correctamente
-   - Solución: Añadir método `_obtener_datos_openweather` manualmente
-
-### Archivos modificados en esta entrada
-
-- `api/schemas/zona.py` - Campos opcionales
-- `api/schemas/medicion.py` - Campos opcionales
-- `api/routes/zonas.py` - Añadido endpoint by_estacion
-- `services/weather_api_service.py` - Añadido fallback OpenWeather
-
----
-
-## 🔵 Entrada 002 - 13 Mayo 2026 (Mañana)
-**Fecha:** 13/05/2026  
-**Autor:** Juan (con asistencia de OpenCode)  
-**Tipo de cambio:** Fix de bugs + Implementación de infraestructura
-
-### Contexto
-Durante las pruebas de los endpoints de FastAPI, se descubrieron errores 500 debido a incompatibilidad entre los schemas Pydantic y la base de datos (que permite valores nulos).
-
-### Cambios realizados
-
-| Archivo | Cambio | Motivo |
-|---------|--------|--------|
-| `api/schemas/zona.py` | Campos opcionales (nombre, latitud, longitud) | El schema requería campos que la DB permite nulos |
-| `api/schemas/medicion.py` | Campos opcionales en response | Compatibilidad con DB |
-| `api/routes/zonas.py` | Añadido endpoint `/zonas/by_estacion/{estacion_id}` | Necesario para ETL |
-| `services/weather_api_service.py` | Añadido fallback OpenWeather real | Reemplazar datos falsos aleatorios |
-| `.env` | Añadida OPENWEATHER_API_KEY | Para fallback |
-
----
-
-## 🔵 Entrada 001 - 13 Mayo 2026 (Inicio)
-**Fecha:** 13/05/2026  
-**Autor:** Juan (con asistencia de OpenCode)  
-**Tipo de cambio:** Implementación de infraestructura
-
-### Contexto
-El proyecto llevaba datos del frontend a un archivo JSON, pero:
-- El ETL estaba roto (faltaba endpoint en API)
-- El scheduler no conectaba con PostgreSQL
-- El fallback generaba datos falsos aleatorios
-- El usuario leía del JSON en lugar de PostgreSQL
+**Rama:** `feat/implementations` → PR a `main`  
+**Estado:** ✅ IMPLEMENTACIONES COMPLETAS - PR EN REVISIÓN
 
 ### Cambios implementados
 
-| Fase | Descripción | Archivos |
-|------|-------------|----------|
-| 1 | Arreglar ETL (añadir endpoint `/zonas/by_estacion/{estacion_id}`) | `api/routes/zonas.py` |
-| 2 | Conectar Scheduler → ETL automático | `controllers/scheduler_controller.py`, `etl/extract.py` |
-| 3 | Fallback real con OpenWeather (no más datos falsos) | `services/weather_api_service.py`, `.env` |
-| 4 | Migrar lectura de `/consulta` a PostgreSQL | `controllers/view_controller.py` |
+| # | Cambio | Archivo | Descripción |
+|---|--------|---------|--------------|
+| 1 | **Scheduler → ETL automático** | `scheduler_controller.py` | Cada 2h ejecuta ETL automáticamente |
+| 2 | **Fallback OpenWeather** | `weather_api_service.py` | Datos reales si AEMET falla |
+| 3 | **Consulta desde PostgreSQL** | `view_controller.py` | /consulta lee de DB via FastAPI |
+| 4 | **Endpoint ETL** | `api/routes/zonas.py` | `/zonas/by_estacion/{estacion_id}` |
+| 5 | **Merge PR #63 Beth** | `api/schemas/*.py` | Normalizers y validators |
+
+### Pruebas realizadas
+
+- FastAPI: http://localhost:8000 ✅
+- Flask: http://localhost:5000 ✅
+- GET /zonas/ → 200 OK (8 zonas)
+- GET /mediciones/ → 200 OK (100 mediciones)
+- /api/clima → 200 OK (Madrid, 18.2°C)
+
+### Archivos relevantes en docs
+- `bitacora.md` (esta)
+- `estado_actual.md`
+- `hoja_ruta.md`
+- `guia_equipo.md`
+- `informe_proyecto.md`
 
 ---
 
-## 📋 Notas para próximas implementaciones
+## 🔵 ENTRADA 012 - 13 Mayo 2026 (Tarde)
+**Fecha:** 13/05/2026  
+**Rama:** `feat/implementations`  
+**Estado:** PR #63 mergeado a main + fix de conflicts
 
-### Pendiente en Lovable
-- Integrar frontend con la nueva estructura de datos
-- Verificar que `/consulta` funciona correctamente con PostgreSQL
-- Testing de OpenWeather fallback
+### Merge PR #63 (Elizabeth - fix/normalizer)
+- Resolución de conflictos en schemas
+- Código de Beth integrado: validators, normalización, campos opcionales
 
-### Pendiente de pruebas
-- [x] Verificar ETL (pendiente manual)
-- [ ] Verificar scheduler → ETL
-- [x] Probar OpenWeather fallback ✅
-- [x] Verificar /consulta lee de PostgreSQL
+---
 
-### Archivos pendientes de eliminar (limpieza)
-- `repositories/sqlite_repository.py` (vacío)
-- `data/registros_climaticos_normalizados.json` (duplicado)
+## 🔵 ENTRADA 011 - 12 Mayo 2026
+**Fecha:** 12/05/2026  
+**Rama:** `main`  
+**Estado:** PR #62 Merge - Pipeline Log
+
+### Cambios
+- `etl/pipeline_log.py` añadido
+- Auditoría pasiva del ETL
+
+---
+
+## 🔵 ENTRADA 010 - 11 Mayo 2026
+**Fecha:** 11/05/2026  
+**Rama:** `main`  
+**Estado:** PR #60 Merge - Test Refactor
+
+### Cambios
+- Suite de tests refactorizada
+- Mejoras en coverage
+
+---
+
+## 🔵 ENTRADA 009 - 10 Mayo 2026
+**Fecha:** 10/05/2026  
+**Rama:** `main`  
+**Estado:** PR #58 Merge - ETL Load
+
+### Cambios
+- `etl/load.py` refactorizado
+- Normalización de fuente (manual/aemet)
+
+---
+
+## 🔵 ENTRADA 008 - 9 Mayo 2026
+**Fecha:** 09/05/2026  
+**Rama:** `main`  
+**Estado:** PR #56 Merge - README completo
+
+### Cambios
+- README.md completo creado
+- Logo del proyecto
+- Estructura de carpetas documentada
+- Guía de instalación
+
+---
+
+## 🔵 ENTRADA 007 - 8 Mayo 2026
+**Fecha:** 08/05/2026  
+**Rama:** `main`  
+**Estado:** PR #55 Merge - Scheduler
+
+### Cambios
+- Fix en scheduler: fuente value coincide con Pydantic schema
+
+---
+
+## 🔵 ENTRADA 006 - 7 Mayo 2026
+**Fecha:** 07/05/2026  
+**Rama:** `main`  
+**Estado:** PR #54 Merge - Fix title
+
+### Cambios
+- Título cambiado a "VORTEX API"
+
+---
+
+## 🔵 ENTRADA 005 - 6 Mayo 2026
+**Fecha:** 06/05/2026  
+**Rama:** `main`  
+**Estado:** PR #52 - Schemas Refactor
+
+### Cambios
+- Pydantic validations en MedicionBase
+- Validaciones de longitud en zona.py
+
+---
+
+## 🔵 ENTRADA 004 - 5 Mayo 2026
+**Fecha:** 05/05/2026  
+**Rama:** `main`  
+**Estado:** PR #51 - ETL Load
+
+### Cambios
+- Refactor de load.py
+- Conexión con Vortex API
+
+---
+
+## 🔵 ENTRADA 003 - 4 Mayo 2026
+**Fecha:** 04/05/2026  
+**Rama:** `main`  
+**Estado:** PR #49 - Sync Init DB
+
+### Cambios
+- Sincronización de init_db con modelos
+- Fix en imports
+
+---
+
+## 🔵 ENTRADA 002 - 3 Mayo 2026
+**Fecha:** 03/05/2026  
+**Rama:** `main`  
+**Estado:** README básico
+
+### Cambios
+- README.md básico creado
+- Descripción del proyecto
+- Estructura de carpetas
+
+---
+
+## 🔵 ENTRADA 001 - Inicio del proyecto
+**Fecha:** Abril 2026  
+**Rama:** `main` (inicio)  
+**Estado:** Creación del proyecto
+
+### Origen del proyecto
+- Inicio como proyecto Weather API (frontend Flask)
+- Evolución a VORTEX con FastAPI + PostgreSQL
+- Integración con API AEMET
+- Pipeline ETL con Pandas
+
+---
+
+## 📋 GLOSARIO DE RAMAS
+
+| Rama | Descripción |
+|------|-------------|
+| `main` | Rama estable/producción |
+| `feat/implementations` | Nuevas implementaciones (esta) |
+| `fix/normalizer` | PR #63 - Normalizers de Beth |
+| `feature/etl-load` | PR #58 - Carga ETL |
+| `docs/readme` | Documentación README |
+
+---
+
+## 📋 PRs IMPORTANTES MERGEADOS
+
+| #PR | Rama | Descripción | Fecha |
+|-----|------|-------------|-------|
+| #63 | fix/normalizer | Normalizers y validators | 13/05 |
+| #62 | feature/pipeline-log | Pipeline Log | 12/05 |
+| #60 | refactor/test | Tests | 11/05 |
+| #58 | feature/etl-load | ETL Load | 10/05 |
+| #56 | docs/readme | README completo | 09/05 |
+| #55 | refactor/scheduler | Scheduler fix | 08/05 |
+| #54 | fix/vortex-api-title | Título API | 07/05 |
 
 ---
 
 *Última actualización: 13/05/2026*
+*Bitácora coherente - Desde el inicio del proyecto*

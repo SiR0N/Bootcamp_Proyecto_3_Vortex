@@ -174,7 +174,7 @@ BLOQUE 3: JOSÉ MANUEL (SM + Desarrollador)
 ═══════════════════════════════════════════════════════════════════════════════
 
 1. api/main.py
-   - app = FastAPI(title="ClimApp API")
+   - app = FastAPI(title="VORTEX API")
    - config DB connection
    - Swagger UI (/docs)
    - exception handlers (404, 500)
