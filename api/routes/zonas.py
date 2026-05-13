@@ -21,6 +21,14 @@ def get_zona(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Zona no encontrada")
     return zona
 
+@router.get("/by_estacion/{estacion_id}", response_model=ZonaResponse)
+def get_zona_by_estacion(estacion_id: str, db: Session = Depends(get_db)):
+    """Busca zona por estacion_id - usado por ETL"""
+    zona = db.query(Zona).filter(Zona.estacion_id == estacion_id).first()
+    if not zona:
+        raise HTTPException(status_code=404, detail="Zona no encontrada")
+    return zona
+
 @router.post("/", response_model=ZonaResponse, status_code=status.HTTP_201_CREATED)
 #def create_zona(zona_in: ZonaCreate, db: Session = Depends(get_db)):
     # zona_in ya viene validado por Pydantic aquí

@@ -1,8 +1,9 @@
 ================================================================================
-             REPORTE 2: HOJA DE RUTA - PROYECTO 3
+             REPORTE 2: HOJA DE RUTA - PROYECTO 3 (VORTEX)
 ================================================================================
 
-Fecha: 6 de mayo de 2026 | Deadline: 18 de mayo (9 días laborables)
+Fecha Actualización: 12 de mayo de 2026 | Deadline: 18 de mayo (6 días laborables)
+Progreso General: ████████░░ 80% completado | 3 componentes pendientes
 
 ================================================================================
                          FILOSOFÍA
@@ -17,26 +18,29 @@ Fecha: 6 de mayo de 2026 | Deadline: 18 de mayo (9 días laborables)
                          DISTRIBUCIÓN EQUITATIVA (BLOQUES AISLADOS)
 ================================================================================
 
-┌─────────────┬────────────────┬───────────────────────────────────────────────┐
-│ PERSONA     │ BLOQUE         │ ARCHIVOS                                     │
-├─────────────┼────────────────┼───────────────────────────────────────────────┤
-│ Juan        │ DB Setup +    │ .env (credenciales), db/models/medicion.py, │
-│             │ API Mediciones │ db/models/zona.py, api/routes/mediciones.py │
-├─────────────┼────────────────┼───────────────────────────────────────────────┤
-│ Helen       │ ETL Completo   │ etl/extract.py, etl/transform.py,           │
-│             │                │ etl/load.py, etl/pipeline.py               │
-├─────────────┼────────────────┼───────────────────────────────────────────────┤
-│ José Manuel │ API Zonas +   │ api/main.py, api/routes/zonas.py            │
-│             │ Main           │                                               │
-├─────────────┼────────────────┼───────────────────────────────────────────────┤
-│ Elizabeth   │ DB Base +     │ db/base.py, db/session.py,                  │
-│             │ Validación     │ api/schemas/medicion.py, api/schemas/zona.py│
-├─────────────┼────────────────┼───────────────────────────────────────────────┤
-│ José Melo   │ Tests          │ tests/test_validators.py, tests/test_api.py │
-├─────────────┼────────────────┼───────────────────────────────────────────────┤
-│ David       │ Linaje + Docs  │ etl/lineage.py, README.md, deploy/           │
-│             │ + Deploy      │                                               │
-└─────────────┴────────────────┴───────────────────────────────────────────────┘
+┌─────────────┬────────────────┬───────────────────────────────────────────────┬─────────┐
+│ PERSONA     │ BLOQUE         │ ARCHIVOS                                     │ ESTADO  │
+├─────────────┼────────────────┼───────────────────────────────────────────────┼─────────┤
+│ Juan (PO)   │ DB Setup +    │ .env ✅, db/models/medicion.py ✅,           │ ✅ 95%  │
+│             │ API Mediciones │ db/models/zona.py ✅, api/routes/med. ✅    │         │
+├─────────────┼────────────────┼───────────────────────────────────────────────┼─────────┤
+│ Helen       │ ETL Completo   │ etl/extract.py ✅, etl/transform.py ✅,     │ ✅ 100% │
+│             │                │ etl/load.py ✅, etl/pipeline.py ✅          │         │
+├─────────────┼────────────────┼───────────────────────────────────────────────┼─────────┤
+│ José Manuel │ API Zonas +   │ api/main.py ✅, api/routes/zonas.py ✅       │ ✅ 100% │
+│ (SM)        │ Main           │ Swagger integrado ✅                          │         │
+├─────────────┼────────────────┼───────────────────────────────────────────────┼─────────┤
+│ Elizabeth   │ DB Base +     │ db/base.py ✅, db/session.py ✅,             │ ✅ 100% │
+│             │ Validación     │ api/schemas/medicion.py ✅ (ajustes),        │         │
+│             │                │ api/schemas/zona.py ✅                       │         │
+├─────────────┼────────────────┼───────────────────────────────────────────────┼─────────┤
+│ José Melo   │ Tests          │ test_validators.py ⏳, test_api.py ⏳        │ ⏳ 30%  │
+├─────────────┼────────────────┼───────────────────────────────────────────────┼─────────┤
+│ David       │ Linaje + Docs  │ etl/lineage.py ⏳, README.md ⏳,             │ ⏳ 20%  │
+│             │ + Deploy       │ deploy/supabase_deploy.md ⏳                  │         │
+└─────────────┴────────────────┴───────────────────────────────────────────────┴─────────┘
+
+LEYENDA: ✅ Completado | ⏳ En progreso | ❌ Pendiente
 
 
 ================================================================================
@@ -150,34 +154,45 @@ proyecto3/
 
 
 ================================================================================
-                         CRONOGRAMA (9 DÍAS)
+                    CRONOGRAMA ACTUALIZADO (6 DÍAS RESTANTES)
 ================================================================================
 
-D1 (6-may):  Juan crea proyecto Supabase + .env
-D2 (7-may):  Elizabeth → db/base.py + session.py
-D3 (8-may):  Juan → db/models + Elizabeth → schemas Pydantic
-D4 (9-may):  José Manuel → ETL extract + transform
-D5 (12-may): José Manuel → ETL load + pipeline
-D6 (13-may): Helen → api/main.py + routes zonas
-D7 (14-may): Juan → routes mediciones
-D8 (15-may): José Melo → tests + David → lineage + deploy
-D9 (18-may): David → README + Presentación
+✅ COMPLETADO:
+├─ D1 (6-may):  Juan crea proyecto Supabase + .env
+├─ D2 (7-may):  Elizabeth → db/base.py + session.py
+├─ D3 (8-may):  Juan → db/models + Elizabeth → schemas Pydantic
+├─ D4 (9-may):  José Manuel → api/main.py + zonas.py
+├─ D5 (10-11):  Helen → ETL completo (extract, transform, load, pipeline)
+└─ D6 (12-may): Juan → routes mediciones + Merge PR #54, #55
+
+⏳ EN PROGRESO:
+├─ D7 (12-13):  José Melo → Ampliar cobertura tests (⏳ 30%)
+└─ D8 (13-14):  David → etl/lineage.py + deploy docs (⏳ 20%)
+
+📅 PENDIENTE (ANTES DEL 18 MAY):
+├─ D9 (15-16):  Revisión y fixes de tests
+├─ D10 (17):    QA final + documentación README
+└─ D11 (18):    Deploy staging + Presentación
 
 
 ================================================================================
                          REGLAS
 ================================================================================
-
-1. Cada uno termina su bloque antes de ayudar
-2. Juan (PO) crea Supabase al inicio para que todos tengan DB
-3. David incluye deploy en su documentación
-
-
-================================================================================
-                         CRITERIOS DE ÉXITO
+CRITERIOS DE ÉXITO - ESTADO ACTUAL
 ================================================================================
 
-□ Proyecto Supabase creado y funcional
+✅ Proyecto Supabase creado y funcional
+✅ Integridad referencial (FK zona_id)
+✅ Duplicados eliminados en ETL
+⏳ Linaje ETL (David en progreso)
+✅ API REST (POST→201, GET/DELETE→404)
+✅ Pydantic rechaza malformados
+⏳ Tests funcionan (José Melo expandiendo cobertura)
+⏳ README + deploy docs (David)
+
+PENDIENTE CRÍTICO:
+├─ José Melo: Completar tests/ (30% listo)
+└─ David: etl/lineage.py + deploy/ (20% listo)eado y funcional
 □ Integridad referencial
 □ Duplicados eliminados
 □ Linaje ETL

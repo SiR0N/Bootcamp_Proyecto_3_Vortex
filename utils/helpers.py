@@ -28,6 +28,4 @@ def calcular_distancia(lat1, lon1, lat2, lon2):
     # Radio de la Tierra ≈ 6371 km
     distancia = 6371 * c
 
-    return distancia
-
-# A la espera de integrar con Isabela 
+    return distancia 

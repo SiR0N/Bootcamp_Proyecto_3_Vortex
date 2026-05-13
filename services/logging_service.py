@@ -17,8 +17,8 @@ def setup_logger() -> logging.Logger:
     # Creamos la carpeta logs/ si no existe
     LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 
-    # Creamos o recuperamos un logger con nombre "climapp"
-    logger = logging.getLogger("climapp")
+    # Creamos o recuperamos un logger con nombre "vortex"
+    logger = logging.getLogger("vortex")
 
     # Nivel mínimo de mensajes que se van a guardar
     # INFO guarda INFO, WARNING, ERROR y CRITICAL

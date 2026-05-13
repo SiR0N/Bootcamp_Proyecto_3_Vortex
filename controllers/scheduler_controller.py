@@ -3,34 +3,63 @@ from services.weather_api_service import obtener_clima_por_coordenadas
 from services.normalizer_service import normalizar_datos_aemet
 from repositories.json_repository import JSONRepository
 import logging
+import sys
+import os
 
 # Instanciamos el scheduler
 scheduler = APScheduler()
 repo = JSONRepository('data/registros_climaticos.json')
 
+
+def ejecutar_etl():
+    """Ejecuta el pipeline ETL para cargar datos a PostgreSQL"""
+    try:
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        etl_path = os.path.join(project_root, "etl")
+        sys.path.insert(0, etl_path)
+
+        from extract import extract_data
+        from transform import transform_data
+        from load import load_data
+
+        raw_data = extract_data("../data/registros_climaticos.json")
+        if not raw_data:
+            logging.warning("No hay datos en JSON para ETL")
+            return 0
+
+        df_clean = transform_data(raw_data)
+        if df_clean.empty:
+            logging.warning("ETL: no hay datos válidos para cargar")
+            return 0
+
+        inserted = load_data(df_clean)
+        logging.info(f"ETL completado: {inserted} registros insertados en PostgreSQL")
+        return inserted
+    except Exception as e:
+        logging.error(f"Error en ETL automático: {e}")
+        return 0
+
+
 def tarea_actualizar_clima():
     """
-    Tarea que se ejecuta automáticamente. 
-    Descarga el clima de una estación principal (ej. Madrid Retiro) y lo guarda.
+    Tarea que se ejecuta automáticamente.
+    Descarga el clima de una estación principal y lo guarda.
     """
     try:
-        # 1. Coordenadas de Madrid por defecto para el histórico automático
         lat, lon = "40.4167", "-3.7033"
-        
-        # 2. Obtener y normalizar
+
         raw_data = obtener_clima_por_coordenadas(lat, lon)
         data = normalizar_datos_aemet(raw_data)
-        
-        # 3. Añadir fuente para saber que fue automático
-        data["fuente"] = "AEMET"
-        
-        # 4. Guardar en el JSON
+
+        data["fuente"] = "SCHEDULER"
+
         repo.guardar(data)
-        
-        print(f"✅ Tarea automática completada: Datos guardados para {data.get('ciudad')}")
-        
+        print(f"Datos guardados para {data.get('ciudad')}")
+
+        ejecutar_etl()
+
     except Exception as e:
-        logging.error(f"❌ Error en la tarea automática: {e}")
+        logging.error(f"Error en tarea automática: {e}")
 
 def init_scheduler(app):
     """

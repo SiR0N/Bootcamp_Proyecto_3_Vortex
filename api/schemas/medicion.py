@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, Union
 from datetime import datetime, timezone
 from typing import Literal
@@ -9,27 +9,36 @@ Validan que los datos climaticos tengan tipos correctos y rangos razonables.
 """
 
 class MedicionBase(BaseModel):
-    # La medicion debe estar asociada a una zona existente
-    # gt=0 significa mayor que 0, el 0 no pasa
     zona_id: int = Field(..., gt=0)
     fecha: Union[str, datetime] = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
-    temperatura: float = Field(..., ge=-50, le=60)
-    humedad: float = Field(..., ge=0, le=100)
-    viento: float = Field(..., ge=0)
-    lluvia: float = Field(..., ge=0)
-    presion: float = Field(..., ge=800, le=1100)
-    fuente: Literal["AEMET", "manual", "api_aemet"] = Field(...)
+    temperatura: Optional[float] = Field(None, ge=-50, le=60)
+    humedad: Optional[float] = Field(None, ge=0, le=100)
+    viento: Optional[float] = Field(None, ge=0)
+    lluvia: Optional[float] = Field(None, ge=0)
+    presion: Optional[float] = Field(None, ge=800, le=1100)
+    fuente: Literal["AEMET", "MANUAL", "SCHEDULER"] = Field(...)
+
+    @field_validator("fuente", mode="before")
+    @classmethod
+    def normalizar_fuente(cls, v):
+        return str(v).upper()
 
 
 class MedicionCreate(MedicionBase):
-    # Hereda todos los campos y validaciones de MedicionBase
     pass
 
 
-class MedicionResponse(MedicionBase):
-    # Campos que genera la base de datos automaticamente
+class MedicionResponse(BaseModel):
     id: int
-    created_at: Optional[str] = None
+    zona_id: int | None = None
+    fecha: datetime | None = None
+    temperatura: float | None = None
+    humedad: float | None = None
+    viento: float | None = None
+    lluvia: float | None = None
+    presion: float | None = None
+    fuente: str | None = None
+    created_at: datetime | None = None
 
     class Config:
         from_attributes = True
@@ -43,4 +52,4 @@ class MedicionUpdate(BaseModel):
     viento: Optional[float] = None
     lluvia: Optional[float] = None
     presion: Optional[float] = None
-    fuente: Optional[Literal["AEMET", "manual", "api_aemet"]] = None
+    fuente: Optional[Literal["AEMET", "MANUAL", "SCHEDULER"]] = None
