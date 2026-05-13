@@ -49,11 +49,11 @@ class WeatherAPIService:
 
     def _obtener_datos_crudos(self) -> list:
         """Método interno para bajar todas las observaciones de AEMET."""
-        if not self.api_key:
-            self.logger.warning("Sin API key, devolviendo lista vacía para fallback.")
+        if not self.aemet_api_key:
+            self.logger.warning("Sin AEMET API key, devolviendo lista vacía para fallback.")
             return []
 
-        headers = {"api_key": self.api_key, "cache-control": "no-cache"}
+        headers = {"api_key": self.aemet_api_key, "cache-control": "no-cache"}
         try:
             # Usamos la sesión con reintentos de la arquitectura original
             res_meta = self.session.get(self.base_url, headers=headers, timeout=20)
