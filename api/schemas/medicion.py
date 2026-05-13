@@ -9,6 +9,8 @@ Validan que los datos climaticos tengan tipos correctos y rangos razonables.
 """
 
 class MedicionBase(BaseModel):
+    # La medicion debe estar asociada a una zona existente
+    # gt=0 significa mayor que 0, el 0 no pasa
     zona_id: int = Field(..., gt=0)
     fecha: Union[str, datetime] = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     temperatura: float = Field(..., ge=-50, le=60)
@@ -20,10 +22,12 @@ class MedicionBase(BaseModel):
 
 
 class MedicionCreate(MedicionBase):
+    # Hereda todos los campos y validaciones de MedicionBase
     pass
 
 
 class MedicionResponse(MedicionBase):
+    # Campos que genera la base de datos automaticamente
     id: int
     created_at: Optional[str] = None
 
