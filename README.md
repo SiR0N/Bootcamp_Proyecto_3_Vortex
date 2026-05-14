@@ -303,6 +303,48 @@ Estos informes, junto con las instantáneas de cada fase, se almacenan en `logs/
 
 ---
 
+## Base de datos
+
+El sistema utiliza **PostgreSQL** alojado en **Supabase** como motor de almacenamiento principal. La capa de acceso a datos se implementa mediante **SQLAlchemy ORM**, que permite definir y consultar los modelos de forma tipada y segura.
+
+### Modelo de datos
+
+**Zona**
+
+Representa una estación meteorológica o ubicación geográfica de la cual se registran mediciones.
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `id` | integer | Identificador único (autogenerado) |
+| `estacion_id` | string | Código identificador de la estación |
+| `nombre` | string | Nombre de la zona o estación |
+| `latitud` | float | Coordenada de latitud |
+| `longitud` | float | Coordenada de longitud |
+
+Relación: una zona tiene múltiples mediciones (1:N).
+
+**Medicion**
+
+Representa una observación meteorológica puntual asociada a una zona.
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `id` | integer | Identificador único (autogenerado) |
+| `zona_id` | integer | Clave foránea hacia Zona |
+| `fecha` | datetime | Fecha y hora de la observación |
+| `temperatura` | float | Temperatura registrada |
+| `humedad` | float | Porcentaje de humedad relativa |
+| `viento` | float | Velocidad del viento |
+| `lluvia` | float | Precipitación acumulada |
+| `presion` | float | Presión atmosférica |
+| `fuente` | string | Origen del dato (aemet, manual) |
+
+### Conexión
+
+Los parámetros de conexión se configuran en el archivo `.env` mediante las variables `DATABASE_URL`, `SUPABASE_URL` y `SUPABASE_KEY`. La configuración de la sesión se encuentra en `db/session.py`.
+
+---
+
 
 
 
