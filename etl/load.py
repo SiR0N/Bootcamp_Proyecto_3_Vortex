@@ -46,7 +46,8 @@ def subir_mediciones(lista_mediciones):
         if response.status_code == 201:
             print(f"✔ Medición subida: {medicion['fecha']}")
         else:
-            print(f"❌ Error subiendo medición: {response.text}")
+            print(f"❌ Error subiendo medición: {response.status_code} - {response.text}")
+
 
 
 # -----------------------------
