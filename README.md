@@ -63,9 +63,18 @@ El sistema resuelve la necesidad de disponer de datos climáticos estructurados 
 
 ---
 
-## 🧱 Arquitectura del Proyecto
+## Arquitectura general
+
+Vortex sigue una arquitectura modular con tres capas diferenciadas:
+
+- **Capa de datos**: base de datos PostgreSQL alojada en Supabase, con modelos relacionales para zonas y mediciones.
+- **Capa de negocio**: pipeline ETL que normaliza, transforma y carga los datos; servicios de trazabilidad que documentan cada etapa.
+- **Capa de exposición**: API REST con FastAPI que sirve los datos validados y permite la operación del pipeline.
+
+A nivel de directorios, el proyecto se organiza de la siguiente manera:
+
 ```
-.
+Vortex/
 │
 ├── 📄 .env / .env.example          ← Credenciales (AEMET, Supabase)
 ├── 📄 requirements.txt              ← Dependencias Python
@@ -85,7 +94,7 @@ El sistema resuelve la necesidad de disponer de datos climáticos estructurados 
 │   ├── transform.py                 ← Limpieza y validación
 │   ├── load.py                      ← Sube zonas/mediciones a la API
 │   ├── lineage.py                   ← Trazabilidad básica
-│   └── pipeline_log.py              ← Auditor completo de trazabilidad
+│   └── pipeline_log.py              ← Auditor de trazabilidad
 │
 ├── 📁 logs/                         ← Logs y evidencias (se generan autom.)
 │   ├── app.log                      ← Registro de actividad
@@ -139,6 +148,7 @@ El sistema resuelve la necesidad de disponer de datos climáticos estructurados 
     ├── helpers.py
     └── ...
 ```
+
 ---
 
 ## 📺 Demo del Proyecto
