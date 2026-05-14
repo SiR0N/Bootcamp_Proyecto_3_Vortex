@@ -27,7 +27,7 @@
 | 4. Arquitectura general | Completado |
 | 5. Tecnologías utilizadas | Completado |
 | 6. Requisitos previos | Completado |
-| 7. Instalación y configuración | Pendiente |
+| 7. Instalación y configuración | Completado |
 | 8. Uso del sistema | Pendiente |
 | 9. Flujo de datos y trazabilidad | Pendiente |
 | 10. Base de datos | Pendiente |
@@ -178,6 +178,97 @@ Antes de instalar y ejecutar Vortex, asegúrate de disponer de lo siguiente:
 Se recomienda el uso de un entorno virtual (Conda, venv o similar) para aislar las dependencias del proyecto.
 
 ---
+
+## Instalación y configuración
+
+### 1. Clonar el repositorio
+
+```
+git clone https://github.com/SiR0N/Bootcamp_Proyecto_3_Vortex.git
+cd Bootcamp_Proyecto_3_Vortex
+```
+
+### 2. Crear y activar un entorno virtual
+
+```
+python -m venv venv
+source venv/bin/activate   # Linux/Mac
+.\venv\Scripts\activate    # Windows
+```
+
+### 3. Instalar las dependencias
+
+```
+pip install -r requirements.txt
+```
+
+### 4. Configurar las variables de entorno
+
+Crear un archivo `.env` en la raíz del proyecto con las siguientes variables:
+
+```
+DATABASE_URL=postgresql://user:password@host:port/dbname
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your-supabase-anon-key
+AEMET_API_KEY=your-aemet-api-key
+```
+
+Los valores de `DATABASE_URL`, `SUPABASE_URL` y `SUPABASE_KEY` se obtienen desde el panel de control de Supabase (Project Settings > API). La `AEMET_API_KEY` se solicita gratuitamente en [AEMET OpenData](https://opendata.aemet.es/).
+
+### 5. Iniciar la API
+
+```
+uvicorn api.main:app --reload
+```
+
+La API estará disponible en `http://localhost:8000`. La documentación interactiva (Swagger) se encuentra en `http://localhost:8000/docs`.
+
+---
+
+Después de insertarlo, actualiza la tabla de la Sección 2:
+
+```
+| 7. Instalación y configuración | Completado |
+```
+
+Y ejecuta:
+
+```
+git add README.md
+git commit -m "docs: add installation section"
+```
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## 📺 Demo del Proyecto
 
