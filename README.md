@@ -28,7 +28,7 @@
 | 5. Tecnologías utilizadas | Completado |
 | 6. Requisitos previos | Completado |
 | 7. Instalación y configuración | Completado |
-| 8. Uso del sistema | Pendiente |
+| 8. Uso del sistema | Completado |
 | 9. Flujo de datos y trazabilidad | Pendiente |
 | 10. Base de datos | Pendiente |
 | 11. Despliegue | Pendiente |
@@ -225,18 +225,53 @@ La API estará disponible en `http://localhost:8000`. La documentación interact
 
 ---
 
-Después de insertarlo, actualiza la tabla de la Sección 2:
+## Uso del sistema
+
+### 1 Iniciar la API
 
 ```
-| 7. Instalación y configuración | Completado |
+uvicorn api.main:app --reload
 ```
 
-Y ejecuta:
+La API estará disponible en `http://localhost:8000`. La documentación interactiva se encuentra en `http://localhost:8000/docs`.
+
+### 2 Ejecutar el Pipeline ETL
+
+El pipeline principal procesa el archivo de datos normalizados, los transforma y los carga en la base de datos a través de la API.
 
 ```
-git add README.md
-git commit -m "docs: add installation section"
+python etl/pipeline.py
 ```
+
+Salida esperada (ejemplo):
+
+```
+Datos transformados: 26
+Filas insertadas: 25
+Pipeline completado
+```
+
+### 3 Ejecutar el Auditor de Trazabilidad
+
+El sistema incluye un módulo de auditoría que descarga datos crudos desde AEMET, los compara con el archivo normalizado existente y genera informes de linaje sin modificar el flujo de producción.
+
+```
+python etl/pipeline_log.py
+```
+
+Los informes y snapshots se almacenan en `logs/snapshots/` y `logs/lineage/`.
+
+### 4 Endpoints principales
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/zonas` | Listar todas las zonas |
+| POST | `/zonas` | Crear una nueva zona |
+| GET | `/zonas/{id}` | Obtener una zona por ID |
+| GET | `/zonas/{id}/mediciones` | Obtener mediciones de una zona |
+| GET | `/mediciones` | Listar todas las mediciones |
+| POST | `/mediciones` | Insertar una nueva medición |
+| POST | `/etl/run` | Ejecutar el pipeline ETL |
 
 ---
 
