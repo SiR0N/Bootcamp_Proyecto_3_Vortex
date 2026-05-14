@@ -6,15 +6,13 @@
 
 ---
 
-
-   ![Python](https://img.shields.io/badge/Python-3.12+-blue)
-   ![FastApi](https://img.shields.io/badge/FastAPI-Backend-009688)
-   ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-336791)
-   ![AEMET](https://img.shields.io/badge/API-AEMET-red)
-   ![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-success)
-
-
-![Flask](https://img.shields.io/badge/Flask-Web%20App-black) ????
+   ![Python](https://img.shields.io/badge/Python-3.12+-blue?style=for-the-badge&logo=python&logoColor=white)
+   ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+   ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+   ![Supabase](https://img.shields.io/badge/Supabase-Cloud-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+   ![AEMET](https://img.shields.io/badge/API-AEMET-red?style=for-the-badge)
+   ![Lineage](https://img.shields.io/badge/Lineage-Trazabilidad-8A2BE2?style=for-the-badge)
+   ![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-success?style=for-the-badge)
 
 ## 📌 Descripción
 
@@ -22,9 +20,10 @@
 
 Un sistema completo que combina:
 
-* Un ETL propio que obtiene datos de la API oficial de [AEMET OpenData](https://opendata.aemet.es/centrodedescargas/inicio).
-* Una API REST desarrollada con FastAPI para exponer zonas, mediciones y operaciones del ETL.
-* Una base de datos PostgreSQL donde se almacenan las mediciones normalizadas.
+* Un pipeline ETL que procesa datos normalizados y los carga en PostgreSQL a través de una API REST.
+* Un **auditor de trazabilidad (Pipeline Auditor)** que descarga datos crudos desde la API oficial de [AEMET OpenData](https://opendata.aemet.es/centrodedescargas/inicio), los compara con los normalizados y genera informes detallados de linaje.
+* Una API REST desarrollada con **FastAPI** para exponer zonas, mediciones y operaciones del ETL.
+* Una base de datos **PostgreSQL** alojada en **Supabase** donde se almacenan las mediciones normalizadas.
 * Un diseño modular que permite escalar el sistema fácilmente.
 * Capacidad de geolocalización inteligente.
 
