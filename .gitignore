@@ -1,4 +1,33 @@
 # Ignorar archivos locales de diagnóstico y arranque
+Variables de entorno
+.env
+
+Entornos virtuales
+.venv/
+venv/
+env/
+
+Python
+pycache/
+*.pyc
+*.pyo
+*.pyd
+
+Logs
+logs/
+*.log
+
+Test cache
+.pytest_cache/
+
+IDEs / editores
+.vscode/
+.idea/
+
+Sistema operativo
+.DS_Store
+Thumbs.db
+
 _clean.py
 _limpiar.py
 resumen_diffs.py
