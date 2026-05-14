@@ -196,6 +196,9 @@ source venv/bin/activate   # Linux/Mac
 .\venv\Scripts\activate    # Windows
 ```
 
+Alternativamente, puedes usar Conda:  
+`conda create -n vortex python=3.12` y luego `conda activate vortex`.
+
 ### 3. Instalar las dependencias
 
 ```
@@ -271,7 +274,6 @@ Los informes y snapshots se almacenan en `logs/snapshots/` y `logs/lineage/`.
 | GET | `/zonas/{id}/mediciones` | Obtener mediciones de una zona |
 | GET | `/mediciones` | Listar todas las mediciones |
 | POST | `/mediciones` | Insertar una nueva medición |
-| POST | `/etl/run` | Ejecutar el pipeline ETL |
 
 ---
 
