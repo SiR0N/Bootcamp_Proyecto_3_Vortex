@@ -13,7 +13,6 @@ Este script:
 from sqlalchemy import text
 from db.session import engine
 
-
 with engine.connect() as connection:
 
     # ── 1. Comprobar conexión ─────────────────────────────────────────────
@@ -21,7 +20,6 @@ with engine.connect() as connection:
     row = result.fetchone()
     print("✅ Conexión correcta con Supabase/PostgreSQL.")
     print(f"   Fecha/hora BD: {row[0]}\n")
-
 
     # ── 2. TABLA: ZONAS ───────────────────────────────────────────────────
     #
@@ -51,7 +49,6 @@ with engine.connect() as connection:
         );
     """))
     print("✅ Tabla 'zonas' creada (o ya existía).")
-
 
     # ── 3. TABLA: MEDICIONES ──────────────────────────────────────────────
     #
@@ -90,13 +87,12 @@ with engine.connect() as connection:
             presion     FLOAT,
 
             fuente      VARCHAR(20) NOT NULL
-                            CHECK (fuente IN ('aemet', 'manual')),
+                            CHECK (fuente IN ('aemet', 'manual', 'openweather')),
 
             created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     """))
     print("✅ Tabla 'mediciones' creada (o ya existía).")
-
 
     # Confirmamos todos los cambios en la base de datos
     connection.commit()

@@ -19,7 +19,6 @@ Ejemplo de uso en un modelo:
 # Esta función crea una clase base para definir modelos ORM.
 from sqlalchemy.orm import declarative_base
 
-
 # Creamos la Base común del proyecto.
 # Todos los modelos de db/models/ deberán heredar de esta Base.
 Base = declarative_base()

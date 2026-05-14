@@ -1,90 +1,95 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Histórico de registros</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/historico.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VORTEX | Histórico de Registros</title>
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-
-    <div class="container">
-        
-        <nav aria-label="breadcrumb" class="breadcrumb">
-            <ol>
-                <li>
-                    <a href="/">Inicio</a>
-                </li>
-                <li class="separator">/</li>
-                <li class="active">Histórico</li>
-            </ol>
-        </nav>
-
-        <h1>Histórico de registros</h1>
-
-        <form method="POST" action="/consulta" class="card">
-            <label for="municipio">Municipio</label>
-            <input
-                type="text"
-                id="municipio"
-                name="municipio"
-                placeholder="Ej: Madrid"
-                autocomplete="off"
-            >
-
-            <label for="fecha">Fecha</label>
-            <input
-                type="date"
-                id="fecha"
-                name="fecha"
-            >
-
-            <button type="submit">Filtrar</button>
-        </form>
-
-        <div class="card">
-            <h2>Resultados</h2>
-
-            {% if registros and registros|length > 0 %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Municipio</th>
-                            <th>Código</th>
-                            <th>Temperatura</th>
-                            <th>Humedad</th>
-                            <th>Viento</th>
-                            <th>Lluvia</th>
-                            <th>Fuente</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for registro in registros %}
-                        <tr>
-                            <td>{{ registro.fecha }}</td>
-                            <td>{{ registro.municipio }}</td>
-                            <td>{{ registro.codigo_municipio }}</td>
-                            <td>{{ registro.temperatura }}ºC</td>
-                            <td>{{ registro.humedad }}%</td>
-                            <td>{{ registro.viento }} km/h</td>
-                            <td>{{ registro.lluvia }} mm</td>
-                            <td>
-                                <span class="badge">
-                                    {{ registro.fuente }}
-                                </span>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p class="no-results">No se han encontrado registros con esos filtros.</p>
-            {% endif %}
+  <main class="page-container">
+    
+    <header class="header">
+      <div class="logo">
+        <div class="logo-img">V</div>
+        <div class="logo-text">
+          <span class="brand">VORTEX</span>
+          <span class="tagline">Datos Meteorológicos</span>
         </div>
+      </div>
+      <nav class="nav-links">
+        <a href="{{ url_for('view.index') }}">Inicio</a>
+        <a href="{{ url_for('view.registro') }}">Registro</a>
+        <a href="{{ url_for('view.consulta') }}" class="active">Histórico</a>
+      </nav>
+    </header>
+
+    <h1>Histórico de Registros</h1>
+
+    <nav class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span class="separator">/</span>
+      <span class="active">Histórico</span>
+    </nav>
+
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <form method="POST" action="/consulta">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="municipio">Municipio</label>
+            <input type="text" id="municipio" name="municipio" placeholder="Ej: Madrid" autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label for="fecha">Fecha</label>
+            <input type="date" id="fecha" name="fecha">
+          </div>
+        </div>
+
+        <button type="submit" class="primary-btn">Filtrar</button>
+      </form>
     </div>
 
+    <div class="card">
+      <h2>Resultados</h2>
+
+      {% if registros and registros|length > 0 %}
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Municipio</th>
+              <th>Código</th>
+              <th>Temp</th>
+              <th>Humedad</th>
+              <th>Viento</th>
+              <th>Lluvia</th>
+              <th>Fuente</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for registro in registros %}
+            <tr>
+              <td>{{ registro.fecha[:16] if registro.fecha else '-' }}</td>
+              <td>{{ registro.municipio or '-' }}</td>
+              <td>{{ registro.codigo_municipio or '-' }}</td>
+              <td>{{ registro.temperatura }}°C</td>
+              <td>{{ registro.humedad }}%</td>
+              <td>{{ registro.viento }} km/h</td>
+              <td>{{ registro.lluvia }} mm</td>
+              <td>
+                <span class="badge {{ registro.fuente }}">{{ registro.fuente or '-' }}</span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="no-results">No se han encontrado registros con esos filtros.</p>
+      {% endif %}
+    </div>
+
+  </main>
 </body>
 </html>

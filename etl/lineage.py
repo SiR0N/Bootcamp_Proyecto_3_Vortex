@@ -11,7 +11,6 @@ import pandas as pd
 
 from services.logging_service import log_info
 
-
 class LineageLogger:
     """Handles lineage tracking for ETL pipelines."""
 

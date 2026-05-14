@@ -1,4 +1,3 @@
-import json
 import os
 from datetime import datetime as dt
 
@@ -7,22 +6,16 @@ try:
 except ImportError:
     NormalizerService = None
 
-try:
-    from services import alert_service
-    from services.alert_service import AlertService
-except ImportError:
-    alert_service = None
-    AlertService = None
 
-
-def normalizar_datos_aemet(data):
+def normalizar_datos_aemet(data, fuente="aemet"):
     """
     Normaliza datos de AEMET para el proyecto VORTEX.
-    
+
     Args:
-        data: dict o lista con datos crudos de AEMET
+        data:   dict o lista con datos crudos de AEMET
+        fuente: origen del dato ('aemet' o 'manual')
     Returns:
-        dict con datos normalizados en formato compatible con el proyecto
+        dict con datos normalizados listos para la BD
     """
     if NormalizerService is None:
         return {"error": "No se pudo importar NormalizerService"}
@@ -30,6 +23,7 @@ def normalizar_datos_aemet(data):
     if data is None:
         return {"error": "Datos nulos"}
 
+    # Si llega una lista, procesamos solo el primero
     if isinstance(data, list):
         if len(data) == 0:
             return {"error": "Lista vacía"}
@@ -40,46 +34,26 @@ def normalizar_datos_aemet(data):
 
     try:
         normalizer = NormalizerService()
-        resultado = normalizer.normalizar(data, fuente="AEMET")
+        resultado = normalizer.normalizar(data, fuente=fuente)
 
-        estacion_raw = resultado.get("ciudad") or resultado.get("estacion") or resultado.get("ubi")
-        estacion = estacion_raw if estacion_raw else "Ubicación Desconocida"
-
-        fecha_raw = resultado.get("fecha")
-        if fecha_raw:
-            if "T" in str(fecha_raw):
-                fecha_formato = str(fecha_raw).replace("T", " ")
-            else:
-                fecha_formato = str(fecha_raw)
-        else:
-            fecha_formato = "N/A"
-
-        def safe_float(valor, default=0.0):
+        def safe_float(valor):
+            """Devuelve float o None. Nunca inventa un 0.0."""
             try:
-                return float(valor) if valor is not None else default
+                return float(valor) if valor is not None else None
             except (ValueError, TypeError):
-                return default
+                return None
 
-        resultado_final = {
-            "estacion": estacion,
-            "fecha": fecha_formato,
+        return {
+            "estacion_id": resultado.get("estacion_id"),
+            "fecha":       resultado.get("fecha"),
             "temperatura": safe_float(resultado.get("temperatura")),
-            "humedad": safe_float(resultado.get("humedad")),
-            "viento": safe_float(resultado.get("viento")),
-            "presion": safe_float(resultado.get("presion")),
-            "lluvia": safe_float(resultado.get("lluvia")),
-            "alertas": []
+            "humedad":     safe_float(resultado.get("humedad")),
+            "viento":      safe_float(resultado.get("viento")),
+            "presion":     safe_float(resultado.get("presion")),
+            "lluvia":      safe_float(resultado.get("lluvia")),
+            # fuente siempre en minúsculas para cumplir el CHECK constraint
+            "fuente":      str(resultado.get("fuente", fuente)).lower(),
         }
-
-        if alert_service and hasattr(alert_service, 'evaluar_alertas'):
-            try:
-                string_alerts = alert_service.evaluar_alertas(resultado_final)
-                resultado_final["alertas"] = string_alerts
-            except Exception:
-                pass
-
-        return resultado_final
 
     except Exception as e:
         return {"error": str(e)}
-

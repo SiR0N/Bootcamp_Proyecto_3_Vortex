@@ -25,7 +25,7 @@ def transform_data(raw_data):
     print("✅ Filas vacías eliminadas.")
 
     # 2. Convetir "fecha" a formato datetime
-    df['fecha'] = pd.to_datetime(df['fecha'], errors='coerce')
+    df['fecha'] = pd.to_datetime(df['fecha'], errors='coerce', dayfirst=True)
     print("✅ Campo 'fecha' transformado a formato datetime.")
 
     # 3. Tipado: Asegurar que los campos numéricos sean números
@@ -37,14 +37,19 @@ def transform_data(raw_data):
     print("✅ Campos numéricos convertidos a tipo numérico.")
     
     # 4. Reemplazar valores nulos en "municipio/ciudad" con "Desconocido"
-    df['municipio'] = df['municipio'].fillna("Desconocido")
-    df["ciudad"] = df["ciudad"].fillna("Desconocido")
-    df["station_name"] = df["station_name"].fillna("Desconocido")
+    for col in ('municipio', 'ciudad', 'station_name'):
+        if col not in df.columns:
+            df[col] = "Desconocido"
+        else:
+            df[col] = df[col].fillna("Desconocido")
 
     print("✅ Campos de municipio/ciudad normalizados")
 
     # 5. Asegurar que "alertas" sea una lista (si no lo es, convertirlo)
-    df["alertas"] = df["alertas"].apply(lambda x: x if isinstance(x, list) else [])
+    if "alertas" not in df.columns:
+        df["alertas"] = [[] for _ in range(len(df))]
+    else:
+        df["alertas"] = df["alertas"].apply(lambda x: x if isinstance(x, list) else [])
     print("✅ Campo 'alertas' validado.")
 
     # 6. Eliminar duplicados
@@ -65,6 +70,3 @@ if __name__ == "__main__":
     df_clean = transform_data(data)
 
     print(df_clean.head())
-
-
-    

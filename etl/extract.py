@@ -1,18 +1,18 @@
 # leemos JSON
 import json
-import os # Esto sirve para que el código buscar localizar el archivo .py donde sea que esté
+import os # Esto sirve para que el c-digo buscar localizar el archivo .py donde sea que est-
 
 def extract_data(relative_path):
-    current_dir = os.path.dirname(__file__) # Esto busca la carpeta donde está este script (extract.py)
+    current_dir = os.path.dirname(__file__) # Esto busca la carpeta donde est- este script (extract.py)
     full_path = os.path.join(current_dir, relative_path) # ruta absoluta al archivo JSON
 
     try:
         with open(full_path, 'r', encoding="utf-8") as file: # lee el archivo JSON
             data = json.load(file) # convierte el JSON en lenguaje Python (lista de diccionarios)
-            print("✅ Extracción exitosa") 
+            print("OK: Extraccion exitosa") 
             return data # devuelve los datos para que puedan ser usados por otros scripts
     except Exception as e: # si ocurre un error, lo captura y muestra un mensaje (e)
-        print(f"❌ Error al leer el archivo: {e}")
+        print(f"ERROR: Error al leer el archivo: {e}")
         return None
     
 # --- ESTO ES PARA PROBAR MANUALMENTE QUE FUNCIONA ---

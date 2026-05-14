@@ -37,7 +37,6 @@ class FakeResponse:
         """
         return self.json_data
 
-
 # =====================================================
 # CLASE FAKE: sesión HTTP simulada
 # =====================================================
@@ -93,7 +92,6 @@ class FakeSession:
             }
         ])
 
-
 # =====================================================
 # FIXTURE: servicio API preparado para tests
 # =====================================================
@@ -127,7 +125,6 @@ def api_service(monkeypatch):
     # Devolvemos el servicio ya preparado para los tests.
     return WeatherAPIService()
 
-
 # =====================================================
 # TEST 1: inicialización correcta
 # =====================================================
@@ -143,7 +140,6 @@ def test_weather_api_service_init(api_service):
     assert api_service.base_url == (
         "https://opendata.aemet.es/opendata/api/observacion/convencional/todas"
     )
-
 
 # =====================================================
 # TEST 2: error si no hay API KEY
@@ -163,7 +159,6 @@ def test_weather_api_service_no_api_key(monkeypatch):
     # Esperamos que al crear el servicio se lance ValueError.
     with pytest.raises(ValueError):
         WeatherAPIService()
-
 
 # =====================================================
 # TEST 3: obtener datos crudos correctamente
@@ -185,7 +180,6 @@ def test_obtener_datos_crudos_success(api_service):
 
     # Comprobamos que la primera observación es Madrid-Retiro.
     assert result[0]["ubi"] == "Madrid-Retiro"
-
 
 # =====================================================
 # TEST 4: primera respuesta sin clave "datos"
@@ -222,7 +216,6 @@ def test_obtener_datos_crudos_sin_url_datos(monkeypatch):
 
     assert result == []
 
-
 # =====================================================
 # TEST 5: error en la petición
 # =====================================================
@@ -258,7 +251,6 @@ def test_obtener_datos_crudos_error(monkeypatch):
 
     assert result == []
 
-
 # =====================================================
 # TEST 6: estación más cercana por coordenadas
 # =====================================================
@@ -275,7 +267,6 @@ def test_obtener_clima_por_coordenadas_devuelve_estacion_cercana(api_service):
 
     assert result is not None
     assert result["ubi"] == "Madrid-Retiro"
-
 
 # =====================================================
 # TEST 7: sin observaciones
@@ -297,7 +288,6 @@ def test_obtener_clima_por_coordenadas_sin_observaciones(monkeypatch, api_servic
     result = api_service.obtener_clima_por_coordenadas(40.4168, -3.7038)
 
     assert result is None
-
 
 # =====================================================
 # TEST 8: ignorar datos corruptos
@@ -334,7 +324,6 @@ def test_obtener_clima_por_coordenadas_ignora_datos_corruptos(monkeypatch, api_s
 
     assert result is not None
     assert result["ubi"] == "Madrid-Retiro"
-
 
 # =====================================================
 # TEST 9: método obtener_clima_por_id

@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request
 from datetime import datetime
-from controllers.compare_controller import compare_latest_records
+from controllers.compare_controller import get_comparison_data
+
 import requests
 
 view_bp = Blueprint("view", __name__, template_folder="../templates")
@@ -8,38 +9,56 @@ view_bp = Blueprint("view", __name__, template_folder="../templates")
 FASTAPI_URL = "http://localhost:8000"
 
 
-def get_mediciones_from_db(municipio=None, fecha=None, limit=500):
-    """Obtiene mediciones de PostgreSQL via FastAPI"""
+def _cargar_zonas_indexadas():
+    """Carga todas las zonas una sola vez y las indexa por id."""
     try:
-        response = requests.get(f"{FASTAPI_URL}/mediciones/", params={"limit": limit}, timeout=10)
-        if response.status_code != 200:
+        r = requests.get(f"{FASTAPI_URL}/zonas/?limit=1000", timeout=10)
+        if r.status_code != 200:
+            return {}
+        return {z["id"]: z for z in r.json()}
+    except Exception as e:
+        print(f"Error cargando zonas: {e}")
+        return {}
+
+
+def get_mediciones_from_db(municipio=None, fecha=None, limit=500):
+    """Obtiene mediciones de PostgreSQL vÃ­a FastAPI."""
+    try:
+        r = requests.get(f"{FASTAPI_URL}/mediciones/", params={"limit": limit}, timeout=10)
+        if r.status_code != 200:
             return []
+        mediciones = r.json()
 
-        mediciones = response.json()
-
+        zonas_idx = _cargar_zonas_indexadas()
         resultados = []
-        for m in mediciones:
-            zona_response = requests.get(f"{FASTAPI_URL}/zonas/{m.get('zona_id')}", timeout=5)
-            zona_nombre = zona_response.json().get("estacion_id", "") if zona_response.status_code == 200 else ""
 
+        for m in mediciones:
+            zona = zonas_idx.get(m.get("zona_id"), {})
+            estacion = zona.get("estacion_id", "")
+            nombre   = zona.get("nombre", "") or ""
+
+            # Filtro por municipio: comparamos contra NOMBRE y estacion_id
             if municipio:
-                if municipio.lower() not in zona_nombre.lower():
+                mun_lower = municipio.lower()
+                if mun_lower not in nombre.lower() and mun_lower not in estacion.lower():
                     continue
 
             if fecha:
-                m_fecha = m.get("fecha", "")[:10] if m.get("fecha") else ""
+                m_fecha = (m.get("fecha") or "")[:10]
                 if fecha not in m_fecha:
                     continue
 
             resultados.append({
-                "estacion_id": zona_nombre,
-                "fecha": m.get("fecha"),
-                "temperatura": m.get("temperatura"),
-                "humedad": m.get("humedad"),
-                "viento": m.get("viento"),
-                "lluvia": m.get("lluvia"),
-                "presion": m.get("presion"),
-                "fuente": m.get("fuente")
+                "estacion_id":       estacion,
+                "municipio":         nombre or estacion,
+                "codigo_municipio":  estacion,
+                "fecha":             m.get("fecha"),
+                "temperatura":       m.get("temperatura"),
+                "humedad":           m.get("humedad"),
+                "viento":            m.get("viento"),
+                "lluvia":            m.get("lluvia"),
+                "presion":           m.get("presion"),
+                "fuente":            m.get("fuente"),
             })
 
         return resultados
@@ -75,33 +94,25 @@ def api_view():
 
 @view_bp.route("/consulta", methods=["GET", "POST"])
 def consulta():
-    """Muestra el histórico filtrado por municipio y fecha desde PostgreSQL"""
     if request.method == "GET":
-        registros = get_mediciones_from_db()
-        return render_template("consulta.html", registros=registros)
+        return render_template("consulta.html", registros=get_mediciones_from_db())
 
-    municipio = request.form.get("municipio", "").strip()
-    if not municipio:
-        municipio = None
+    municipio = request.form.get("municipio", "").strip() or None
 
     fecha_raw = request.form.get("fecha", "").strip()
-    fecha_formateada = None
-
+    fecha_filter = None
     if fecha_raw:
         try:
-            fecha_obj = datetime.strptime(fecha_raw, "%Y-%m-%d")
-            fecha_formateada = fecha_obj.strftime("%d/%m/%Y")
+            fecha_filter = datetime.strptime(fecha_raw, "%Y-%m-%d").strftime("%Y-%m-%d")
         except ValueError:
-            fecha_formateada = None
+            fecha_filter = None
 
-    registros = get_mediciones_from_db(municipio=municipio, fecha=fecha_formateada)
-
+    registros = get_mediciones_from_db(municipio=municipio, fecha=fecha_filter)
     return render_template("consulta.html", registros=registros)
 
 
 @view_bp.route("/comparar", methods=["GET", "POST"])
 def comparar():
-    """Realiza la comparativa entre JSON y API."""
     if request.method == "GET":
         return render_template("comparar.html", resultado=None)
 

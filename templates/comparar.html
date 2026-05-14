@@ -1,105 +1,114 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Comparar registros</title>
-
-    <!-- Fuente -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/compare.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VORTEX | Comparar Datos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+  <style>
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
+    .compare-box { background: var(--bg-primary); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1.5rem; }
+    .compare-box h3 { font-size: 0.9rem; color: var(--accent-dark); text-transform: uppercase; margin-bottom: 1rem; }
+    .compare-box p { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border-light); }
+    .compare-box p:last-child { border-bottom: none; }
+    .compare-box .label { color: var(--text-muted); }
+    .compare-box .value { font-weight: 600; color: var(--text-primary); }
+    .diff-box { margin-top: 1.5rem; }
+    .info-box { background: var(--bg-card-alt); border: 1px solid var(--accent-light); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1rem; }
+    .info-box p { color: var(--text-secondary); font-size: 0.9rem; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <nav class="breadcrumb">
-        <ol>
-            {% for crumb in breadcrumbs %}
-                {% if loop.last %}
-                    <li class="active">{{ crumb.text }}</li>
-                {% else %}
-                    <li>
-                        <a href="{{ crumb.url }}">{{ crumb.text }}</a>
-                    </li>
-                    <li class="separator">/</li>
-                {% endif %}
-            {% endfor %}
-        </ol>
+  <main class="page-container">
+    
+    <header class="header">
+      <div class="logo">
+        <div class="logo-img">V</div>
+        <div class="logo-text">
+          <span class="brand">VORTEX</span>
+          <span class="tagline">Datos Meteorológicos</span>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="{{ url_for('view.index') }}">Inicio</a>
+        <a href="{{ url_for('view.registro') }}">Registro</a>
+        <a href="{{ url_for('view.consulta') }}">Histórico</a>
+        <a href="{{ url_for('view.comparar') }}" class="active">Comparar</a>
+      </nav>
+    </header>
+
+    <h1>Comparar Datos</h1>
+
+    <nav class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span class="separator">/</span>
+      <span class="active">Comparar</span>
     </nav>
 
-        <h1>Comparativa manual vs AEMET</h1>
-        <form method="POST" action="/comparar" class="card">
-            <label for="municipio">Municipio</label>
-            <input type="text" id="municipio" name="municipio" placeholder="Ej: Madrid" required>
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <div class="info-box">
+        <p><strong>Cómo funciona:</strong> Ingresa un municipio para comparar tus datos manuales registrados con los datos actuales de AEMET.</p>
+      </div>
+      
+      <form method="POST" action="/comparar">
+        <div class="form-group">
+          <label for="municipio">Municipio</label>
+          <input type="text" id="municipio" name="municipio" placeholder="Ej: Madrid" required>
+        </div>
+        <input type="hidden" id="fecha" name="fecha" value="">
+        <button type="submit" class="primary-btn">Comparar</button>
+      </form>
+    </div>
 
-            <label for="fecha">Fecha</label>
-            <input type="date" id="fecha" name="fecha" required>
-
-            <button type="submit">Comparar</button>
-        </form>
-
-    <!-- RESULTADOS -->
     {% if resultado %}
-
-    <!-- ERROR -->
-    {% if not resultado.success %}
-    <div class="card error">
-        <p>{{ resultado.message }}</p>
-    </div>
-
-    {% else %}
-
-    <div class="card">
-        <h2>{{ resultado.municipio }}</h2>
-
-        <div class="grid">
-
-            <!-- MANUAL -->
-            <div class="box">
-                <h3>Manual</h3>
-                <p> {{ resultado.manual.temperatura }}°C</p>
-                <p> {{ resultado.manual.humedad }}%</p>
-                <p> {{ resultado.manual.viento }}</p>
-                <p> {{ resultado.manual.lluvia }}</p>
-            </div>
-
-            <!-- API -->
-            <div class="box">
-                <h3>AEMET</h3>
-                <p> {{ resultado.api.temperatura }}°C</p>
-                <p> {{ resultado.api.humedad }}%</p>
-                <p> {{ resultado.api.viento }}</p>
-                <p> {{ resultado.api.lluvia }}</p>
-            </div>
-
+      {% if not resultado.success %}
+        <div class="card">
+          <div class="alert alert-warning">{{ resultado.message }}</div>
         </div>
+      {% else %}
+        <div class="card">
+          <h2>{{ resultado.municipio }} - {{ resultado.fecha }}</h2>
 
-        <!-- DIFERENCIAS -->
-        <div class="box">
+          <div class="compare-grid">
+            <div class="compare-box">
+              <h3>Datos Manuales</h3>
+              <p><span class="label">Temperatura</span><span class="value">{{ resultado.manual.temperatura }}°C</span></p>
+              <p><span class="label">Humedad</span><span class="value">{{ resultado.manual.humedad }}%</span></p>
+              <p><span class="label">Viento</span><span class="value">{{ resultado.manual.viento }} km/h</span></p>
+              <p><span class="label">Lluvia</span><span class="value">{{ resultado.manual.lluvia }} mm</span></p>
+            </div>
+
+            <div class="compare-box">
+              <h3>Datos AEMET</h3>
+              <p><span class="label">Temperatura</span><span class="value">{{ resultado.api.temperatura or '-' }}°C</span></p>
+              <p><span class="label">Humedad</span><span class="value">{{ resultado.api.humedad or '-' }}%</span></p>
+              <p><span class="label">Viento</span><span class="value">{{ resultado.api.viento or '-' }} km/h</span></p>
+              <p><span class="label">Lluvia</span><span class="value">{{ resultado.api.lluvia or '-' }} mm</span></p>
+            </div>
+          </div>
+
+          <div class="compare-box diff-box">
             <h3>Diferencias</h3>
-            <p>Temperatura: {{ resultado.diferencias.temperatura }}</p>
-            <p>Humedad: {{ resultado.diferencias.humedad }}</p>
-            <p>Viento: {{ resultado.diferencias.viento }}</p>
-            <p>Lluvia: {{ resultado.diferencias.lluvia }}</p>
-        </div>
+            <p><span class="label">Temperatura</span><span class="value">{{ resultado.diferencias.temperatura }}°C</span></p>
+            <p><span class="label">Humedad</span><span class="value">{{ resultado.diferencias.humedad }}%</span></p>
+            <p><span class="label">Viento</span><span class="value">{{ resultado.diferencias.viento }} km/h</span></p>
+            <p><span class="label">Lluvia</span><span class="value">{{ resultado.diferencias.lluvia }} mm</span></p>
+          </div>
 
-        <!-- RESULTADO FINAL -->
-        {% if resultado.hay_discrepancia %}
-        <div class="alert error">
-            Hay discrepancias importantes
+          {% if resultado.hay_discrepancia %}
+            <div class="alert alert-warning" style="margin-top: 1rem;">
+              <strong>⚠️ Alerta:</strong> Hay diferencias significativas entre los datos manuales y los de AEMET.
+            </div>
+          {% else %}
+            <div class="alert alert-success" style="margin-top: 1rem;">
+              <strong>✓ OK:</strong> Los datos son coherentes entre sí.
+            </div>
+          {% endif %}
         </div>
-        {% else %}
-        <div class="alert success">
-            Datos coherentes
-        </div>
-        {% endif %}
-
-    </div>
-
-    {% endif %}
+      {% endif %}
     {% endif %}
 
-</div>
-
+  </main>
 </body>
 </html>

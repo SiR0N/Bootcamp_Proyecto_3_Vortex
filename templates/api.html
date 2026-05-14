@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClimApp | Datos en vivo (AEMET)</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+<main class="dashboard">
+
+    <section class="topbar">
+        <div>
+            <p class="eyebrow">ClimApp · API en vivo</p>
+            <h1 id="mainTitle">Cargando datos AEMET...</h1>
+        </div>
+        <a href="{{ url_for('view.index') }}" class="mini-btn">← Volver</a>
+    </section>
+
+    <nav aria-label="breadcrumb" class="breadcrumb">
+        <ol>
+            {% for crumb in breadcrumbs %}
+                {% if loop.last %}
+                    <li class="active">{{ crumb.text }}</li>
+                {% else %}
+                    <li><a href="{{ crumb.url }}">{{ crumb.text }}</a></li>
+                    <li class="separator">/</li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </nav>
+
+    <section class="grid">
+
+        <article class="card hero-card">
+            <div class="hero-left">
+                <p class="label">Municipio detectado</p>
+                <h2 id="cityName">Detectando...</h2>
+                <p class="muted" id="stationName">Buscando estación cercana...</p>
+
+                <div class="temp-row">
+                    <span class="temp" id="temperature">--°</span>
+                    <div class="status-dot" id="statusDot"></div>
+                </div>
+
+                <p class="updated" id="updatedAt">Esperando datos...</p>
+            </div>
+        </article>
+
+        <article class="card metrics-card">
+            <h3>Condiciones actuales</h3>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <p class="metric-label">Humedad</p>
+                    <p class="metric-value" id="humidity">--%</p>
+                </div>
+                <div class="metric-box">
+                    <p class="metric-label">Viento</p>
+                    <p class="metric-value" id="wind">-- km/h</p>
+                </div>
+                <div class="metric-box">
+                    <p class="metric-label">Lluvia</p>
+                    <p class="metric-value" id="rain">-- mm</p>
+                </div>
+                <div class="metric-box">
+                    <p class="metric-label">Presión</p>
+                    <p class="metric-value" id="pressure">-- hPa</p>
+                </div>
+                <div class="metric-box">
+                    <p class="metric-label">Fuente</p>
+                    <p class="metric-value small" id="source">--</p>
+                </div>
+                <div class="metric-box">
+                    <p class="metric-label">Fecha</p>
+                    <p class="metric-value small" id="datetime">--</p>
+                </div>
+            </div>
+        </article>
+
+        <article class="card summary-card">
+            <h3>Acciones</h3>
+            <button id="refreshBtn" class="primary-btn">Refrescar datos</button>
+            <p id="errorBox" class="muted" style="color:#ef4444; margin-top:12px; display:none;"></p>
+        </article>
+
+    </section>
+</main>
+
+<script>
+async function cargarClima() {
+    const errorBox  = document.getElementById("errorBox");
+    const statusDot = document.getElementById("statusDot");
+    errorBox.style.display = "none";
+
+    try {
+        // Coordenadas Madrid por defecto (fallback si no hay GPS)
+        let lat = 40.4167, lon = -3.7033;
+
+        if (navigator.geolocation) {
+            try {
+                const pos = await new Promise((res, rej) => {
+                    navigator.geolocation.getCurrentPosition(res, rej, { timeout: 4000 });
+                });
+                lat = pos.coords.latitude;
+                lon = pos.coords.longitude;
+            } catch (_) { /* fallback Madrid */ }
+        }
+
+        const r = await fetch(`/api/clima?lat=${lat}&lon=${lon}`);
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const d = await r.json();
+
+        document.getElementById("mainTitle").textContent  = `${d.ciudad || "Ubicación"} · AEMET`;
+        document.getElementById("cityName").textContent    = d.ciudad || "—";
+        document.getElementById("stationName").textContent = d.estacion_id || "—";
+        document.getElementById("temperature").textContent = d.temperatura != null ? `${Math.round(d.temperatura)}°` : "--°";
+        document.getElementById("humidity").textContent    = d.humedad != null ? `${d.humedad}%` : "--%";
+        document.getElementById("wind").textContent        = d.viento != null ? `${d.viento} km/h` : "-- km/h";
+        document.getElementById("rain").textContent        = d.lluvia != null ? `${d.lluvia} mm` : "-- mm";
+        document.getElementById("pressure").textContent    = d.presion != null ? `${d.presion} hPa` : "-- hPa";
+        document.getElementById("source").textContent      = d.fuente || "—";
+        document.getElementById("datetime").textContent    = d.fecha || "—";
+        document.getElementById("updatedAt").textContent   = "Actualizado: " + new Date().toLocaleTimeString("es-ES");
+
+        statusDot.style.background = "#22c55e";
+        statusDot.style.boxShadow  = "0 0 12px rgba(34,197,94,0.45)";
+    } catch (err) {
+        console.error(err);
+        errorBox.textContent = "No se pudieron obtener datos de la API: " + err.message;
+        errorBox.style.display = "block";
+        statusDot.style.background = "#ef4444";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    cargarClima();
+    document.getElementById("refreshBtn").addEventListener("click", cargarClima);
+});
+</script>
+</body>
+</html>

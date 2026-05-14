@@ -6,7 +6,6 @@ from controllers.compare_controller import (
     compare_latest_records,
 )
 
-
 # =====================================================
 # FIXTURES
 # =====================================================
@@ -29,7 +28,6 @@ def manual_record():
         "lluvia": 0.0,
     }
 
-
 @pytest.fixture
 def api_record():
     """
@@ -48,7 +46,6 @@ def api_record():
         "lluvia": 0.0,
     }
 
-
 # =====================================================
 # TESTS calculate_difference()
 # =====================================================
@@ -61,7 +58,6 @@ def test_calculate_difference_with_numbers():
     assert calculate_difference(20, 23) == 3.0
     assert calculate_difference(10.5, 8.0) == 2.5
 
-
 def test_calculate_difference_with_none():
     """
     Comprueba que si recibe None lo trata como 0.0.
@@ -70,7 +66,6 @@ def test_calculate_difference_with_none():
     assert calculate_difference(None, 5) == 5.0
     assert calculate_difference(5, None) == 5.0
 
-
 def test_calculate_difference_with_invalid_values():
     """
     Comprueba que si recibe valores no convertibles devuelve 0.0.
@@ -78,7 +73,6 @@ def test_calculate_difference_with_invalid_values():
 
     assert calculate_difference("hola", 5) == 0.0
     assert calculate_difference(5, "adios") == 0.0
-
 
 # =====================================================
 # TESTS has_discrepancy()
@@ -99,7 +93,6 @@ def test_has_discrepancy_false():
 
     assert has_discrepancy(differences) is False
 
-
 def test_has_discrepancy_true_temperature():
     """
     Comprueba que hay discrepancia si la temperatura supera el límite.
@@ -113,7 +106,6 @@ def test_has_discrepancy_true_temperature():
     }
 
     assert has_discrepancy(differences) is True
-
 
 def test_has_discrepancy_true_humidity():
     """
@@ -129,7 +121,6 @@ def test_has_discrepancy_true_humidity():
 
     assert has_discrepancy(differences) is True
 
-
 def test_has_discrepancy_true_wind():
     """
     Comprueba que hay discrepancia si el viento supera el límite.
@@ -144,7 +135,6 @@ def test_has_discrepancy_true_wind():
 
     assert has_discrepancy(differences) is True
 
-
 def test_has_discrepancy_true_rain():
     """
     Comprueba que hay discrepancia si la lluvia supera el límite.
@@ -158,7 +148,6 @@ def test_has_discrepancy_true_rain():
     }
 
     assert has_discrepancy(differences) is True
-
 
 # =====================================================
 # TESTS compare_latest_records()
@@ -220,7 +209,6 @@ def test_compare_latest_records_success(monkeypatch, manual_record, api_record):
     assert "diferencias" in resultado
     assert "hay_discrepancia" in resultado
 
-
 def test_compare_latest_records_no_manual(monkeypatch):
     """
     Comprueba que compare_latest_records devuelve error
@@ -240,7 +228,6 @@ def test_compare_latest_records_no_manual(monkeypatch):
 
     assert resultado["success"] is False
     assert "No hay datos manuales" in resultado["message"]
-
 
 def test_compare_latest_records_no_api(monkeypatch, manual_record):
     """
@@ -271,7 +258,6 @@ def test_compare_latest_records_no_api(monkeypatch, manual_record):
 
     assert resultado["success"] is False
     assert "AEMET" in resultado["message"]
-
 
 def test_compare_latest_records_api_exception(monkeypatch, manual_record):
     """

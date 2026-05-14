@@ -25,13 +25,11 @@ class ZonaBase(BaseModel):
             return v
         return str(v).title()
 
-
 class ZonaCreate(BaseModel):
     estacion_id: str = Field(..., min_length=1, max_length=50)
     nombre: Optional[str] = None
     latitud: Optional[float] = None
     longitud: Optional[float] = None
-
 
 class ZonaResponse(BaseModel):
     id: int

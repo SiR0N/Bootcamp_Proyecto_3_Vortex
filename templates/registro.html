@@ -1,138 +1,189 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Climapp - Registro</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/registro_styles.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VORTEX | Registrar y Comparar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+  <style>
+    .compare-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+    .compare-col { background: var(--bg-primary); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem; }
+    .compare-col h3 { font-size: 0.85rem; color: var(--accent-dark); text-transform: uppercase; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-light); }
+    .compare-col p { display: flex; justify-content: space-between; padding: 0.4rem 0; font-size: 0.9rem; }
+    .compare-col .label { color: var(--text-muted); }
+    .compare-col .value { font-weight: 600; }
+    .diff-col { border-color: var(--accent); }
+    .diff-col .value.warning { color: var(--accent-dark); }
+    #comparisonResult { display: none; margin-top: 1.5rem; }
+  </style>
 </head>
-
 <body>
-
-    <div class="page-container">
-
-        <a href="/" style="text-decoration: none; color: #94a3b8; margin-bottom: 20px; display: inline-block;">
-            ← Volver al Menú
-        </a>
-
-        <h1>Registrar Datos Climáticos</h1>
-
-        <div class="card">
-
-            <div id="mensaje" class="message" style="display: none;"></div>
-
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <div class="flashes">
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">{{ message }}</div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endwith %}
-
-            <form id="form-registro">
-
-                <div class="form-group">
-                    <label>Municipio de Madrid</label>
-                    <input 
-                        type="text"
-                        id="municipio_input"
-                        name="municipio_nombre"
-                        placeholder="Escribe un municipio..."
-                        list="estaciones_list"
-                        required
-                        autocomplete="off"
-                    >
-
-                    <datalist id="estaciones_list"></datalist>
-
-                    <input 
-                        type="hidden"
-                        id="estacion_id"
-                        name="estacion_id"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label>Fecha</label>
-                    <input 
-                        type="date"
-                        id="fecha"
-                        name="fecha"
-                        required
-                    >
-                </div>
-
-                <div class="grid-inputs">
-                    <div class="form-group">
-                        <label>Temperatura ºC</label>
-                        <input 
-                            type="number"
-                            step="0.1"
-                            id="temperatura"
-                            name="temperatura"
-                            min="-50"
-                            max="50"
-                            placeholder="0.0"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label>Humedad %</label>
-                        <input 
-                            type="number"
-                            id="humedad"
-                            name="humedad"
-                            min="0"
-                            max="100"
-                            placeholder="0"
-                            required
-                        >
-                    </div>
-                </div>
-
-                <div class="grid-inputs">
-                    <div class="form-group">
-                        <label>Viento km/h</label>
-                        <input 
-                            type="number"
-                            step="0.1"
-                            id="viento"
-                            name="viento"
-                            min="0"
-                            placeholder="0"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label>Lluvia mm</label>
-                        <input 
-                            type="number"
-                            step="0.1"
-                            id="lluvia"
-                            name="lluvia"
-                            min="0"
-                            placeholder="0"
-                            required
-                        >
-                    </div>
-                </div>
-
-                <button type="submit" class="primary-btn">
-                    Guardar Registro
-                </button>
-
-            </form>
-
+  <main class="page-container">
+    
+    <header class="header">
+      <div class="logo">
+        <div class="logo-img">V</div>
+        <div class="logo-text">
+          <span class="brand">VORTEX</span>
+          <span class="tagline">Datos Meteorológicos</span>
         </div>
+      </div>
+      <nav class="nav-links">
+        <a href="{{ url_for('view.index') }}">Inicio</a>
+        <a href="{{ url_for('view.registro') }}" class="active">Registro</a>
+        <a href="{{ url_for('view.consulta') }}">Histórico</a>
+      </nav>
+    </header>
+
+    <h1>Registrar y Comparar</h1>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Registra tu dato manual y compáralo automáticamente con AEMET</p>
+
+    <div class="card">
+      <form id="form-registro">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="municipio_input">Municipio</label>
+            <input type="text" id="municipio_input" name="municipio_nombre" placeholder="Ej: Madrid" list="estaciones_list" required autocomplete="off">
+            <datalist id="estaciones_list"></datalist>
+            <input type="hidden" id="estacion_id" name="estacion_id">
+          </div>
+
+          <div class="form-group">
+            <label for="temperatura">Temperatura (°C)</label>
+            <input type="number" step="0.1" id="temperatura" name="temperatura" min="-50" max="50" placeholder="Ej: 25" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="humedad">Humedad (%)</label>
+            <input type="number" id="humedad" name="humedad" min="0" max="100" placeholder="Ej: 60" required>
+          </div>
+
+          <div class="form-group">
+            <label for="viento">Viento (km/h)</label>
+            <input type="number" step="0.1" id="viento" name="viento" min="0" placeholder="Ej: 10" required>
+          </div>
+
+          <div class="form-group">
+            <label for="lluvia">Lluvia (mm)</label>
+            <input type="number" step="0.1" id="lluvia" name="lluvia" min="0" placeholder="Ej: 0" required>
+          </div>
+        </div>
+
+        <button type="submit" class="primary-btn" id="submitBtn">Registrar y Comparar</button>
+      </form>
     </div>
 
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <div id="comparisonResult" class="card">
+      <h2 style="margin-bottom: 0;">Comparación: Tu dato vs AEMET</h2>
+      <div class="compare-row">
+        <div class="compare-col">
+          <h3>Tu Dato Manual</h3>
+          <p><span class="label">Temperatura</span><span class="value" id="manualTemp">--°C</span></p>
+          <p><span class="label">Humedad</span><span class="value" id="manualHum">--%</span></p>
+          <p><span class="label">Viento</span><span class="value" id="manualWind">-- km/h</span></p>
+          <p><span class="label">Lluvia</span><span class="value" id="manualRain">-- mm</span></p>
+        </div>
+        <div class="compare-col">
+          <h3>AEMET Actual</h3>
+          <p><span class="label">Temperatura</span><span class="value" id="aemetTemp">--°C</span></p>
+          <p><span class="label">Humedad</span><span class="value" id="aemetHum">--%</span></p>
+          <p><span class="label">Viento</span><span class="value" id="aemetWind">-- km/h</span></p>
+          <p><span class="label">Lluvia</span><span class="value" id="aemetRain">-- mm</span></p>
+        </div>
+        <div class="compare-col diff-col">
+          <h3>Diferencias</h3>
+          <p><span class="label">Temperatura</span><span class="value warning" id="diffTemp">--°C</span></p>
+          <p><span class="label">Humedad</span><span class="value warning" id="diffHum">--%</span></p>
+          <p><span class="label">Viento</span><span class="value warning" id="diffWind">-- km/h</span></p>
+          <p><span class="label">Lluvia</span><span class="value warning" id="diffRain">-- mm</span></p>
+        </div>
+      </div>
+      <div id="alertBox" class="alert" style="margin-top: 1rem;"></div>
+    </div>
 
+    <div id="errorMsg" class="card" style="display: none; margin-top: 1rem;">
+      <div class="alert alert-error" id="errorText"></div>
+    </div>
+
+  </main>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script>
+    document.getElementById('form-registro').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Registrando...';
+      
+      const datos = {
+        estacion_id: document.getElementById('estacion_id').value || 'MANUAL-1',
+        municipio: document.getElementById('municipio_input').value,
+        fecha: new Date().toISOString(),
+        temperatura: parseFloat(document.getElementById('temperatura').value),
+        humedad: parseFloat(document.getElementById('humedad').value),
+        viento: parseFloat(document.getElementById('viento').value),
+        lluvia: parseFloat(document.getElementById('lluvia').value)
+      };
+      
+      try {
+        // 1. Guardar registro manual
+        const resp = await fetch('/api/registrar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(datos)
+        });
+        
+        if (!resp.ok) throw new Error('Error al guardar');
+        
+        // 2. Obtener dato actual de AEMET
+        const aemetResp = await fetch('/api/clima?lat=40.4167&lon=-3.7033');
+        const aemet = await aemetResp.json();
+        
+        // 3. Mostrar comparación
+        document.getElementById('manualTemp').textContent = datos.temperatura + '°C';
+        document.getElementById('manualHum').textContent = datos.humedad + '%';
+        document.getElementById('manualWind').textContent = datos.viento + ' km/h';
+        document.getElementById('manualRain').textContent = datos.lluvia + ' mm';
+        
+        document.getElementById('aemetTemp').textContent = (aemet.temperatura || '--') + '°C';
+        document.getElementById('aemetHum').textContent = (aemet.humedad || '--') + '%';
+        document.getElementById('aemetWind').textContent = (aemet.viento || '--') + ' km/h';
+        document.getElementById('aemetRain').textContent = (aemet.lluvia || '--') + ' mm';
+        
+        const diffTemp = Math.abs(datos.temperatura - (aemet.temperatura || 0)).toFixed(1);
+        const diffHum = Math.abs(datos.humedad - (aemet.humedad || 0)).toFixed(1);
+        const diffWind = Math.abs(datos.viento - (aemet.viento || 0)).toFixed(1);
+        const diffRain = Math.abs(datos.lluvia - (aemet.lluvia || 0)).toFixed(1);
+        
+        document.getElementById('diffTemp').textContent = diffTemp + '°C';
+        document.getElementById('diffHum').textContent = diffHum + '%';
+        document.getElementById('diffWind').textContent = diffWind + ' km/h';
+        document.getElementById('diffRain').textContent = diffRain + ' mm';
+        
+        const alertBox = document.getElementById('alertBox');
+        if (diffTemp > 3 || diffHum > 10 || diffWind > 10 || diffRain > 5) {
+          alertBox.className = 'alert alert-warning';
+          alertBox.textContent = '⚠️ Hay diferencias significativas entre tu dato y AEMET';
+        } else {
+          alertBox.className = 'alert alert-success';
+          alertBox.textContent = '✓ Los datos son coherentes con AEMET';
+        }
+        
+        document.getElementById('comparisonResult').style.display = 'block';
+        document.getElementById('form-registro').reset();
+        
+      } catch (err) {
+        document.getElementById('errorText').textContent = err.message;
+        document.getElementById('errorMsg').style.display = 'block';
+      }
+      
+      btn.disabled = false;
+      btn.textContent = 'Registrar y Comparar';
+    });
+  </script>
 </body>
 </html>
