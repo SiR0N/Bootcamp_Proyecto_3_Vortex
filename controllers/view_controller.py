@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request
 from datetime import datetime
-from controllers.compare_controller import compare_latest_records
+from controllers.compare_controller import get_comparison_data
+
 import requests
 
 view_bp = Blueprint("view", __name__, template_folder="../templates")
@@ -21,7 +22,7 @@ def _cargar_zonas_indexadas():
 
 
 def get_mediciones_from_db(municipio=None, fecha=None, limit=500):
-    """Obtiene mediciones de PostgreSQL vía FastAPI."""
+    """Obtiene mediciones de PostgreSQL vÃ­a FastAPI."""
     try:
         r = requests.get(f"{FASTAPI_URL}/mediciones/", params={"limit": limit}, timeout=10)
         if r.status_code != 200:
