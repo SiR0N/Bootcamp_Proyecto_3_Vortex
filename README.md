@@ -11,7 +11,6 @@
    ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-336791?style=for-the-badge&logo=postgresql&logoColor=white)
    ![Supabase](https://img.shields.io/badge/Supabase-Cloud-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
    ![AEMET](https://img.shields.io/badge/API-AEMET-red?style=for-the-badge)
-   ![Lineage](https://img.shields.io/badge/Lineage-Trazabilidad-8A2BE2?style=for-the-badge)
    ![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-success?style=for-the-badge)
 
 ## 📌 Descripción
