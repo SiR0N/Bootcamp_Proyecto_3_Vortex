@@ -29,7 +29,7 @@
 | 6. Requisitos previos | Completado |
 | 7. Instalación y configuración | Completado |
 | 8. Uso del sistema | Completado |
-| 9. Flujo de datos y trazabilidad | Pendiente |
+| 9. Flujo de datos y trazabilidad | Completado |
 | 10. Base de datos | Pendiente |
 | 11. Despliegue | Pendiente |
 | 12. Testing | Pendiente |
@@ -272,6 +272,34 @@ Los informes y snapshots se almacenan en `logs/snapshots/` y `logs/lineage/`.
 | GET | `/mediciones` | Listar todas las mediciones |
 | POST | `/mediciones` | Insertar una nueva medición |
 | POST | `/etl/run` | Ejecutar el pipeline ETL |
+
+---
+
+## Flujo de datos y trazabilidad
+
+El sistema implementa un ciclo de vida del dato en tres etapas, desde la fuente original hasta su almacenamiento definitivo:
+
+**1. Obtención de datos crudos**
+
+Las observaciones meteorológicas se descargan desde la API de AEMET OpenData. Esta fuente proporciona miles de registros diarios en formato JSON, correspondientes a estaciones distribuidas por todo el territorio nacional.
+
+**2. Normalización y transformación**
+
+Los datos crudos pasan por un proceso de filtrado, limpieza y validación. En esta etapa se descartan registros incompletos o fuera de rango, se unifican formatos de fecha y se convierten los tipos de datos numéricos. El resultado es un conjunto reducido de registros normalizados, preparados para su carga en la base de datos.
+
+**3. Carga en base de datos**
+
+Los registros transformados se insertan en PostgreSQL a través de la API REST. Cada medición queda vinculada a una zona geográfica identificada por su estación meteorológica de origen.
+
+**Trazabilidad**
+
+Cada ejecución del pipeline deja constancia documental de todo el proceso. El sistema genera automáticamente informes de linaje que registran:
+
+- Cuántos registros se obtuvieron en cada etapa.
+- Cuántos fueron descartados y por qué motivos.
+- Qué transformaciones se aplicaron a los datos.
+
+Estos informes, junto con las instantáneas de cada fase, se almacenan en `logs/snapshots/` y `logs/lineage/`, permitiendo auditar el recorrido de cualquier dato desde su origen hasta su destino final.
 
 ---
 
