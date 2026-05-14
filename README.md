@@ -13,6 +13,31 @@
    ![AEMET](https://img.shields.io/badge/API-AEMET-red?style=for-the-badge)
    ![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-success?style=for-the-badge)
 
+---
+
+## Contenidos
+
+> Este README se encuentra en fase de redacción. Las secciones completadas están listas para revisión del equipo; el resto se incorporarán progresivamente.
+
+| Sección | Estado |
+|---------|--------|
+| 1. Título y badges | Completado |
+| 2. Tabla de contenidos | Completado |
+| 3. Resumen del proyecto | Pendiente |
+| 4. Arquitectura general | Pendiente |
+| 5. Tecnologías utilizadas | Pendiente |
+| 6. Requisitos previos | Pendiente |
+| 7. Instalación y configuración | Pendiente |
+| 8. Uso del sistema | Pendiente |
+| 9. Flujo de datos y trazabilidad | Pendiente |
+| 10. Base de datos | Pendiente |
+| 11. Despliegue | Pendiente |
+| 12. Testing | Pendiente |
+| 13. Equipo | Pendiente |
+| 14. Licencia | Pendiente |
+
+---
+
 ## 📌 Descripción
 
 **Vortex** es una plataforma completa para la **ingestión, transformación, almacenamiento y consulta de datos meteorológicos** en la Comunidad de Madrid.
