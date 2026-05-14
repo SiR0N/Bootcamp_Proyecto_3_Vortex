@@ -57,7 +57,7 @@ def tarea_actualizar_clima():
         repo.guardar(data)
         print(f"Datos guardados para {data.get('ciudad')}")
 
-        ejecutar_etl() 🎯 AQUÍ DISPARA EL ETL
+        ejecutar_etl() #🎯 AQUÍ DISPARA EL ETL
 
     except Exception as e:
         logging.error(f"Error en tarea automática: {e}")
