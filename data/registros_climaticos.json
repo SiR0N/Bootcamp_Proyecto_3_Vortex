@@ -4766,5 +4766,32 @@
         "version_normalizador": "vortex-1.0",
         "_stale": false,
         "_horas_sin_actualizar": 0
+    },
+    {
+        "estacion_id": "OW-3117735",
+        "ciudad": "Madrid",
+        "lat": 40.42,
+        "lon": -3.7,
+        "temperatura": 20.24,
+        "humedad": 34.0,
+        "viento": 20.376,
+        "presion": 1007.0,
+        "lluvia": 0.0,
+        "fecha": "2026-05-14T17:55:32",
+        "fuente": "openweather",
+        "municipio": null,
+        "alertas": [
+            {
+                "tipo": "estado",
+                "nivel": "verde",
+                "descripcion": "Sin alertas",
+                "color": "#22c55e"
+            }
+        ],
+        "normalizado_en": "2026-05-14T17:55:32.822048",
+        "version_normalizador": "vortex-1.0",
+        "_fallback": false,
+        "_stale": false,
+        "_horas_sin_actualizar": 0
     }
 ]
