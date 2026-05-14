@@ -7,6 +7,14 @@ Entornos virtuales
 venv/
 env/
 
+# Datos locales
+data/
+*.json
+
+# Permitir solo ejemplos
+!data/*.example.json
+
+
 Python
 pycache/
 *.pyc
