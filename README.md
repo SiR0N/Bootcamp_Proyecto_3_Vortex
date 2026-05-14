@@ -32,7 +32,7 @@
 | 9. Flujo de datos y trazabilidad | Completado |
 | 10. Base de datos | Completado |
 | 11. Despliegue | Completado |
-| 12. Testing | Pendiente |
+| 12. Testing | Completado |
 | 13. Equipo | Pendiente |
 | 14. Licencia | Pendiente |
 
@@ -396,6 +396,23 @@ Para instrucciones más detalladas, consulta `deploy/supabase_deploy.md`.
 
 ---
 
+## Testing
+
+El proyecto incluye una suite de tests automáticos basada en **pytest**. Para ejecutarla:
+
+```
+pytest -v
+```
+
+Los tests cubren:
+
+* Validación de datos (formatos, rangos, campos obligatorios)
+* Endpoints de la API (respuestas esperadas, códigos de estado)
+* Lógica de transformación del pipeline ETL
+
+Se recomienda ejecutar los tests antes de cada push para verificar que los cambios no introducen errores.
+
+---
 
 
 
