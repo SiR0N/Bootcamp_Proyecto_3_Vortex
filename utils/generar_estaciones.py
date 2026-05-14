@@ -43,6 +43,5 @@ def generar_estaciones_madrid():
 
     print(f"✅ {len(madrid)} estaciones guardadas en estaciones_madrid.json")
 
-
 if __name__ == "__main__":
     generar_estaciones_madrid()

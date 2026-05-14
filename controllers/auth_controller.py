@@ -6,9 +6,7 @@ import hashlib
 from flask import Blueprint, request, redirect, url_for, session, flash
 from models.usuario import Usuario
 
-
 auth_bp = Blueprint("auth", __name__)
-
 
 class AuthController:
     def __init__(self):
@@ -78,9 +76,7 @@ class AuthController:
 
         return False, "Email o contraseña incorrectos."
 
-
 auth_controller = AuthController()
-
 
 @auth_bp.route("/registro_usuario", methods=["POST"])
 def registrar_usuario():
@@ -101,7 +97,6 @@ def registrar_usuario():
     flash(mensaje, "error")
     return redirect(url_for("view.registro_usuario"))
 
-
 @auth_bp.route("/login", methods=["POST"])
 def login():
     email = request.form.get("email", "").strip()
@@ -116,7 +111,6 @@ def login():
 
     flash(mensaje, "error")
     return redirect(url_for("view.login"))
-
 
 @auth_bp.route("/logout")
 def logout():

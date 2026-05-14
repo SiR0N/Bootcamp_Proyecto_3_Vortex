@@ -10,7 +10,6 @@ from utils.validators import (
     validate_weather_data
 )
 
-
 # =====================================================
 # FIXTURE: registro climático válido
 # =====================================================
@@ -28,7 +27,6 @@ def valid_weather_data():
         "lluvia": 0
     }
 
-
 # =====================================================
 # TESTS comprobar_si_es_numero()
 # =====================================================
@@ -39,20 +37,17 @@ def test_comprobar_si_es_numero_con_numero():
     
     assert comprobar_si_es_numero(22, "Temperatura") == 22.0
 
-
 def test_comprobar_si_es_numero_con_string_numerico():
     
     #Si recibe un string numérico, debe convertirlo a float.
     
     assert comprobar_si_es_numero("22.5", "Temperatura") == 22.5
 
-
 def test_comprobar_si_es_numero_con_texto():
     
     #Si recibe texto no numérico, debe devolver None.
     
     assert comprobar_si_es_numero("hola", "Temperatura") is None
-
 
 def test_comprobar_si_es_numero_vacio():
     
@@ -61,13 +56,11 @@ def test_comprobar_si_es_numero_vacio():
     assert comprobar_si_es_numero("", "Temperatura") is None
     assert comprobar_si_es_numero("   ", "Temperatura") is None
 
-
 def test_comprobar_si_es_numero_none():
    
     #Si recibe None, debe devolver None.
     
     assert comprobar_si_es_numero(None, "Temperatura") is None
-
 
 # =====================================================
 # TESTS validar_fecha()
@@ -79,13 +72,11 @@ def test_validar_fecha_formato_preferido():
     
     assert validar_fecha("27/04/2026 13:30:00") is True
 
-
 def test_validar_fecha_con_barras():
    
     #Formato europeo con barras.
    
     assert validar_fecha("27/04/2026 13:30:00") is True
-
 
 def test_validar_fecha_sin_segundos():
     
@@ -93,15 +84,11 @@ def test_validar_fecha_sin_segundos():
     
     assert validar_fecha("27/04/2026 13:30") is True
 
-
-
-
 def test_validar_fecha_formato_iso_con_segundos():
     
     #Formato año-mes-día con segundos.
     
     assert validar_fecha("27/04/2026 13:30:00") is True
-
 
 def test_validar_fecha_incorrecta():
     
@@ -112,7 +99,6 @@ def test_validar_fecha_incorrecta():
     assert validar_fecha("") is False
     assert validar_fecha(None) is False
 
-
 # =====================================================
 # TESTS validar_temperatura()
 # =====================================================
@@ -121,18 +107,15 @@ def test_validar_temperatura_valida():
     assert validar_temperatura(20) is True
     assert validar_temperatura("22.5") is True
 
-
 def test_validar_temperatura_limites_validos():
     assert validar_temperatura(-50) is True
     assert validar_temperatura(60) is True
-
 
 def test_validar_temperatura_invalida():
     assert validar_temperatura(-51) is False
     assert validar_temperatura(61) is False
     assert validar_temperatura("hola") is False
     assert validar_temperatura(None) is False
-
 
 # =====================================================
 # TESTS validar_humedad()
@@ -142,18 +125,15 @@ def test_validar_humedad_valida():
     assert validar_humedad(50) is True
     assert validar_humedad("75") is True
 
-
 def test_validar_humedad_limites_validos():
     assert validar_humedad(0) is True
     assert validar_humedad(100) is True
-
 
 def test_validar_humedad_invalida():
     assert validar_humedad(-1) is False
     assert validar_humedad(101) is False
     assert validar_humedad("texto") is False
     assert validar_humedad(None) is False
-
 
 # =====================================================
 # TESTS validar_viento()
@@ -164,12 +144,10 @@ def test_validar_viento_valido():
     assert validar_viento(10.5) is True
     assert validar_viento("12") is True
 
-
 def test_validar_viento_invalido():
     assert validar_viento(-1) is False
     assert validar_viento("mucho") is False
     assert validar_viento(None) is False
-
 
 # =====================================================
 # TESTS validar_lluvia()
@@ -180,12 +158,10 @@ def test_validar_lluvia_valida():
     assert validar_lluvia(5.4) is True
     assert validar_lluvia("1.2") is True
 
-
 def test_validar_lluvia_invalida():
     assert validar_lluvia(-0.1) is False
     assert validar_lluvia("llueve") is False
     assert validar_lluvia(None) is False
-
 
 # =====================================================
 # TESTS validate_weather_data()
@@ -197,7 +173,6 @@ def test_validate_weather_data_valido(valid_weather_data):
     
     assert validate_weather_data(valid_weather_data) is True
 
-
 def test_validate_weather_data_fecha_invalida(valid_weather_data):
     
     #Si la fecha no es válida, debe devolver False.
@@ -205,26 +180,21 @@ def test_validate_weather_data_fecha_invalida(valid_weather_data):
     valid_weather_data["fecha"] = "fecha incorrecta"
     assert validate_weather_data(valid_weather_data) is False
 
-
 def test_validate_weather_data_temperatura_invalida(valid_weather_data):
     valid_weather_data["temperatura"] = 100
     assert validate_weather_data(valid_weather_data) is False
-
 
 def test_validate_weather_data_humedad_invalida(valid_weather_data):
     valid_weather_data["humedad"] = 150
     assert validate_weather_data(valid_weather_data) is False
 
-
 def test_validate_weather_data_viento_invalido(valid_weather_data):
     valid_weather_data["viento"] = -5
     assert validate_weather_data(valid_weather_data) is False
 
-
 def test_validate_weather_data_lluvia_invalida(valid_weather_data):
     valid_weather_data["lluvia"] = -1
     assert validate_weather_data(valid_weather_data) is False
-
 
 def test_validate_weather_data_diccionario_vacio():
     
@@ -232,20 +202,17 @@ def test_validate_weather_data_diccionario_vacio():
     
     assert validate_weather_data({}) is False
 
-
 def test_validate_weather_data_none():
     
     #Si recibe None, debe devolver False.
     
     assert validate_weather_data(None) is False
 
-
 def test_validate_weather_data_no_diccionario():
     
     #  Si recibe algo que no es un diccionario, debe devolver False.
     
     assert validate_weather_data("no soy un diccionario") is False
-
 
 # =====================================================
 # TESTS ADICIONALES: casos límite y valores extremos
@@ -257,7 +224,6 @@ def test_comprobar_si_es_numero_con_negativo():
     
     assert comprobar_si_es_numero(-15.5, "Valor") == -15.5
 
-
 def test_comprobar_si_es_numero_con_cero():
     
     #Si recibe cero, debe devolverlo como float.
@@ -265,20 +231,17 @@ def test_comprobar_si_es_numero_con_cero():
     assert comprobar_si_es_numero(0, "Valor") == 0.0
     assert comprobar_si_es_numero("0", "Valor") == 0.0
 
-
 def test_comprobar_si_es_numero_con_exponencial():
     
     #Si recibe notación exponencial, debe convertirla.
     
     assert comprobar_si_es_numero("1.5e2", "Valor") == 150.0
 
-
 def test_comprobar_si_es_numero_con_espacios_alrededor():
     
     #Si recibe espacios alrededor, debe ignorarlos.
     
     assert comprobar_si_es_numero("  25.5  ", "Valor") == 25.5
-
 
 # =====================================================
 # TESTS FECHA: casos adicionales
@@ -292,14 +255,12 @@ def test_validar_fecha_multiples_formatos():
     assert validar_fecha("29-04-2026") is True
     assert validar_fecha("2026-04-29") is True
 
-
 def test_validar_fecha_con_hora_incluida():
     
     #Ignora la hora si está incluida en el string.
     
     assert validar_fecha("29/04/2026 14:30:00") is True
     assert validar_fecha("29/04/2026 14:30") is True
-
 
 def test_validar_fecha_invalida_mes():
     
@@ -308,14 +269,12 @@ def test_validar_fecha_invalida_mes():
     assert validar_fecha("29/13/2026") is False
     assert validar_fecha("29/00/2026") is False
 
-
 def test_validar_fecha_invalida_dia():
     
     #Día inválido debe rechazarse.
     
     assert validar_fecha("32/04/2026") is False
     assert validar_fecha("00/04/2026") is False
-
 
 # =====================================================
 # TESTS TEMPERATURA: casos límite
@@ -327,13 +286,11 @@ def test_validar_temperatura_limite_inferior():
     
     assert validar_temperatura(-50) is True
 
-
 def test_validar_temperatura_limite_superior():
     
     #Exactamente en el límite superior (60).
     
     assert validar_temperatura(60) is True
-
 
 def test_validar_temperatura_bajo_limite_inferior():
     
@@ -341,13 +298,11 @@ def test_validar_temperatura_bajo_limite_inferior():
     
     assert validar_temperatura(-50.1) is False
 
-
 def test_validar_temperatura_sobre_limite_superior():
     
     #Un décimo sobre el límite superior.
     
     assert validar_temperatura(60.1) is False
-
 
 def test_validar_temperatura_string_valido():
     
@@ -356,14 +311,12 @@ def test_validar_temperatura_string_valido():
     assert validar_temperatura("25.5") is True
     assert validar_temperatura("-30") is True
 
-
 def test_validar_temperatura_cero():
     
     #Cero es válido.
     
     assert validar_temperatura(0) is True
     assert validar_temperatura("0") is True
-
 
 # =====================================================
 # TESTS HUMEDAD: casos límite
@@ -375,13 +328,11 @@ def test_validar_humedad_limite_inferior():
     
     assert validar_humedad(0) is True
 
-
 def test_validar_humedad_limite_superior():
     
     #Exactamente en el límite superior (100).
     
     assert validar_humedad(100) is True
-
 
 def test_validar_humedad_bajo_limite():
     
@@ -389,13 +340,11 @@ def test_validar_humedad_bajo_limite():
     
     assert validar_humedad(-0.1) is False
 
-
 def test_validar_humedad_sobre_limite():
     
     #Sobre el límite superior.
     
     assert validar_humedad(100.1) is False
-
 
 def test_validar_humedad_punto_medio():
     
@@ -403,7 +352,6 @@ def test_validar_humedad_punto_medio():
     
     assert validar_humedad(50) is True
     assert validar_humedad("50.0") is True
-
 
 # =====================================================
 # TESTS VIENTO: casos límite
@@ -415,7 +363,6 @@ def test_validar_viento_limite_inferior():
     
     assert validar_viento(0) is True
 
-
 def test_validar_viento_numero_grande():
     
     #Números grandes (ej. huracán) son válidos.
@@ -423,14 +370,12 @@ def test_validar_viento_numero_grande():
     assert validar_viento(200) is True
     assert validar_viento(500.5) is True
 
-
 def test_validar_viento_string_valido():
     
     #String numérico válido.
     
     assert validar_viento("15.5") is True
     assert validar_viento("0") is True
-
 
 # =====================================================
 # TESTS LLUVIA: casos límite
@@ -442,7 +387,6 @@ def test_validar_lluvia_limite_inferior():
     
     assert validar_lluvia(0) is True
 
-
 def test_validar_lluvia_numero_grande():
     
     #Números grandes de lluvia son válidos.
@@ -450,14 +394,12 @@ def test_validar_lluvia_numero_grande():
     assert validar_lluvia(500) is True
     assert validar_lluvia(1000.5) is True
 
-
 def test_validar_lluvia_string_valido():
     
     #String numérico válido.
     
     assert validar_lluvia("5.5") is True
     assert validar_lluvia("0") is True
-
 
 # =====================================================
 # TESTS VALIDATE_WEATHER_DATA: casos complejos
@@ -478,7 +420,6 @@ def test_validate_weather_data_con_campos_extras():
     
     assert validate_weather_data(data) is True
 
-
 def test_validate_weather_data_todos_limites_validos():
     
     #Todos los campos en los límites válidos.
@@ -492,7 +433,6 @@ def test_validate_weather_data_todos_limites_validos():
     }
     
     assert validate_weather_data(data) is True
-
 
 def test_validate_weather_data_todos_limites_superiores():
     
@@ -508,7 +448,6 @@ def test_validate_weather_data_todos_limites_superiores():
     
     assert validate_weather_data(data) is True
 
-
 def test_validate_weather_data_falta_un_campo():
     
     #Si falta un campo obligatorio, debe fallar.
@@ -521,7 +460,6 @@ def test_validate_weather_data_falta_un_campo():
     }
     
     assert validate_weather_data(data) is False
-
 
 def test_validate_weather_data_campo_none():
     
@@ -537,7 +475,6 @@ def test_validate_weather_data_campo_none():
     
     assert validate_weather_data(data) is False
 
-
 def test_validate_weather_data_con_strings():
     
     #Todos los campos como strings numéricos.
@@ -551,7 +488,6 @@ def test_validate_weather_data_con_strings():
     }
     
     assert validate_weather_data(data) is True
-
 
 def test_validate_weather_data_temperatura_invalida_pero_otros_ok():
     
@@ -567,7 +503,6 @@ def test_validate_weather_data_temperatura_invalida_pero_otros_ok():
     
     assert validate_weather_data(data) is False
 
-
 def test_validate_weather_data_humedad_invalida():
     
     #Si humedad es inválida, falla.
@@ -581,7 +516,6 @@ def test_validate_weather_data_humedad_invalida():
     }
     
     assert validate_weather_data(data) is False
-
 
 def test_validate_weather_data_lluvia_negativa():
     

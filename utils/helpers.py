@@ -1,6 +1,5 @@
 import math
 
-
 def calcular_distancia(lat1, lon1, lat2, lon2):
     """
     Calcula la distancia en kilómetros entre dos puntos geográficos

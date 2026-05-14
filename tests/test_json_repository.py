@@ -3,7 +3,6 @@ import pytest
 
 import repositories.json_repository as repo
 
-
 # =====================================================
 # FIXTURE: archivo JSON temporal
 # =====================================================
@@ -25,7 +24,6 @@ def archivo_json_temporal(tmp_path, monkeypatch):
     monkeypatch.setattr(repo._repo, "file_path", str(ruta_archivo))
 
     return ruta_archivo
-
 
 # =====================================================
 # TEST guardar_registro()
@@ -54,7 +52,6 @@ def test_guardar_registro_correctamente(archivo_json_temporal):
 
     assert len(datos_guardados) == 1
     assert datos_guardados[0]["municipio"] == "Madrid"
-
 
 def test_guardar_varios_registros(archivo_json_temporal):
     """
@@ -86,7 +83,6 @@ def test_guardar_varios_registros(archivo_json_temporal):
     assert datos_guardados[0]["municipio"] == "Madrid"
     assert datos_guardados[1]["municipio"] == "Sevilla"
 
-
 # =====================================================
 # TEST filter_records()
 # =====================================================
@@ -99,7 +95,6 @@ def test_filtrar_registros_con_archivo_vacio(archivo_json_temporal):
     resultado = repo.filter_records(municipio="Madrid")
 
     assert resultado == []
-
 
 def test_filtrar_registros_por_municipio(archivo_json_temporal):
     """
@@ -128,7 +123,6 @@ def test_filtrar_registros_por_municipio(archivo_json_temporal):
     assert len(resultado) == 1
     assert resultado[0]["municipio"] == "Madrid"
 
-
 def test_filtrar_registros_por_municipio_sin_importar_mayusculas(archivo_json_temporal):
     """
     Comprueba que el filtro por municipio no falla por mayúsculas/minúsculas.
@@ -149,7 +143,6 @@ def test_filtrar_registros_por_municipio_sin_importar_mayusculas(archivo_json_te
 
     assert len(resultado) == 1
     assert resultado[0]["municipio"] == "Madrid"
-
 
 def test_filtrar_registros_por_fecha(archivo_json_temporal):
     """
@@ -180,7 +173,6 @@ def test_filtrar_registros_por_fecha(archivo_json_temporal):
     assert len(resultado) == 1
     assert resultado[0]["fecha"] == "22/04/2026"
 
-
 def test_filtrar_registros_por_fuente(archivo_json_temporal):
     """
     Comprueba que filtra correctamente por fuente.
@@ -207,7 +199,6 @@ def test_filtrar_registros_por_fuente(archivo_json_temporal):
 
     assert len(resultado) == 1
     assert resultado[0]["fuente"] == "manual"
-
 
 def test_filtrar_registros_por_municipio_fecha_y_fuente(archivo_json_temporal):
     """
@@ -245,7 +236,6 @@ def test_filtrar_registros_por_municipio_fecha_y_fuente(archivo_json_temporal):
 
     assert len(resultado) == 1
     assert resultado[0]["id"] == "1"
-
 
 # =====================================================
 # TEST find_latest_by_municipio_and_source()
@@ -288,7 +278,6 @@ def test_buscar_ultimo_registro_por_municipio(archivo_json_temporal):
     assert resultado is not None
     assert resultado["id"] == "2"
     assert resultado["municipio"] == "Madrid"
-
 
 def test_buscar_ultimo_registro_devuelve_none_si_no_existe(archivo_json_temporal):
     """

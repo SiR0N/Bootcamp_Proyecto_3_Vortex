@@ -29,15 +29,12 @@ from sqlalchemy import create_engine
 # sessionmaker crea sesiones de base de datos
 from sqlalchemy.orm import sessionmaker
 
-
 # Cargamos las variables definidas en el archivo .env
 # Por ejemplo: DATABASE_URL=postgresql://...
 load_dotenv()
 
-
 # Leemos la URL de conexión desde el archivo .env
 DATABASE_URL = os.getenv("DATABASE_URL")
-
 
 # Validación defensiva:
 # Si DATABASE_URL no existe, detenemos el programa con un mensaje claro.
@@ -48,11 +45,9 @@ if not DATABASE_URL:
         "y que contenga la variable DATABASE_URL."
     )
 
-
 # Creamos el engine de SQLAlchemy.
 # El engine es el objeto que sabe cómo conectarse a PostgreSQL/Supabase.
 engine = create_engine(DATABASE_URL)
-
 
 # Creamos SessionLocal.
 # SessionLocal NO es una sesión todavía.
@@ -62,7 +57,6 @@ SessionLocal = sessionmaker(
     autoflush=False,
     bind=engine
 )
-
 
 def get_db():
     """

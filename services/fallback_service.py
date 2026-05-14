@@ -11,7 +11,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
 class FallbackService:
     """Servicio de fallback dinámico que lee configuración de JSON"""
 
@@ -107,10 +106,8 @@ class FallbackService:
             return self.get_ubicacion_por_nombre(nombre_default)
         return self.ubicaciones[0] if self.ubicaciones else None
 
-
 # Instancia global para uso en la aplicación
 _fallback_service = None
-
 
 def get_fallback_service():
     """Obtiene la instancia global del servicio de fallback"""
@@ -118,7 +115,6 @@ def get_fallback_service():
     if _fallback_service is None:
         _fallback_service = FallbackService()
     return _fallback_service
-
 
 if __name__ == "__main__":
     # Test del servicio

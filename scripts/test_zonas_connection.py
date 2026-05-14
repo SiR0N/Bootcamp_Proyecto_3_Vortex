@@ -12,7 +12,6 @@ from sqlalchemy import text
 
 from db.session import engine
 
-
 with engine.connect() as connection:
     # 1. Comprobar conexión básica
     result = connection.execute(text("SELECT NOW();"))
