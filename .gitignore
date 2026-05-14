@@ -1,30 +1,32 @@
-# Variables de entorno
-.env
-
-# Entornos virtuales
-.venv/
-venv/
-env/
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Logs
-logs/
-*.log
-
-# Test cache
-.pytest_cache/
-
-# IDEs / editores
-.vscode/
-.idea/
-
-# Sistema operativo
-.DS_Store
-Thumbs.db
-
-# Añadir lo que sea
+# Ignorar archivos locales de diagnóstico y arranque
+_clean.py
+_limpiar.py
+resumen_diffs.py
+check_repo.py
+check_remote.ps1
+show_diffs.ps1
+fix_crlf.ps1
+revisar.ps1
+start_servers.ps1
+start.ps1
+test_app.ps1
+INICIAR.bat
+INICIAR.ps1
+verificar.ps1
+diagnostico.py
+diagnostico_ui.ps1
+debug*.py
+debug*.ps1
+diagnose.py
+run_all.ps1
+run_fastapi.py
+run_flask.py
+run_tests.py
+test_schema.py
+verify_project.py
+logs_fastapi.txt
+pr_body.md
+VORTEX_CONTEXT.md
+PLAN_DE_TRABAJO_HOY.md
+debug_html.ps1
+setup.cfg

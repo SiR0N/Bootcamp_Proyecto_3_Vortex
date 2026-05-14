@@ -55,7 +55,6 @@ async def not_found_exception_handler(request: Request, exc: Exception):
         status_code=404,
         content={"message": "Lo sentimos, el recurso solicitado no existe."},
     )
-# - HELEN - ESTO LO HE HECHO PARA QUE NO OCULTARA EL ERROR Y ME DEJARA VER QUÉ PASABA
 #@app.exception_handler(500)
 #async def server_error_exception_handler(request: Request, exc: Exception):
     #return JSONResponse(

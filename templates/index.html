@@ -3,108 +3,154 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ClimApp | Tiempo Real</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+  <title>VORTEX | Dashboard Meteorológico</title>
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 </head>
-
 <body>
   <main class="dashboard">
 
-    <section class="topbar">
-      <div>
-        <p class="eyebrow">ClimApp</p>
-        <h1 id="mainTitle">Cargando ubicación...</h1>
+    <!-- HEADER -->
+    <header class="header">
+      <div class="logo">
+        <div class="logo-img">V</div>
+        <div class="logo-text">
+          <span class="brand">VORTEX</span>
+          <span class="tagline">Datos Meteorológicos en Tiempo Real</span>
+        </div>
       </div>
-    </section>
+      <nav class="nav-links">
+        {% if session.get("usuario") %}
+          <a href="{{ url_for('view.index') }}" class="active">Inicio</a>
+          <a href="{{ url_for('view.registro') }}">Registro</a>
+          <a href="{{ url_for('view.consulta') }}">Histórico</a>
+          <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+        {% else %}
+          <a href="{{ url_for('view.login') }}">Iniciar sesión</a>
+          <a href="{{ url_for('view.registro_usuario') }}">Registro</a>
+        {% endif %}
+      </nav>
+      <div class="status-badge">● EN VIVO</div>
+    </header>
 
-    <section class="grid">
+    <!-- MAIN GRID -->
+    <section class="grid grid-2">
 
+      <!-- HERO CARD - Main Weather -->
       <article class="card hero-card">
-        <div class="hero-left">
-          <p class="label">Municipio</p>
-          <h2 id="cityName">Detectando...</h2>
-          <p class="muted" id="stationName">Buscando estación cercana...</p>
-
-          <div class="temp-row">
-            <span class="temp" id="temperature">--°</span>
-            <div class="status-dot" id="statusDot"></div>
+        <div class="hero-content">
+          <span class="eyebrow">Municipio</span>
+          <h2 id="cityName">Esperando señal...</h2>
+          <p id="stationName">Buscando estación...</p>
+          
+          <div class="weather-main">
+            <div class="temp-display">
+              <span id="temperature">--°</span>
+            </div>
+            <div class="weather-details">
+              <span>Humedad: <strong id="humidity">--%</strong></span>
+              <span>Viento: <strong id="wind">-- km/h</strong></span>
+              <span>Lluvia: <strong id="rain">-- mm</strong></span>
+            </div>
           </div>
-
-          <p class="updated" id="updatedAt">Esperando permisos...</p>
+          
+          <div class="updated-info">
+            <span class="dot"></span>
+            <span id="updatedAt">Esperando actualización...</span>
+          </div>
         </div>
-
-        <div class="hero-right" id="weather-icon-container">
-          <div class="sun" id="sun-icon">
-            <span class="sun-core"></span>
-            <span class="ray ray-1"></span>
-            <span class="ray ray-2"></span>
-            <span class="ray ray-3"></span>
-            <span class="ray ray-4"></span>
-            <span class="ray ray-5"></span>
-            <span class="ray ray-6"></span>
-            <span class="ray ray-7"></span>
-            <span class="ray ray-8"></span>
-          </div>
+        
+        <div class="weather-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
         </div>
       </article>
 
-      <article class="card metrics-card">
-        <h3>Condiciones</h3>
-
+      <!-- METRICS CARD -->
+      <article class="card">
+        <h3>Condiciones Actuales</h3>
         <div class="metrics-grid">
-          <div class="metric-box">
+          <div class="metric-item">
             <p class="metric-label">Humedad</p>
-            <p class="metric-value" id="humidity">--%</p>
+            <p class="metric-value" id="humidity2">--%</p>
           </div>
-
-          <div class="metric-box">
+          <div class="metric-item">
             <p class="metric-label">Viento</p>
-            <p class="metric-value" id="wind">-- km/h</p>
+            <p class="metric-value" id="wind2">-- km/h</p>
           </div>
-
-          <div class="metric-box">
+          <div class="metric-item">
             <p class="metric-label">Lluvia</p>
-            <p class="metric-value" id="rain">-- mm</p>
+            <p class="metric-value" id="rain2">-- mm</p>
           </div>
-
-          <div class="metric-box">
+          <div class="metric-item">
             <p class="metric-label">Fuente</p>
-            <p class="metric-value small" id="source">AEMET</p>
+            <p class="metric-value" id="source">--</p>
           </div>
         </div>
-      </article>
-
-      <article class="card summary-card">
-        <h3>Navegación</h3>
-
-        <div class="topbar-actions">
-
-          {% if session.get("usuario") %}
-
-            <a href="{{ url_for('view.registro') }}" class="mini-btn">Registro</a>
-            <a href="{{ url_for('view.api_view') }}" class="mini-btn active">API</a>
-            <a href="{{ url_for('view.consulta') }}" class="mini-btn">Histórico</a>
-            <a href="{{ url_for('view.comparar') }}" class="mini-btn">Comparar</a>
-            <a href="{{ url_for('auth.logout') }}" class="mini-btn logout-btn">Cerrar sesión</a>
-
-          {% else %}
-
-            <a href="{{ url_for('view.registro_usuario') }}" class="mini-btn">Registro de usuario</a>
-            <a href="{{ url_for('view.login') }}" class="mini-btn active">Iniciar sesión</a>
-
-          {% endif %}
-
-        </div>
-
-        <button id="refreshBtn" class="primary-btn">Actualizar Datos</button>
       </article>
 
     </section>
+
+    <!-- SECOND ROW - Info + Map -->
+    <section class="grid grid-2">
+
+      <!-- INFO CARD -->
+      <article class="card">
+        <h3>Información del Sistema</h3>
+        <ul class="info-list">
+          <li>
+            <span class="icon">1</span>
+            <span class="text">Estación más cercana: <strong id="stationInfo">--</strong></span>
+          </li>
+          <li>
+            <span class="icon">2</span>
+            <span class="text">Coordenadas: <strong id="coordsInfo">--</strong></span>
+          </li>
+          <li>
+            <span class="icon">3</span>
+            <span class="text">Última actualización: <strong id="timeInfo">--</strong></span>
+          </li>
+          <li>
+            <span class="icon">4</span>
+            <span class="text">Estado conexión: <strong id="statusInfo">Verificando...</strong></span>
+          </li>
+        </ul>
+      </article>
+
+      <!-- MAP CARD -->
+      <article class="card">
+        <h3>Ubicación</h3>
+        <div class="map-container">
+          <div class="map-placeholder" id="mapPlaceholder">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+              <circle cx="12" cy="9" r="2.5"/>
+            </svg>
+            <p id="mapCity">Esperando ubicación...</p>
+            <a id="openMaps" href="#" target="_blank" class="map-link">Abrir en Maps</a>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- FOOTER ACTIONS -->
+    <section class="grid-footer">
+      <button id="refreshBtn" class="primary-btn">
+        <span class="spinner" style="display: none;"></span>
+        Actualizar Datos
+      </button>
+    </section>
+
   </main>
 
   <script src="{{ url_for('static', filename='js/index.js') }}"></script>

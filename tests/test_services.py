@@ -3,7 +3,6 @@ import pytest
 from services.normalizer_service import normalizar_datos_aemet
 from services.alert_service import AlertService
 
-
 def test_normalizer_handles_ip_rain():
     """Verifica que la lluvia inapreciable 'Ip' se convierta en 0.0."""
 
@@ -20,7 +19,6 @@ def test_normalizer_handles_ip_rain():
     assert normalized["lluvia"] == 0.0
     assert isinstance(normalized["lluvia"], float)
 
-
 def test_alert_service_returns_list():
     """Verifica que evaluar_alertas devuelve una lista."""
 
@@ -36,7 +34,6 @@ def test_alert_service_returns_list():
     alertas = service.evaluar_alertas(data)
 
     assert isinstance(alertas, list)
-
 
 def test_alert_service_no_alerts_with_normal_weather():
     """Verifica que con datos normales no se generan alertas."""

@@ -1,15 +1,21 @@
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
+
+_validator_available = False
 
 try:
-    from utils.validators import validate_weather_data
+    from utils.validators import validate_weather_data as _validate
+    _validator_available = True
 except ImportError:
     logger = logging.getLogger(__name__)
     logger.warning("No se pudo importar 'validate_weather_data'. Usando validador temporal.")
 
-    def validate_weather_data(data: Dict[str, Any]) -> bool:
+    def _validate(data: Dict[str, Any]) -> bool:  # type: ignore[misc]
         return True
 
+def validate_weather_data(data: Dict[str, Any]) -> bool:
+    """Wrapper que garantiza firma consistente."""
+    return _validate(data)
 
 class AlertService:
     """Motor de análisis de riesgos climáticos y generación de alertas."""
@@ -61,7 +67,6 @@ class AlertService:
             alertas.append("VERDE")
 
         return alertas
-
 
 def evaluar_alertas(data: Dict[str, Any]) -> List[str]:
     """Convenience function that calls AlertService().evaluar_alertas(data)"""

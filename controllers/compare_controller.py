@@ -1,92 +1,66 @@
-import os
 from datetime import datetime
-from repositories.json_repository import filter_records
-from services.weather_api_service import WeatherAPIService
-from services.normalizer_service import normalizar_datos_aemet
-from services.logging_service import log_info, log_error
+from services.weather_api_service import obtener_clima_por_coordenadas
+from services.normalizer import get_normalizer_service
 
-def calculate_difference(v1, v2) -> float:
+def calculate_diff(v1, v2):
     try:
-        val1 = float(v1) if v1 is not None else 0.0
-        val2 = float(v2) if v2 is not None else 0.0
-        return round(abs(val1 - val2), 2)
-    except (ValueError, TypeError):
-        return 0.0
+        return round(abs(float(v1 or 0) - float(v2 or 0)), 2)
+    except:
+        return 0
 
-def has_discrepancy(differences: dict) -> bool:
-    return (
-        differences["temperatura"] > 3 or
-        differences["humedad"] > 10 or
-        differences["viento"] > 10 or
-        differences["lluvia"] > 5
-    )
-
-def compare_latest_records(municipio: str, fecha_html: str = None) -> dict:
+def get_comparison_data(municipio, manual_data):
     """
-    Orquestador de comparación. Filtra JSON por municipio/fecha y compara con API.
+    Recibe los datos manuales del usuario y compara con AEMET actual.
     """
-    # 1. Normalizar la fecha (De AAAA-MM-DD a DD/MM/AAAA)
-    if not fecha_html:
-        fecha_target = datetime.now().strftime("%d/%m/%Y")
-    else:
-        try:
-            fecha_obj = datetime.strptime(fecha_html, "%Y-%m-%d")
-            fecha_target = fecha_obj.strftime("%d/%m/%Y")
-        except ValueError:
-            fecha_target = fecha_html
-
-    log_info(f"Iniciando comparativa: {municipio} para el día {fecha_target}")
-
-    # 2. Buscar registro manual en JSON
-    # Usamos .title() para asegurar que coincida con el formato del JSON (Ej: 'Madrid')
-    registros_hoy = filter_records(municipio=municipio.title(), fecha=fecha_target)
-    manual_record = next((r for r in registros_hoy if r.get("fuente") == "manual"), None)
+    normalizer = get_normalizer_service()
     
-    if not manual_record:
-        return {
-            "success": False,
-            "message": f"No hay datos manuales para {municipio} el día {fecha_target}."
+    # Obtener dato actual de AEMET
+    # Usamos coordenadas por defecto de Madrid (esto debería venir del municipio)
+    aemet_data = None
+    try:
+        raw_aemet = obtener_clima_por_coordenadas(40.4167, -3.7033)
+        if raw_aemet:
+            aemet_data = normalizer.normalizar(raw_aemet, fuente="aemet")
+    except:
+        pass
+    
+    # Calcular diferencias
+    diffs = {}
+    if aemet_data:
+        diffs = {
+            "temperatura": calculate_diff(manual_data.get("temperatura"), aemet_data.get("temperatura")),
+            "humedad": calculate_diff(manual_data.get("humedad"), aemet_data.get("humedad")),
+            "viento": calculate_diff(manual_data.get("viento"), aemet_data.get("viento")),
+            "lluvia": calculate_diff(manual_data.get("lluvia"), aemet_data.get("lluvia"))
         }
-
-    id_estacion = manual_record.get("estacion_id")
+    else:
+        diffs = {"temperatura": 0, "humedad": 0, "viento": 0, "lluvia": 0}
     
-    try:
-        # 3. Consultar API AEMET
-        api_service = WeatherAPIService()
-        todas_las_obs = api_service._obtener_datos_crudos()
-        
-        raw_api_data = next(
-            (obs for obs in todas_las_obs if str(obs.get('idema')) == str(id_estacion)), 
-            None
-        )
-        
-        if not raw_api_data:
-            return {
-                "success": False, 
-                "message": f"La AEMET no tiene datos hoy para la estación {id_estacion}."
-            }
-
-        api_record = normalizar_datos_aemet(raw_api_data)
-        api_record["fuente"] = "AEMET (Oficial)"
-
-    except Exception as e:
-        log_error(f"Error en comparativa: {e}")
-        return {"success": False, "message": "Error de conexión con la API de AEMET."}
-
-    # 4. Calcular diferencias
-    diffs = {
-        "temperatura": calculate_difference(manual_record.get("temperatura"), api_record.get("temperatura")),
-        "humedad":     calculate_difference(manual_record.get("humedad"), api_record.get("humedad")),
-        "viento":      calculate_difference(manual_record.get("viento"), api_record.get("viento")),
-        "lluvia":      calculate_difference(manual_record.get("lluvia"), api_record.get("lluvia"))
-    }
-
     return {
         "success": True,
-        "municipio": municipio.title(),
-        "fecha": fecha_target,
-        "manual": manual_record,
-        "api": api_record,
+        "municipio": municipio,
+        "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+        "manual": manual_data,
+        "aemet": aemet_data or {},
         "diferencias": diffs,
-        "hay_discrepancia": has_discrepancy(diffs)
+        "hay_discrepancia": (
+            diffs["temperatura"] > 3 or
+            diffs["humedad"] > 10 or
+            diffs["viento"] > 10 or
+            diffs["lluvia"] > 5
+        )
     }
+
+
+def get_aemet_current(municipio="Madrid"):
+    """
+    Obtiene solo el dato actual de AEMET para mostrar en pantalla.
+    """
+    normalizer = get_normalizer_service()
+    try:
+        raw = obtener_clima_por_coordenadas(40.4167, -3.7033)
+        if raw:
+            return normalizer.normalizar(raw, fuente="aemet")
+    except:
+        pass
+    return None

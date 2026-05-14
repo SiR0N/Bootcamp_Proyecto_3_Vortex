@@ -4,7 +4,6 @@ import pytest
 # Esta función está en services/normalizer_service.py
 from services.normalizer_service import normalizar_datos_aemet
 
-
 # =====================================================
 # FIXTURE: datos AEMET simulados
 # =====================================================
@@ -30,7 +29,6 @@ def sample_aemet_data():
             "prec": "0.5"                       # Lluvia como string
         }
     ]
-
 
 # =====================================================
 # TEST 1: normalización correcta
@@ -80,7 +78,6 @@ def test_normalizar_datos_aemet_correcto(monkeypatch, sample_aemet_data):
     # Como hemos usado fake_alertas, esperamos exactamente esta lista.
     assert result["alertas"] == ["alerta_test"]
 
-
 # =====================================================
 # TEST 2: entrada como diccionario
 # =====================================================
@@ -124,7 +121,6 @@ def test_normalizar_datos_aemet_dict(monkeypatch):
     assert result["lluvia"] == 0.0
     assert result["alertas"] == []
 
-
 # =====================================================
 # TEST 3: lista vacía
 # =====================================================
@@ -139,7 +135,6 @@ def test_normalizar_datos_aemet_lista_vacia():
 
     assert "error" in result
 
-
 # =====================================================
 # TEST 4: None
 # =====================================================
@@ -153,7 +148,6 @@ def test_normalizar_datos_aemet_none():
     result = normalizar_datos_aemet(None)
 
     assert "error" in result
-
 
 # =====================================================
 # TEST 5: valores faltantes
@@ -190,7 +184,6 @@ def test_normalizar_datos_aemet_valores_faltantes(monkeypatch):
     assert result["presion"] == 0
     assert result["lluvia"] == 0
     assert result["alertas"] == []
-
 
 # =====================================================
 # TEST 6: error interno controlado

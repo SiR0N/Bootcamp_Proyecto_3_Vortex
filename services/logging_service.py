@@ -1,10 +1,8 @@
 import logging
 from pathlib import Path
 
-
 # Ruta del archivo donde se guardarán los logs
 LOG_FILE = Path("logs/app.log")
-
 
 def setup_logger() -> logging.Logger:
     """
@@ -44,14 +42,12 @@ def setup_logger() -> logging.Logger:
 
     return logger
 
-
 def log_info(message: str) -> None:
     """
     Guarda un mensaje informativo.
     """
     logger = setup_logger()
     logger.info(message)
-
 
 def log_warning(message: str) -> None:
     """
@@ -60,14 +56,12 @@ def log_warning(message: str) -> None:
     logger = setup_logger()
     logger.warning(message)
 
-
 def log_error(message: str) -> None:
     """
     Guarda un mensaje de error.
     """
     logger = setup_logger()
     logger.error(message)
-
 
 def log_critical(message: str) -> None:
     """

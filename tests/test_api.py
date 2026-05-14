@@ -14,7 +14,6 @@ from api.main import app
 # Cliente para hacer requests HTTP
 client = TestClient(app)
 
-
 # =====================================================
 # TESTS: GET /zonas/
 # =====================================================
@@ -26,7 +25,6 @@ def test_get_zonas_devuelve_200():
     response = client.get("/zonas/")
     assert response.status_code == 200
 
-
 def test_get_zonas_devuelve_lista():
     """
     GET /zonas/ debe devolver una lista (aunque esté vacía).
@@ -35,14 +33,12 @@ def test_get_zonas_devuelve_lista():
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
-
 def test_get_zonas_con_skip_limit():
     """
     GET /zonas/ debe aceptar parámetros skip y limit.
     """
     response = client.get("/zonas/?skip=0&limit=10")
     assert response.status_code == 200
-
 
 # =====================================================
 # TESTS: GET /zonas/{id}
@@ -56,14 +52,12 @@ def test_get_zona_inexistente_devuelve_404():
     assert response.status_code == 404
     assert "detail" in response.json()
 
-
 def test_get_zona_id_invalido_devuelve_422():
     """
     GET /zonas/abc debe devolver 422 por parámetro inválido.
     """
     response = client.get("/zonas/abc")
     assert response.status_code == 422
-
 
 # =====================================================
 # TESTS: POST /zonas/
@@ -81,7 +75,6 @@ def test_post_crear_zona_datos_incompletos_devuelve_422():
     response = client.post("/zonas/", json=zona_invalida)
     assert response.status_code == 422
 
-
 def test_post_crear_zona_json_invalido_devuelve_422():
     """
     POST /zonas/ debe devolver 422 si el JSON es inválido.
@@ -92,7 +85,6 @@ def test_post_crear_zona_json_invalido_devuelve_422():
         headers={"Content-Type": "application/json"}
     )
     assert response.status_code == 422
-
 
 # =====================================================
 # TESTS: PUT /zonas/{id}
@@ -112,7 +104,6 @@ def test_put_zona_inexistente_devuelve_404():
     response = client.put("/zonas/99999", json=zona_update)
     assert response.status_code == 404
 
-
 def test_put_zona_datos_incompletos_devuelve_422():
     """
     PUT /zonas/{id} debe devolver 422 si los datos son inválidos.
@@ -126,7 +117,6 @@ def test_put_zona_datos_incompletos_devuelve_422():
     # Podría ser 404 (zona no existe) o 422 (datos inválidos)
     assert response.status_code in [404, 422]
 
-
 # =====================================================
 # TESTS: DELETE /zonas/{id}
 # =====================================================
@@ -137,7 +127,6 @@ def test_delete_zona_inexistente_devuelve_404():
     """
     response = client.delete("/zonas/99999")
     assert response.status_code == 404
-
 
 # =====================================================
 # TESTS: GET /zonas/{id}/mediciones
@@ -150,7 +139,6 @@ def test_get_mediciones_por_zona_inexistente_devuelve_404():
     response = client.get("/zonas/99999/mediciones")
     assert response.status_code == 404
 
-
 # =====================================================
 # TESTS: GET /mediciones/
 # =====================================================
@@ -162,7 +150,6 @@ def test_get_mediciones_devuelve_200():
     response = client.get("/mediciones/")
     assert response.status_code == 200
 
-
 def test_get_mediciones_devuelve_lista():
     """
     GET /mediciones/ debe devolver una lista.
@@ -171,14 +158,12 @@ def test_get_mediciones_devuelve_lista():
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
-
 def test_get_mediciones_con_parametros_paginacion():
     """
     GET /mediciones/ debe aceptar skip y limit.
     """
     response = client.get("/mediciones/?skip=0&limit=5")
     assert response.status_code == 200
-
 
 # =====================================================
 # TESTS: GET /mediciones/{id}
@@ -192,14 +177,12 @@ def test_get_medicion_inexistente_devuelve_404():
     assert response.status_code == 404
     assert "Medición no encontrada" in response.json()["detail"]
 
-
 def test_get_medicion_id_invalido_devuelve_422():
     """
     GET /mediciones/abc debe devolver 422 por ID inválido.
     """
     response = client.get("/mediciones/abc")
     assert response.status_code == 422
-
 
 # =====================================================
 # TESTS: POST /mediciones/
@@ -216,7 +199,6 @@ def test_post_crear_medicion_datos_incompletos_devuelve_422():
     
     response = client.post("/mediciones/", json=medicion_incompleta)
     assert response.status_code == 422
-
 
 def test_post_crear_medicion_zona_no_existe_devuelve_400():
     """
@@ -237,7 +219,6 @@ def test_post_crear_medicion_zona_no_existe_devuelve_400():
     # Si la zona no existe, debe devolver 400
     assert response.status_code in [400, 404, 422]
 
-
 # =====================================================
 # TESTS: PUT /mediciones/{id}
 # =====================================================
@@ -254,7 +235,6 @@ def test_put_medicion_inexistente_devuelve_404():
     response = client.put("/mediciones/99999", json=medicion_update)
     assert response.status_code == 404
 
-
 # =====================================================
 # TESTS: DELETE /mediciones/{id}
 # =====================================================
@@ -265,7 +245,6 @@ def test_delete_medicion_inexistente_devuelve_404():
     """
     response = client.delete("/mediciones/99999")
     assert response.status_code == 404
-
 
 # =====================================================
 # TESTS: Codigos HTTP generales
@@ -278,14 +257,12 @@ def test_endpoint_inexistente_devuelve_404():
     response = client.get("/api/inexistente")
     assert response.status_code == 404
 
-
 def test_root_endpoint_existe():
     """
     GET / debe existir y devolver 200.
     """
     response = client.get("/")
     assert response.status_code == 200
-
 
 # =====================================================
 # TESTS: Validación de tipos de contenido
@@ -302,7 +279,6 @@ def test_post_mediciones_json_invalido_devuelve_422():
     )
     assert response.status_code == 422
 
-
 def test_response_tiene_estructura_correcta():
     """
     Verifica que las respuestas tengan estructura esperada.
@@ -311,7 +287,6 @@ def test_response_tiene_estructura_correcta():
     assert response.status_code == 200
     # Las respuestas de lista deben ser arrays
     assert isinstance(response.json(), list) or isinstance(response.json(), dict)
-
 
 # =====================================================
 # TESTS: Resumen de códigos HTTP

@@ -35,13 +35,11 @@ with patch('db.session.engine', test_engine):
         from db.models.zona import Zona
         from db.models.medicion import Medicion
 
-
 # =====================================================
 # 3. CREAR TABLAS EN TEST ENGINE
 # =====================================================
 
 Base.metadata.create_all(bind=test_engine)
-
 
 # =====================================================
 # 4. FIXTURES DE PYTEST
@@ -64,5 +62,4 @@ def cleanup_after_test():
         db.rollback()
     finally:
         db.close()
-
 

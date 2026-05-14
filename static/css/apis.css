@@ -1,0 +1,291 @@
+/* VORTEX - API Panel | 2026 */
+/* Tonos grises azules con acentos amarillos */
+
+:root {
+  --bg: #0d1117;
+  --card-bg: #161b22;
+  --card-soft: #1a2234;
+  --text-main: #ffffff;
+  --text-muted: #8b949e;
+  --text-bright: #ffffff;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --accent: #58a6ff;
+  --accent-hover: #1f6feb;
+  --warning: #f59e0b;
+  --success: #3fb950;
+  --error: #f85149;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(88, 166, 255, 0.08), transparent 40%),
+    linear-gradient(180deg, #0f1419 0%, var(--bg) 100%);
+  color: var(--text-main);
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.container { width: 100%; max-width: 1000px; margin: 0 auto; }
+
+.breadcrumb { margin-bottom: 1.5rem; }
+.breadcrumb ol { display: flex; list-style: none; gap: 0.6rem; font-size: 0.85rem; }
+.breadcrumb a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.breadcrumb a:hover { color: var(--text-bright); }
+.breadcrumb .separator, .breadcrumb .active { color: var(--text-muted); }
+.breadcrumb .active { font-weight: 600; }
+
+h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 1.2rem; text-align: center; color: var(--text-bright); }
+h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-bright); }
+h3 { font-size: 1rem; margin-bottom: 0.8rem; color: var(--text-muted); }
+
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Status Indicator */
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem;
+  border-radius: var(--radius-sm);
+  background: var(--card-soft);
+  margin-bottom: 1rem;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.status-dot.online { background: var(--warning); box-shadow: 0 0 12px rgba(245, 158, 11, 0.45); }
+.status-dot.offline { background: var(--error); box-shadow: 0 0 12px rgba(248, 81, 73, 0.45); }
+
+.status-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.status-value {
+  font-weight: 600;
+  color: var(--text-bright);
+}
+
+/* Data Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.data-table th, .data-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.data-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+}
+
+.data-table td {
+  color: var(--text-main);
+}
+
+.data-table tr:hover td {
+  background: rgba(88, 166, 255, 0.04);
+}
+
+/* Metric Row */
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.metric-row:last-child { border-bottom: none; }
+
+.metric-label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.metric-value {
+  font-weight: 700;
+  color: var(--text-bright);
+  font-size: 0.95rem;
+}
+
+/* Badge */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-aemet {
+  background: rgba(88, 166, 255, 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(88, 166, 255, 0.3);
+}
+
+.badge-ow {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-manual {
+  background: rgba(63, 185, 80, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(63, 185, 80, 0.3);
+}
+
+/* Buttons */
+.primary-btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  color: var(--text-bright);
+}
+
+.primary-btn:hover {
+  background: linear-gradient(135deg, var(--accent-hover), #1565c0);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(88, 166, 255, 0.3);
+}
+
+.primary-btn:active { transform: scale(0.98); }
+
+.secondary-btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.secondary-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Form */
+.form-control {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  background: var(--card-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-bright);
+  font-size: 0.9rem;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.alert-msg {
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1rem;
+}
+
+.alert-warn {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--warning);
+}
+
+.alert-success {
+  background: rgba(63, 185, 80, 0.1);
+  border: 1px solid rgba(63, 185, 80, 0.3);
+  color: var(--success);
+}
+
+.alert-error {
+  background: rgba(248, 81, 73, 0.1);
+  border: 1px solid rgba(248, 81, 73, 0.3);
+  color: var(--error);
+}
+
+/* Zone Info */
+.zone-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.zone-icon {
+  font-size: 1.8rem;
+}
+
+.zone-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.zone-id {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.timestamp {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body { padding: 1rem; }
+  .data-table th, .data-table td { padding: 0.5rem; font-size: 0.8rem; }
+}

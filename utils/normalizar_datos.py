@@ -42,7 +42,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
 class ValidadorRegistro:
     """Validador que usa los validadores existentes del proyecto"""
 
@@ -75,7 +74,6 @@ class ValidadorRegistro:
         registro_limpio = {k: v for k, v in registro.items() if v is not None}
 
         return len(errores) == 0, errores, registro_limpio
-
 
 class NormalizadorRobusto:
     """Normalizador usando validadores existentes"""
@@ -208,14 +206,13 @@ Backup creado: {self.backup_file}
 =============================================
 """
 
-
 def generar_datos_sinteticos(cantidad=50):
     """Genera datos sintéticos válidos para pruebas"""
     import random
 
     estaciones = [
         "Madrid-Retiro", "Madrid-Cuarteles", "Alcala de Henares",
-        "Getafe", "Barajas", "Tres Cantos", "Collado Villalb"
+        "Getafe", "Barajas", "Tres Cantos", "Collado Villalba"
     ]
 
     municipios = [
@@ -237,7 +234,6 @@ def generar_datos_sinteticos(cantidad=50):
         })
 
     return datos
-
 
 if __name__ == "__main__":
     print("=" * 50)
