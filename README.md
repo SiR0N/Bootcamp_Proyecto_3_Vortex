@@ -30,8 +30,8 @@
 | 7. Instalación y configuración | Completado |
 | 8. Uso del sistema | Completado |
 | 9. Flujo de datos y trazabilidad | Completado |
-| 10. Base de datos | Pendiente |
-| 11. Despliegue | Pendiente |
+| 10. Base de datos | Completado |
+| 11. Despliegue | Completado |
 | 12. Testing | Pendiente |
 | 13. Equipo | Pendiente |
 | 14. Licencia | Pendiente |
@@ -345,6 +345,56 @@ Los parámetros de conexión se configuran en el archivo `.env` mediante las var
 
 ---
 
+## Despliegue
+
+El despliegue de la base de datos se realiza sobre **Supabase**, que proporciona PostgreSQL en la nube junto con herramientas de administración.
+
+### 1. Crear un proyecto en Supabase
+
+Accede a [supabase.com](https://supabase.com/), inicia sesión y crea un nuevo proyecto. Anota la contraseña de base de datos que establezcas durante la creación.
+
+### 2. Obtener las credenciales de conexión
+
+Una vez creado el proyecto, ve a **Project Settings > API** y copia:
+
+- `Project URL` → será `SUPABASE_URL`
+- `anon public` → será `SUPABASE_KEY`
+
+En **Project Settings > Database** copia la cadena de conexión bajo `Connection string` → será `DATABASE_URL`. Sustituye `[YOUR-PASSWORD]` por la contraseña que configuraste en el paso 1.
+
+### 3. Configurar las variables de entorno
+
+Asegúrate de que tu archivo `.env` contiene los valores copiados:
+
+```
+DATABASE_URL=postgresql://postgres.xxxx:password@aws-0-eu-central-1.pooler.supabase.com:5432/postgres
+SUPABASE_URL=https://xxxx.supabase.co
+SUPABASE_KEY=exxxxxxxxxxxxxxxxxxxxVCJ9...
+```
+
+### 4. Crear las tablas en la base de datos
+
+Con el entorno virtual activado, ejecuta el script de inicialización:
+
+```
+python db/init_db.py
+```
+
+Este script crea las tablas `zonas` y `mediciones` con sus relaciones, utilizando los modelos definidos en `db/models/`.
+
+### 5. Verificar el despliegue
+
+Inicia la API y realiza una petición de prueba:
+
+```
+uvicorn api.main:app --reload
+```
+
+Abre `http://localhost:8000/zonas` en el navegador. Si la base de datos está correctamente configurada, recibirás una respuesta JSON vacía (`[]`) en lugar de un error.
+
+Para instrucciones más detalladas, consulta `deploy/supabase_deploy.md`.
+
+---
 
 
 
