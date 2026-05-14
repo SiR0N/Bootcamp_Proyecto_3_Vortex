@@ -32,12 +32,12 @@ def create_medicion(medicion_in: MedicionCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail="Error interno al guardar la medición")
     return nueva_medicion
 
-@router.get("/{medicion_id}", response_model=MedicionResponse)
-def get_medicion(medicion_id: int, db: Session = Depends(get_db)):
-    medicion = db.query(Medicion).filter(Medicion.id == medicion_id).first()
-    if not medicion:
-        raise HTTPException(status_code=404, detail="Medición no encontrada")
-    return medicion
+@router.get("/{id}", response_model=ZonaResponse)
+def get_zona(id: int, db: Session = Depends(get_db)):
+    zona = db.query(Zona).filter(Zona.id == id).first()
+    if not zona:
+        raise HTTPException(status_code=404, detail="Zona no encontrada")
+    return zona
 
 @router.put("/{medicion_id}", response_model=MedicionResponse)
 def update_medicion(medicion_id: int, medicion_update: MedicionUpdate, db: Session = Depends(get_db)):
