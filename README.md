@@ -23,7 +23,7 @@
 |---------|--------|
 | 1. Título y badges | Completado |
 | 2. Tabla de contenidos | Completado |
-| 3. Resumen del proyecto | Pendiente |
+| 3. Resumen del proyecto | Completado |
 | 4. Arquitectura general | Pendiente |
 | 5. Tecnologías utilizadas | Pendiente |
 | 6. Requisitos previos | Pendiente |
@@ -38,57 +38,30 @@
 
 ---
 
-## 📌 Descripción
+## Resumen del proyecto
 
-**Vortex** es una plataforma completa para la **ingestión, transformación, almacenamiento y consulta de datos meteorológicos** en la Comunidad de Madrid.
+**Vortex** es una plataforma de gestión de inteligencia climática orientada a la Comunidad de Madrid. Su objetivo es automatizar la obtención, validación y exposición de datos meteorológicos fiables, combinando un pipeline ETL, una API REST y una capa de trazabilidad integrada.
 
-Un sistema completo que combina:
+El sistema resuelve la necesidad de disponer de datos climáticos estructurados y auditables, eliminando procesos manuales y garantizando la procedencia de cada registro.
 
-* Un pipeline ETL que procesa datos normalizados y los carga en PostgreSQL a través de una API REST.
-* Un **auditor de trazabilidad (Pipeline Auditor)** que descarga datos crudos desde la API oficial de [AEMET OpenData](https://opendata.aemet.es/centrodedescargas/inicio), los compara con los normalizados y genera informes detallados de linaje.
-* Una API REST desarrollada con **FastAPI** para exponer zonas, mediciones y operaciones del ETL.
-* Una base de datos **PostgreSQL** alojada en **Supabase** donde se almacenan las mediciones normalizadas.
-* Un diseño modular que permite escalar el sistema fácilmente.
-* Capacidad de geolocalización inteligente.
+**Funcionalidades principales**
 
-**Vortex** proporciona al usuario los siguientes datos:
+* Ingesta automatizada de observaciones meteorológicas desde fuentes oficiales.
+* Normalización, limpieza y validación de datos con reglas configurables.
+* Almacenamiento en PostgreSQL con integridad referencial (zonas y mediciones).
+* API REST documentada con FastAPI para consulta y carga de datos.
+* Trazabilidad completa del dato: registro del origen, transformaciones y destino final.
+* Gestión de zonas geográficas por estación meteorológica.
 
-- 🌡️ **Temperatura** (gestión de máximas y mínimas).
-- 💧 **Humedad** relativa del aire.
-- 💨 **Viento** (velocidad y dirección).
-- 🌧️ **Precipitaciones** acumuladas.
-- ⚠️ **Alertas meteorológicas** críticas.
+**Datos disponibles**
 
-## 🚀 Características Principales
+* Temperatura (máxima y mínima)
+* Humedad relativa
+* Viento (velocidad y dirección)
+* Precipitaciones acumuladas
+* Alertas meteorológicas críticas
 
-# 🔄 ETL completo (Extract → Transform → Load)
-
-- `Extract.py`: Descarga datos de AEMET mediante API Key.
-- `Transform.py`: Limpieza, normalización, eliminación de duplicados, validación de campos.
-- `Load.py`: Inserción en PostgreSQL con control de zonas y mediciones.
-
-# 🌍 Gestión de Zonas
-
-- Registro automático de zonas según estacion_id.
-- Relación 1:N entre Zona y Mediciones.
-- Endpoints para CRUD completo.
-
-# 🌡️ Gestión de Mediciones
-
-- Inserción automática desde el ETL.
-- Validación de fuente (aemet o manual).
-- Consulta por zona.
-
-# ⚡ API REST con FastAPI
-
-- Documentación automática en /docs.
-- Endpoints para zonas, mediciones y ejecución del ETL.
-
-# 🗄️ Persistencia en PostgreSQL
-
-- Modelos ORM con SQLAlchemy.
-- Relaciones normalizadas.
-- Integridad garantizada.
+---
 
 ## 🧱 Arquitectura del Proyecto
 ```
