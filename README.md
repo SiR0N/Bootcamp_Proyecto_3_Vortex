@@ -24,8 +24,8 @@
 | 1. Título y badges | Completado |
 | 2. Tabla de contenidos | Completado |
 | 3. Resumen del proyecto | Completado |
-| 4. Arquitectura general | Pendiente |
-| 5. Tecnologías utilizadas | Pendiente |
+| 4. Arquitectura general | Completado |
+| 5. Tecnologías utilizadas | Completado |
 | 6. Requisitos previos | Pendiente |
 | 7. Instalación y configuración | Pendiente |
 | 8. Uso del sistema | Pendiente |
@@ -148,6 +148,21 @@ Vortex/
     ├── helpers.py
     └── ...
 ```
+
+---
+
+## Tecnologías utilizadas
+
+| Tecnología | Uso en el proyecto |
+|------------|--------------------|
+| Python 3.12+ | Lenguaje principal del sistema |
+| FastAPI | API REST con documentación automática |
+| PostgreSQL | Almacenamiento relacional de datos |
+| Supabase | Infraestructura cloud de la base de datos |
+| SQLAlchemy | ORM para definición y consulta de modelos |
+| Pydantic | Validación de esquemas en la API |
+| AEMET OpenData | Fuente oficial de observaciones meteorológicas |
+| pytest | Framework de testing automatizado |
 
 ---
 
