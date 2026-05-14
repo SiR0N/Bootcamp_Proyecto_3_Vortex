@@ -22,6 +22,6 @@ class Medicion(Base):
     lluvia      = Column(Float, nullable=True)
     presion     = Column(Float, nullable=True)
     fuente      = Column(String(20), nullable=False)
-    created_at  = Column(DateTime, default=datetime.utcnow)
+    created_at  = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     zona = relationship("Zona", back_populates="mediciones")
