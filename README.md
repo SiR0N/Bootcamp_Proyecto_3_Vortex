@@ -26,7 +26,7 @@
 | 3. Resumen del proyecto | Completado |
 | 4. Arquitectura general | Completado |
 | 5. Tecnologías utilizadas | Completado |
-| 6. Requisitos previos | Pendiente |
+| 6. Requisitos previos | Completado |
 | 7. Instalación y configuración | Pendiente |
 | 8. Uso del sistema | Pendiente |
 | 9. Flujo de datos y trazabilidad | Pendiente |
@@ -163,6 +163,19 @@ Vortex/
 | Pydantic | Validación de esquemas en la API |
 | AEMET OpenData | Fuente oficial de observaciones meteorológicas |
 | pytest | Framework de testing automatizado |
+
+---
+
+## Requisitos previos
+
+Antes de instalar y ejecutar Vortex, asegúrate de disponer de lo siguiente:
+
+* Python 3.12 o superior
+* Git
+* Una cuenta gratuita en [Supabase](https://supabase.com/)
+* Una clave de API de [AEMET OpenData](https://opendata.aemet.es/) (gratuita)
+
+Se recomienda el uso de un entorno virtual (Conda, venv o similar) para aislar las dependencias del proyecto.
 
 ---
 
