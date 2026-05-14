@@ -126,19 +126,25 @@ def load_data(df):
 # -----------------------------
 if __name__ == "__main__":
     import pandas as pd
+    from datetime import datetime
+    import random
+    import string
 
     print("🔧 Test manual de load.py")
 
+    def generar_estacion_id():
+        return "EST-test-" + "".join(random.choices(string.digits, k=2))
+
     df_test = pd.DataFrame([
         {
-            "estacion_id": "EST-01",
+            "estacion_id": generar_estacion_id(),
             "fecha": datetime.now(),
             "temperatura": 10,
             "humedad": 50,
             "viento": 2,
             "lluvia": 0,
             "presion": 1012,
-            "fuente": "manual",  # valores válidos: aemet | manual | openweather
+            "fuente": "manual",
         }
     ])
 

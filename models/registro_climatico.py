@@ -1,5 +1,5 @@
 class RegistroClimatico:
-    def __init__(self, estacion_id, fecha, temperatura, humedad, viento, lluvia):
+    def __init__(self, estacion_id, fecha, temperatura, humedad, viento, lluvia, presion=None):
         """
         Isabella, mantengo tu estructura original. He añadido pequeñas 
         conversiones de tipo (float) aquí por seguridad, para asegurarnos 
@@ -12,6 +12,7 @@ class RegistroClimatico:
         self.humedad = float(humedad)
         self.viento = float(viento)
         self.lluvia = float(lluvia)
+        self.presion = float(presion) if presion is not None else None  # Presión no se incluye en el constructor, pero se puede añadir después
 
     def to_dict(self):
         """
@@ -25,5 +26,6 @@ class RegistroClimatico:
             "temperatura": self.temperatura,
             "humedad": self.humedad,
             "viento": self.viento,
-            "lluvia": self.lluvia            
+            "lluvia": self.lluvia,
+            "presion": self.presion
         }

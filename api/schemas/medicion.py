@@ -12,6 +12,9 @@ Regla del proyecto: el campo 'fuente' SIEMPRE será uno de:
 
 
 class MedicionBase(BaseModel):
+# añado id y created at
+
+    id:          Optional[int]      = None
     zona_id:     int                  = Field(..., gt=0)
     fecha:       Union[str, datetime] = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     temperatura: Optional[float]      = Field(None, ge=-50, le=60)
@@ -20,6 +23,7 @@ class MedicionBase(BaseModel):
     lluvia:      Optional[float]      = Field(None, ge=0)
     presion:     Optional[float]      = Field(None, ge=800, le=1100)
     fuente:      Literal["aemet", "manual", "openweather"] = "manual"
+    created_at: Optional[datetime]   = None
 
     @field_validator("fuente", mode="before")
     @classmethod
